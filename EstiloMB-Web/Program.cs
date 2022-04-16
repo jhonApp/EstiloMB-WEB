@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EstiloMB_Web
+namespace EstiloMB.Site
 {
     public class Program
     {

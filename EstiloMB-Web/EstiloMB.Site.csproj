@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DataBase\" />
+    <Compile Remove="DataBase\**" />
+    <Content Remove="DataBase\**" />
+    <EmbeddedResource Remove="DataBase\**" />
+    <None Remove="DataBase\**" />
   </ItemGroup>
 
   <ItemGroup>

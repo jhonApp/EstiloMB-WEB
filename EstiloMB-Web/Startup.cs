@@ -82,8 +82,6 @@ namespace EstiloMB.Site
         public void Configure(IApplicationBuilder app)
         {
             Database.Configure(Configuration.GetConnectionString("Desenvolvimento"));
-            //Database.Configure(Configuration.GetConnectionString("BaseJhon"));
-            //Database.Configure(Configuration.GetConnectionString("Escritorio"));
             //Database.Configure(Configuration.GetConnectionString("Homologacao"));
 
             Localization.AddDictionary("pt-br", PT_BR.dicionario);
@@ -107,7 +105,7 @@ namespace EstiloMB.Site
             {
                 routes.MapRoute(name: "page", template: "Page/{control}/{page}", defaults: new { controller = "Api", action = "Page" });
                 routes.MapRoute(name: "api", template: "Api/{type}/{function}", defaults: new { controller = "Api", action = "Ajax" });
-                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Login}/{type?}");
+                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{type?}");
             });
         }
     }
