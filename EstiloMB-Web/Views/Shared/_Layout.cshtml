@@ -3,15 +3,31 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - EstiloMB</title>
+    <title>@ViewData["Title"] EstiloMB</title>
     <link rel="stylesheet" href="~/css/site.css" />
+	<script type="text/javascript" src="~/js/fa/all.js"></script>
+    <script type="text/javascript" src="~/js/ChartJS/Chart.js"></script>
+
 </head>
 <body>
-    <div class="nav-top">
-        
-    </div>
+    @*<div class="nav-top">
+        <div class="social">
+            <i class="fab fa-instagram icon"></i>
+            <i class="fab fa-facebook-f icon"></i>
+        </div>
+        <div class="user">
+            <span>Entrar/Cadastrar</span>
+            <i class="fas fa-user-circle icon"></i>
+        </div>
+    </div>*@
     <div class="nav-main">
-
+        <img class="logo" src="~/image/logo-site.png" alt=""/>
+        <div class="itens">
+            <div class="user">
+                <span>Entrar/Cadastrar</span>
+                <i class="fas fa-user-circle icon"></i>
+            </div>
+        </div>
     </div>
     <header>
 
@@ -22,9 +38,7 @@
         </main>
     </div>
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - EstiloMB_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+        &copy; 2022 - EstiloMB_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
