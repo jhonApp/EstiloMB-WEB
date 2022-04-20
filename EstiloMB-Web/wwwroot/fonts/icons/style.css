@@ -1,0 +1,78 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('icomoon.eot?qf90od');
+  src:  url('icomoon.eot?qf90od#iefix') format('embedded-opentype'),
+    url('icomoon.ttf?qf90od') format('truetype'),
+    url('icomoon.woff?qf90od') format('woff'),
+    url('icomoon.svg?qf90od#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-casa:before {
+  content: "\e904";
+}
+.icon-df:before {
+  content: "\e909";
+}
+.icon-close:before {
+  content: "\e910";
+}
+.icon-face:before {
+  content: "\e90a";
+}
+.icon-in:before {
+  content: "\e90b";
+}
+.icon-twiter:before {
+  content: "\e90c";
+}
+.icon-seta:before {
+  content: "\e90d";
+}
+.icon-menu:before {
+  content: "\e90e";
+}
+.icon-airport:before {
+  content: "\e900";
+}
+.icon-ampulheta:before {
+  content: "\e901";
+}
+.icon-cartao:before {
+  content: "\e902";
+}
+.icon-folha:before {
+  content: "\e903";
+}
+.icon-lampada:before {
+  content: "\e90f";
+}
+.icon-medico:before {
+  content: "\e905";
+}
+.icon-mobile:before {
+  content: "\e906";
+}
+.icon-server:before {
+  content: "\e907";
+}
+.icon-quebra-cabeca:before {
+  content: "\e908";
+}
+

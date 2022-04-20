@@ -13,6 +13,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\fonts\font-awesome\fontawesome-webfont.svg" />
+    <None Include="wwwroot\fonts\font-awesome\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\fonts\icons\icomoon.svg" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Bold.woff2" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Light.woff2" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Medium.woff2" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Regular.woff2" />
+    <None Include="wwwroot\fonts\roboto\Roboto-Thin.woff2" />
+    <None Include="wwwroot\js\ChartJS\Chart.bundle.js" />
+    <None Include="wwwroot\js\ChartJS\Chart.bundle.min.js" />
+    <None Include="wwwroot\js\ChartJS\Chart.js" />
+    <None Include="wwwroot\js\ChartJS\Chart.min.js" />
+    <None Include="wwwroot\js\fa\all.js" />
+    <None Include="wwwroot\js\fa\all.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EstiloMB.Core\EstiloMB.Core.csproj" />
     <ProjectReference Include="..\EstiloMB.MVC\EstiloMB.MVC.csproj" />
   </ItemGroup>

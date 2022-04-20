@@ -4,7 +4,7 @@ body {
     height: 100vh;
     background: white;
     margin: 0;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -16,14 +16,55 @@ html {
     position: relative;
     min-height: 100%;
 }
+
+/* Nav-Top
+-------------------------------------------------- */
 .nav-top {
-    background-color: aqua;
+    background-color: #b684eb;
     height: 10vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
+    .nav-top > .user span {
+        align-items: center;
+        padding: 0 0.75rem;
+    }
+
+.social {
+    margin: 20px;
+}
+
+
+
+/* Nav-Main
+-------------------------------------------------- */
 .nav-main {
-    background-color: chocolate;
-    height: 10vh;
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-template-rows:1fr;
 }
+.logo {
+    max-height: 10em;
+    margin-left: auto;
+    margin-right: auto;
+}
+     .logo .itens {
+        position:absolute;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .logo .user {
+        white-space: nowrap;
+        margin: auto;
+        color: white;
+        margin-right: 1.5em;
+        display: grid;
+        grid-template-columns: 1fr 20%;
+    }
 header {
     background-color: blueviolet;
     height: 10vh;
@@ -40,3 +81,28 @@ header {
     line-height: 10vh; /* Vertically center the text there */
     background-color: white;
 }
+
+/*------------------------------------------------------------------*/
+/*------------------------------------------------------[ ELEMENTS ]*/
+/*------------------------------------------------------------------*/
+
+.icon {
+    position: relative;
+    display: inline-block;
+    background: none;
+    border: 0;
+    outline: 0;
+    padding: 0;
+    cursor: pointer;
+    min-width: 1.5em;
+    min-height: 1.5em;
+    font-size: 1.09375rem;
+    text-align: center;
+    color: black;
+    fill: currentColor;
+}
+
+    .icon > * {
+        position: relative;
+    }
+
