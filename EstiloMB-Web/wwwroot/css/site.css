@@ -39,36 +39,68 @@ html {
 /* Nav-Main
 -------------------------------------------------- */
 .nav-main {
-    display:grid;
-    grid-template-columns: 1fr;
-    grid-template-rows:1fr;
+    display: grid;
+    grid-template-columns: 1fr 20%;
+    grid-template-rows: 1fr;
+    height: 7rem;
 }
 .logo {
-    max-height: 10em;
-    margin-left: auto;
-    margin-right: auto;
+    max-height: 5em;
+    margin-left: 47%;
+    margin-top: 25px;
 }
-     .logo .itens {
-        position:absolute;
-        height: 60px;
+.itens {
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+    .itens .user {
         display: flex;
         align-items: center;
         flex-direction: row;
         justify-content: space-around;
+        white-space: nowrap;
+        font-weight: 300;
+        margin-right: 25%;
+        margin-top: 25%;
+        color: #B583EA;
+        padding: unset !important;
     }
 
-    .logo .user {
-        white-space: nowrap;
-        margin: auto;
-        color: white;
-        margin-right: 1.5em;
-        display: grid;
-        grid-template-columns: 1fr 20%;
-    }
-header {
-    background-color: blueviolet;
-    height: 10vh;
+.user ul {
+    margin: 0;
+    display: flex;
+    padding: 0;
+    list-style: none;
+    padding: 0.5em;
 }
+
+    .user ul li {
+        padding: 10px;
+    }
+
+header {
+    height: 20vh;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+}
+
+.search {
+    width: 90%;
+    height: 5vh;
+    border: solid 1px #c2c2c2;
+    border-radius: 4px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    padding: 5px;
+}
+
+
 .container {
     background-color: black;
     height: 60vh;
@@ -96,9 +128,9 @@ header {
     cursor: pointer;
     min-width: 1.5em;
     min-height: 1.5em;
-    font-size: 1.09375rem;
+    /*font-size: 1.09375rem;*/
     text-align: center;
-    color: black;
+    color: #B583EA;
     fill: currentColor;
 }
 
