@@ -4,17 +4,10 @@ body {
     height: 100vh;
     background: white;
     margin: 0;
+    padding: 0;
+    left: 0;
     font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    text-align: left;
-}
-html {
-    font-size: 14px;
-    position: relative;
-    min-height: 100%;
+
 }
 
 /* Nav-Top
@@ -40,14 +33,21 @@ html {
 -------------------------------------------------- */
 .nav-main {
     display: grid;
-    grid-template-columns: 1fr 20%;
-    grid-template-rows: 1fr;
-    height: 7rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 8vh 8vh;
+    height: auto;
+    grid-template-areas: "logo nav"
+        "search  itens"
 }
+
+
+/* LOGO-PRINCIPAL + ITENS-ENTRAR E SACOLA
+-------------------------------------------------- */
 .logo {
     max-height: 5em;
-    margin-left: 47%;
+    margin-left: 10%;
     margin-top: 25px;
+    grid-area: logo;
 }
 .itens {
     justify-content: space-between;
@@ -55,6 +55,7 @@ html {
     align-items: center;
     flex-direction: row;
     justify-content: space-around;
+    grid-area: itens;
 }
 
     .itens .user {
@@ -64,8 +65,8 @@ html {
         justify-content: space-around;
         white-space: nowrap;
         font-weight: 300;
-        margin-right: 25%;
-        margin-top: 25%;
+        margin-right: 8em;
+        margin-top: 61px;
         color: #B583EA;
         padding: unset !important;
     }
@@ -79,28 +80,204 @@ html {
 }
 
     .user ul li {
-        padding: 10px;
+        padding: 5px;
     }
 
-header {
-    height: 20vh;
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr;
-}
+/* SEARCH PRINCIPAL
+-------------------------------------------------- */
 
 .search {
-    width: 90%;
-    height: 5vh;
-    border: solid 1px #c2c2c2;
-    border-radius: 4px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    padding: 5px;
+    grid-area: search;
+    display: flex;
+    position:relative;
+}
+    .search .content {
+        width: 90%;
+        margin-left: 8%;
+    }
+
+    
+    .search input {
+        width: 90%;
+        border: 0;
+        border-radius: 4px;
+        border: solid 1px #e0dfdf;
+        padding: 5px;
+        animation-duration: 10ms;
+        -webkit-tap-highlight-color: transparent;
+        /*transition: 0.2s;*/
+    }
+        .search input[type="text"] {
+            padding-left: 25px;
+        }
+
+            .search input[type="text"]:hover {
+                border: 1px solid #B583EA;
+                color: #B583EA;
+            }
+
+            .search input[type="text"]:focus {
+                outline: none !important;
+                border: 1px solid #B583EA;
+                color: #B583EA;
+            }
+
+    .search div {
+        min-height: 2em;
+        display: flex;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+        .search div .icon {
+            min-width: 2em;
+            min-height: 1em;
+            display: inline-block;
+            align-items: center;
+            transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+            flex-shrink: 0;
+            color: #d1d1d1;
+        }
+
+/* MENU
+-------------------------------------------------- */
+
+nav {
+    grid-area: nav;
+    width: 100%;
+    z-index: 999;
+    height: 65px;
+    line-height: 50px;
+    background-color: black;
 }
 
+nav .wrapper{
+    position: relative;
+    max-width: 1000px;
+    padding: 0 30px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
 
+ul {
+    padding: 0;
+}
+
+.wrapper .nav-links {
+    display: inline-flex;
+    margin: auto;
+}
+
+.nav-links li a {
+    color: black;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 9px 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+    .nav-links li a:hover {
+        background: #5b5b5b;
+    }
+
+    .nav-links li {
+        list-style: none;
+    }
+
+.nav-links .drop-menu {
+    background: #212529;
+    width: 180px;
+    top: 65px;
+    padding-left: 0.8em;
+    line-height: 45px;
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.nav-links li:hover .drop-menu,
+.nav-links li:hover .mega-box {
+    top: 65px;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s ease;
+}
+
+.drop-menu li a {
+    width: 100%;
+    display: block;
+    padding: 0 0 0 15px;
+    font-weight: 400;
+    border-radius: 0;
+}
+
+li {
+    text-align: start;
+}
+
+.mega-box {
+    position: absolute;
+    top: 66px;
+    width: 70%;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+    .mega-box .content {
+        background: #212529;
+        padding: 25px 27px;
+        padding-top: 0px;
+        padding-right: 0px;
+        display: flex;
+        justify-content: space-around;
+        width: 70%;
+    }
+
+.content .row {
+    width: calc(34% - 28px);
+    line-height: 33px;
+}
+
+    .content .row h1{
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .content .row .mega-links{
+        margin-left: -40px;
+        border-left: 1px solid #ffffff91;
+    }
+
+        .content .row .mega-links:nth-child(1) {
+            border-left: 1px solid red;
+        }
+
+        .row .mega-links li {
+            padding: 0 20px;
+        }
+
+    .row .mega-links li a {
+        padding: 0 20px;
+        display: block;
+    }
+
+    /* header
+-------------------------------------------------- */
+    header {
+        height: 20vh;
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr;
+        background-color: aqua;
+    }
 .container {
     background-color: black;
     height: 60vh;
