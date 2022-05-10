@@ -17,20 +17,24 @@
         </div>
     </div>*@
     <div class="nav-main">
-        <img class="logo" src="~/image/logo-oficial.png" alt=""/>
-        <div class="itens">
-            <div class="user">
-                <span>Entrar/Cadastrar</span>
-                <ul>
-                    <li><i class="fal fa-user icon"></i></li>
-                    <li><i class="fal fa-shopping-cart icon"></i></li>
-                </ul>
-            </div>
-        </div>
-        <div class="search">
+       
+        
+        @*<div class="search">
             <div class="content">
                 <div> <i class="fas fa-search icon"></i> </div>
                 <input type="text" name="" data-bind="" />
+            </div>
+        </div>*@
+        @*<div class="social">
+            <i class="fab fa-instagram icon"></i>
+            <i class="fab fa-facebook-f icon"></i>
+        </div>*@
+        <div class="iten-user">
+            <div class="user">
+                <ul>
+                    <li><i class="far fa-user icon"></i></li>
+                    <li><span>Entrar / Cadastre-se</span></li>
+                </ul>
             </div>
         </div>
         <nav>
@@ -41,7 +45,7 @@
                     </li>
                     <li>
                         <a>Feminino</a>
-                        <div class="mega-box">
+                        @*<div class="mega-box">
                             <div class="content">
                                 <div class="row">
                                     <h1>Services</h1>
@@ -71,14 +75,62 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
+                    </li>
+                    <li>
+                         <img class="logo" src="~/image/logo-oficial.png" alt=""/>
+                    </li>
+                    <li>
+                        <a>Promoções</a>
+                    </li>
+                    <li>
+                        <a>Sobre</a>
                     </li>
                 </ul>
-            </div>  
+            </div>
         </nav>
+        <div class="itens">
+            <div class="user">
+                <ul>
+                    <li><i class="far fa-heart icon"></i></li>
+                    <li><i class="far fa-shopping-cart icon"></i></li>
+                </ul>
+            </div>
+        </div>
     </div>
     <header>
-        
+        <div class="slider">
+            <div class="slides">
+
+                <input type="radio" name="radio-btn" id="radio1"/>
+                <input type="radio" name="radio-btn" id="radio1"/>
+                <input type="radio" name="radio-btn" id="radio1"/>
+                
+
+                <div class="slide first">
+                    <img src=~/image/look.jpg alt="" />
+                </div>
+                <div class="slide">
+                    <img src=~/image/jeans.jpgjpg alt="" />
+                </div>
+                <div class="slide">
+                    <img src=~/image/tp231-presentation-04-383.jpg alt="" />
+                </div>
+
+                <div class="navigation-auto">
+                    <div class="auto-btn1"></div>
+                    <div class="auto-btn2"></div>
+                    <div class="auto-btn3"></div>
+                </div>
+
+            </div>
+
+            <div class="manual-navigation">
+                <label for="radio1" class="manual-btn"></label>
+                <label for="radio2" class="manual-btn"></label>
+                <label for="radio3" class="manual-btn"></label>
+            </div>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
