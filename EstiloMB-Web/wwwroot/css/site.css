@@ -283,9 +283,9 @@ li {
         display: block;
     }
 
-    /* header
+    /* section
 -------------------------------------------------- */
-header {
+section {
     height: 60vh;
     display: grid;
     grid-template-rows: 1fr;
@@ -313,6 +313,7 @@ header {
 .slide {
     width: 25%;
     position: relative;
+    transition: 2s;
 }
     .slide img {
         width: 100%;
@@ -341,12 +342,72 @@ header {
     .manual-btn:hover {
         background-color: #fff;
     }
-    /* Container
--------------------------------------------------- */
-    .container {
-        background-color: white;
-        height: 60vh;
+
+#radio1:checked ~ .first {
+    margin-left: 0;
+}
+
+#radio2:checked ~ .first {
+    margin-left: -25%;
+}
+
+#radio3:checked ~ .first {
+    margin-left: -50%;
+}
+
+.navigation-auto {
+    position: absolute;
+    width: 100%;
+    margin-top: 340px;
+    display: flex;
+    justify-content:center;
+}
+
+    .navigation-auto div {
+        border: 2px solid #B583EA;
+        padding: 5px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 1s;
     }
+
+    .navigation-auto div:not(:last-child){
+        margin-right: 40px;
+    }
+
+#radio1:checked ~ .navigation-auto .auto-btn1 {
+    background-color: #fff;
+}
+
+#radio2:checked ~ .navigation-auto .auto-btn2 {
+    background-color: #fff;
+}
+
+#radio3:checked ~ .navigation-auto .auto-btn3 {
+    background-color: #fff;
+}
+
+/* content
+-------------------------------------------------- */
+content {
+    background-color: white;
+    height: auto;
+}
+
+/* Cols
+-------------------------------------------------- */
+.cols {
+    display: flex;
+    width: 90%;
+    height: 30vh;
+    margin: 0 auto;
+    top: 10px;
+    position: relative;
+    background-color: black;
+}
+
+/* Footer
+-------------------------------------------------- */
 .footer {
     position: absolute;
     bottom: 0;
