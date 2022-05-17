@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,12 +8,7 @@
     
 	<script type="text/javascript" src="~/js/fa/all.js"></script>
     <script type="text/javascript" src="~/js/ChartJS/Chart.js"></script>
-
-    <link rel="stylesheet" href="css/lightslider.css" />
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/lightslider.js"></script>
-
-
+    <script type="text/javascript" src="~/js/site.js"></script>
 </head>
 <body>
     @*<div class="nav-top">
@@ -25,12 +20,7 @@
     <div class="nav-main">
        
         
-        @*<div class="search">
-            <div class="content">
-                <div> <i class="fas fa-search icon"></i> </div>
-                <input type="text" name="" data-bind="" />
-            </div>
-        </div>*@
+        
         @*<div class="social">
             <i class="fab fa-instagram icon"></i>
             <i class="fab fa-facebook-f icon"></i>
@@ -115,9 +105,9 @@
     <footer class="border-top footer text-muted">
         &copy; 2022 - EstiloMB_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

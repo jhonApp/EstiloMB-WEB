@@ -1,17 +1,11 @@
-﻿let count = 1;
-document.getElementById("radio1").checked = true;
+﻿function toggle(button) {
 
-setInterval(function () {
-    nextImage();
-}, 15000);
+    if (button.style.color == "rgb(182, 132, 235)") {
+        button.style.color = "rgb(255, 0, 0)";
 
-function nextImage() {
-    count++;
-    if (count > 3) {
-        count = 1;
+    } else {
+        button.style.color = "rgb(182, 132, 235)";
     }
 
-    document.getElementById("radio" + count).checked = true;
+    
 }
-
-

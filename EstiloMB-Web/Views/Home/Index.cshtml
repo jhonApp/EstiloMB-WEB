@@ -38,95 +38,217 @@
 </section>
 <content>
     <div class="cols">
-        <ul id="autoWidth" class="cs-hidden">
-            <li class="item-a">
-                <div class="cols">
-                    <div class="box">
-                        <div class="slide-img">
-                            <img src="~/image/vertical-photo1.jpg"/>
-                            <div class="overlay">
-                                <a href="#" class="buy-btn">Buy Now</a>
-                            </div>
-                        </div>
-                        <div class="details-box">
-                            <div class="type">
-                                <a href="#">Rabbed Cardigan</a>
-                                <span>Noe Arri</span>
-                            </div>
-                            <a href="#" class="price">R$63,00</a>
-                        </div>
-                    </div>
+        <div class="search">
+            <div class="content">
+                <div> <i class="fas fa-search icon"></i> </div>
+                <input type="text" id="search" data-bind="" placeholder="O que você está procurando?"/>
+            </div>
+        </div>
+    </div>
+    <div class="cols">
+        <h2 class="product-category">Destaques</h2>
+        <button class="pre-btn"><i class="fas fa-chevron-circle-left icon"></i></button>
+        <button class="nxt-btn"><i class="fas fa-chevron-circle-right icon"></i></button>
+        <div class="product-container">
+            @*----------------------- Produto 1 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+                    
+                    
+                    <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
                 </div>
-            </li>
-            <li class="item-b">
-                <div class="cols">
-                    <div class="box">
-                        <div class="slide-img">
-                            <img src="~/image/vertical-photo3.jpg"/>
-                            <div class="overlay">
-                                <a href="#" class="buy-btn">Buy Now</a>
-                            </div>
-                        </div>
-                        <div class="details-box">
-                            <div class="type">
-                                <a href="#">Rabbed Cardigan</a>
-                                <span>Noe Arri</span>
-                            </div>
-                            <a href="#" class="price">R$63,00</a>
-                        </div>
-                    </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
                 </div>
-            </li>
-            <li class="item-c">
-                <div class="cols">
-                    <div class="box">
-                        <div class="slide-img">
-                            <img src="~/image/vertical-photo2.jpg"/>
-                            <div class="overlay">
-                                <a href="#" class="buy-btn">Buy Now</a>
-                            </div>
-                        </div>
-                        <div class="details-box">
-                            <div class="type">
-                                <a href="#">Rabbed Cardigan</a>
-                                <span>Noe Arri</span>
-                            </div>
-                            <a href="#" class="price">R$63,00</a>
-                        </div>
-                    </div>
+            </div>
+            @*----------------------- Produto 2 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+
+                    <img src="~/image/vertical-photo2.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
                 </div>
-            </li>
-            <li class="item-d">
-                <div class="cols">
-                    <div class="box">
-                        <div class="slide-img">
-                            <img src="~/image/vertical-photo3.jpg"/>
-                            <div class="overlay">
-                                <a href="#" class="buy-btn">Buy Now</a>
-                            </div>
-                        </div>
-                        <div class="details-box">
-                            <div class="type">
-                                <a href="#">Rabbed Cardigan</a>
-                                <span>Noe Arri</span>
-                            </div>
-                            <a href="#" class="price">R$63,00</a>
-                        </div>
-                    </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
                 </div>
-            </li>
-            <li class="item-e"></li>
-        </ul>
+            </div>
+            @*----------------------- Produto 3 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+
+                    <img src="~/image/vertical-photo3.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
+                </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
+                </div>
+            </div>
+            @*----------------------- Produto 4 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+
+                    <img src="~/image/vertical-photo2.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
+                </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
+                </div>
+            </div>
+            @*----------------------- Produto 5 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+
+                    <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
+                </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="cols">
+        <h2 class="product-category">Promoções</h2>
+        <button class="pre-btn"><i class="fas fa-chevron-circle-left icon"></i></button>
+        <button class="nxt-btn"><i class="fas fa-chevron-circle-right icon"></i></button>
+        <div class="product-container">
+            @*----------------------- Produto 1 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+
+                    <img src="~/image/3367979.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
+                </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
+                </div>
+            </div>
+            @*----------------------- Produto 2 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+
+                    <img src="~/image/vertical-shot-of-an-african-american-woman-wearing-a-white-top-and-posing.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
+                </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
+                </div>
+            </div>
+            @*----------------------- Produto 3 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+
+                    <img src="~/image/vertical-photo3.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
+                </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
+                </div>
+            </div>
+            @*----------------------- Produto 4 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+
+                    <img src="~/image/vertical-photo2.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
+                </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
+                </div>
+            </div>
+            @*----------------------- Produto 5 -------------------*@
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="discount-tag">50% off</span>
+                    <span class="discount-heart">
+                        <input type="checkbox" />
+                        <i class="fas fa-heart icon"></i>
+                    </span>
+
+                    <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
+                    <button class="card-btn">adicionar ao carrinho</button>
+                </div>
+                <div class="product-info">
+                    <h2 class="product-brand">brand</h2>
+                    <p class="product-short-description">a short line about the product</p>
+                    <span class="price">R$120,00</span>
+                    <span class="actual-price">R$50,00</span>
+                </div>
+            </div>
+        </div>
     </div>
 </content>
-<script>
-    $(document).ready(function () {
-        $('#autoWidth').lightSlider({
-            autoWidth: true,
-            loop: true,
-            onSliderLoad: function () {
-                $('#autoWidth').removeClass('cS-hidden');
-            }
-        });
-    });
-</script>
+<script src="~/js/slideProduct.js" asp-append-version="true"></script>
