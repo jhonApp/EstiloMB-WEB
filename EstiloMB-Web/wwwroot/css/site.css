@@ -480,6 +480,10 @@ content {
     text-transform: capitalize;
 }
 
+.swiper {
+    width:950px;
+}
+
 /*/--------BUTTON PREFERIDOS---------/*/
 .discount-heart {
     left: 10px;

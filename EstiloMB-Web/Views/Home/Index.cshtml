@@ -45,110 +45,113 @@
             </div>
         </div>
     </div>
-    <div class="cols">
-        <h2 class="product-category">Destaques</h2>
-        <button class="pre-btn"><i class="fas fa-chevron-circle-left icon"></i></button>
-        <button class="nxt-btn"><i class="fas fa-chevron-circle-right icon"></i></button>
-        <div class="product-container">
-            @*----------------------- Produto 1 -------------------*@
-            <div class="product-card">
-                <div class="product-image">
-                    <span class="discount-tag">50% off</span>
-                    <span class="discount-heart">
-                        <input type="checkbox" />
-                        <i class="fas fa-heart icon"></i>
-                    </span>
+    <div class="swiper mySwiper cols">
+        <div class="swiper-wrapper">
+            <h2 class="product-category">Destaques</h2>
+            <button class="swiper-button-prev pre-btn"><i class="fas fa-chevron-circle-left icon"></i></button>
+            <button class="swiper-button-next nxt-btn"><i class="fas fa-chevron-circle-right icon"></i></button>
+            <div class="swiper-pagination"></div>
+            <div class="product-container">
+                @*----------------------- Produto 1 -------------------*@
+                <div class="swiper-slide product-card">
+                    <div class="product-image">
+                        <span class="discount-tag">50% off</span>
+                        <span class="discount-heart">
+                            <input type="checkbox" />
+                            <i class="fas fa-heart icon"></i>
+                        </span>
                     
                     
-                    <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
-                    <button class="card-btn">adicionar ao carrinho</button>
+                        <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
+                        <button class="card-btn">adicionar ao carrinho</button>
+                    </div>
+                    <div class="product-info">
+                        <h2 class="product-brand">brand</h2>
+                        <p class="product-short-description">a short line about the product</p>
+                        <span class="price">R$120,00</span>
+                        <span class="actual-price">R$50,00</span>
+                    </div>
                 </div>
-                <div class="product-info">
-                    <h2 class="product-brand">brand</h2>
-                    <p class="product-short-description">a short line about the product</p>
-                    <span class="price">R$120,00</span>
-                    <span class="actual-price">R$50,00</span>
-                </div>
-            </div>
-            @*----------------------- Produto 2 -------------------*@
-            <div class="product-card">
-                <div class="product-image">
-                    <span class="discount-tag">50% off</span>
-                    <span class="discount-heart">
-                        <input type="checkbox" />
-                        <i class="fas fa-heart icon"></i>
-                    </span>
+                @*----------------------- Produto 2 -------------------*@
+                <div class="swiper-slide product-card">
+                    <div class="product-image">
+                        <span class="discount-tag">50% off</span>
+                        <span class="discount-heart">
+                            <input type="checkbox" />
+                            <i class="fas fa-heart icon"></i>
+                        </span>
 
-                    <img src="~/image/vertical-photo2.jpg" class="product-thumb" />
-                    <button class="card-btn">adicionar ao carrinho</button>
+                        <img src="~/image/vertical-photo2.jpg" class="product-thumb" />
+                        <button class="card-btn">adicionar ao carrinho</button>
+                    </div>
+                    <div class="product-info">
+                        <h2 class="product-brand">brand</h2>
+                        <p class="product-short-description">a short line about the product</p>
+                        <span class="price">R$120,00</span>
+                        <span class="actual-price">R$50,00</span>
+                    </div>
                 </div>
-                <div class="product-info">
-                    <h2 class="product-brand">brand</h2>
-                    <p class="product-short-description">a short line about the product</p>
-                    <span class="price">R$120,00</span>
-                    <span class="actual-price">R$50,00</span>
-                </div>
-            </div>
-            @*----------------------- Produto 3 -------------------*@
-            <div class="product-card">
-                <div class="product-image">
-                    <span class="discount-tag">50% off</span>
-                    <span class="discount-heart">
-                        <input type="checkbox" />
-                        <i class="fas fa-heart icon"></i>
-                    </span>
+                @*----------------------- Produto 3 -------------------*@
+                <div class="swiper-slide product-card">
+                    <div class="product-image">
+                        <span class="discount-tag">50% off</span>
+                        <span class="discount-heart">
+                            <input type="checkbox" />
+                            <i class="fas fa-heart icon"></i>
+                        </span>
 
-                    <img src="~/image/vertical-photo3.jpg" class="product-thumb" />
-                    <button class="card-btn">adicionar ao carrinho</button>
+                        <img src="~/image/vertical-photo3.jpg" class="product-thumb" />
+                        <button class="card-btn">adicionar ao carrinho</button>
+                    </div>
+                    <div class="product-info">
+                        <h2 class="product-brand">brand</h2>
+                        <p class="product-short-description">a short line about the product</p>
+                        <span class="price">R$120,00</span>
+                        <span class="actual-price">R$50,00</span>
+                    </div>
                 </div>
-                <div class="product-info">
-                    <h2 class="product-brand">brand</h2>
-                    <p class="product-short-description">a short line about the product</p>
-                    <span class="price">R$120,00</span>
-                    <span class="actual-price">R$50,00</span>
-                </div>
-            </div>
-            @*----------------------- Produto 4 -------------------*@
-            <div class="product-card">
-                <div class="product-image">
-                    <span class="discount-tag">50% off</span>
-                    <span class="discount-heart">
-                        <input type="checkbox" />
-                        <i class="fas fa-heart icon"></i>
-                    </span>
+                @*----------------------- Produto 4 -------------------*@
+                <div class="swiper-slide product-card">
+                    <div class="product-image">
+                        <span class="discount-tag">50% off</span>
+                        <span class="discount-heart">
+                            <input type="checkbox" />
+                            <i class="fas fa-heart icon"></i>
+                        </span>
 
-                    <img src="~/image/vertical-photo2.jpg" class="product-thumb" />
-                    <button class="card-btn">adicionar ao carrinho</button>
+                        <img src="~/image/vertical-photo2.jpg" class="product-thumb" />
+                        <button class="card-btn">adicionar ao carrinho</button>
+                    </div>
+                    <div class="product-info">
+                        <h2 class="product-brand">brand</h2>
+                        <p class="product-short-description">a short line about the product</p>
+                        <span class="price">R$120,00</span>
+                        <span class="actual-price">R$50,00</span>
+                    </div>
                 </div>
-                <div class="product-info">
-                    <h2 class="product-brand">brand</h2>
-                    <p class="product-short-description">a short line about the product</p>
-                    <span class="price">R$120,00</span>
-                    <span class="actual-price">R$50,00</span>
-                </div>
-            </div>
-            @*----------------------- Produto 5 -------------------*@
-            <div class="product-card">
-                <div class="product-image">
-                    <span class="discount-tag">50% off</span>
-                    <span class="discount-heart">
-                        <input type="checkbox" />
-                        <i class="fas fa-heart icon"></i>
-                    </span>
+                @*----------------------- Produto 5 -------------------*@
+                <div class="swiper-slide product-card">
+                    <div class="product-image">
+                        <span class="discount-tag">50% off</span>
+                        <span class="discount-heart">
+                            <input type="checkbox" />
+                            <i class="fas fa-heart icon"></i>
+                        </span>
 
-                    <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
-                    <button class="card-btn">adicionar ao carrinho</button>
-                </div>
-                <div class="product-info">
-                    <h2 class="product-brand">brand</h2>
-                    <p class="product-short-description">a short line about the product</p>
-                    <span class="price">R$120,00</span>
-                    <span class="actual-price">R$50,00</span>
+                        <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
+                        <button class="card-btn">adicionar ao carrinho</button>
+                    </div>
+                    <div class="product-info">
+                        <h2 class="product-brand">brand</h2>
+                        <p class="product-short-description">a short line about the product</p>
+                        <span class="price">R$120,00</span>
+                        <span class="actual-price">R$50,00</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-     <div class="cols">
+    <div class="cols">
         <h2 class="product-category">Promoções</h2>
         <button class="pre-btn"><i class="fas fa-chevron-circle-left icon"></i></button>
         <button class="nxt-btn"><i class="fas fa-chevron-circle-right icon"></i></button>
@@ -252,3 +255,22 @@
     </div>
 </content>
 <script src="~/js/slideProduct.js" asp-append-version="true"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        slidesPerGroup: 3,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    </script>
