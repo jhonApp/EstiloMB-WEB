@@ -411,7 +411,6 @@ content {
 /* Cols
 -------------------------------------------------- */
 .cols {
-    display: flex;
     width: 100%;
     height: auto;
     margin: 0 auto;
@@ -439,9 +438,8 @@ content {
 }
 
 .product-container {
-    padding: 0 10vw;
+    /*padding: 0 10vw;*/
     display: flex;
-    overflow-x: auto;
     scroll-behavior: smooth;
 }
 
@@ -451,7 +449,7 @@ content {
 
 .product-card {
     flex: 0 0 auto;
-    width: 250px;
+    max-width: 250px;
     /*height: 450px;*/
     margin-right: 40px;
 }
@@ -481,7 +479,7 @@ content {
 }
 
 .swiper {
-    width:950px;
+    width:1100px;
 }
 
 /*/--------BUTTON PREFERIDOS---------/*/
