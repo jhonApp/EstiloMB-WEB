@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EstiloMB_Web.Controllers
+namespace EstiloMB.Site.Controllers
 {
     public class HomeController : Controller
     {
