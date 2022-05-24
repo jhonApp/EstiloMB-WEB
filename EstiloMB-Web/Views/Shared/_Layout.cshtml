@@ -1,5 +1,7 @@
 ﻿@using EstiloMB.Core;
+@using EstiloMB.Site;
 @using EstiloMB.MVC;
+@addTagHelper *, MyWebApp
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -106,9 +108,5 @@
     <footer class="border-top footer text-muted">
         &copy; 2022 - EstiloMB_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </footer>
-    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
-
-    @RenderSection("Scripts", required: false)
 </body>
 </html>
