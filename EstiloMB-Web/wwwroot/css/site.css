@@ -105,9 +105,9 @@ a {
 
 /* SEARCH PRINCIPAL
 -------------------------------------------------- */
-.cols:nth-child(1){
+/*.cols:nth-child(1){
     margin-bottom: 0px;
-}
+}*/
 
 #search::-webkit-input-placeholder {
     color: #e0dfdf;
@@ -422,6 +422,9 @@ content {
     /*background-color: black;*/
 }
 
+/* Product
+-------------------------------------------------- */
+
 .product {
     position: relative;
     overflow: hidden;
@@ -466,21 +469,72 @@ content {
     height: 100%;
     object-fit: cover;
 }
-.discount-heart,
-.discount-tag {
-    position: absolute;
-    background: white;
-    padding: 5px;
-    border-radius: 5px;
-    color: #b684eb; /*lilás site*/
-    right: 10px;
-    top: 10px;
-    text-transform: capitalize;
+
+/* Details Product
+-------------------------------------------------- */
+
+.grid-content {
+    display: grid;
+    grid-template-areas:
+        "small big big"
+        "small big big"
+        "small big big";
+    grid-template-rows: 1fr;
+    grid-template-columns: 110px 1fr;
 }
+.left {
+    margin: 45px;
+}
+
+.big-img {
+    grid-area: big;
+    width: 400px;
+}
+
+.big-img img{
+    width: inherit;
+}
+
+.images {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.small-img {
+    grid-area: small;
+    width: 90px;
+    overflow: hidden;
+    /*border: 1.5px solid #000;*/
+}
+
+    .small-img img{
+        width: inherit;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .small-img:hover img{
+        transform: scale(1.2);
+    }
+
+
+    .discount-heart,
+    .discount-tag {
+        position: absolute;
+        background: white;
+        padding: 5px;
+        border-radius: 5px;
+        color: #b684eb; /*lilás site*/
+        right: 10px;
+        top: 10px;
+        text-transform: capitalize;
+    }
 
 .swiper {
     width:85%;
 }
+
 
     /*/--------BUTTON PREFERIDOS---------/*/
     .discount-heart {

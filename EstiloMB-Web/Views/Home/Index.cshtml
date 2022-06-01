@@ -182,7 +182,7 @@
                         </span>
 
                         <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
-                        <button class="card-btn"><a class="link@(ViewContext.View.Path == "/Views/Produto/Details.cshtml" ? " selected" : "")" href="~/Produto/Details.cshtml">Mais Detalhes</a></button>
+                        <button class="card-btn"><a href="~/Produto/Details">Mais Detalhes</a></button>
                     </div>
                     <div class="product-info">
                         <h2 class="product-brand">brand</h2>
@@ -293,7 +293,7 @@
         @*<div class="swiper-pagination"></div>*@
     </div>
 </content>
-<script src="~/js/swipe.js"></script>
+
 
 <script>
     var swiper = new Swiper(".destaques", {

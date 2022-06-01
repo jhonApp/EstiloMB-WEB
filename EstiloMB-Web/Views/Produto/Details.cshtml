@@ -2,6 +2,86 @@
     ViewData["Title"] = "Detalhes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<section>
-    <p>oi</p>
-</section>
+<content>
+    <div class="cols">
+        <div class="left">
+            <div class="grid-content">
+                <div class=" big-img">
+                     <div class="swiper mySwiper2">
+                      <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src=~/image/vertical-photo1.jpg/></div>
+                        <div class="swiper-slide"><img src=~/image/vertical-photo2.jpg/></div>
+                        <div class="swiper-slide"><img src=~/image/vertical-photo3.jpg/></div>
+                      </div>
+                      <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="swiper mySwiper">
+                        <div class="images swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="small-img">
+                                    <img src=~/image/vertical-photo1.jpg/>
+                                </div>
+                            </div>
+                            <div class=" swiper-slide">
+                                <div class="small-img">
+                                    <img src=~/image/vertical-photo2.jpg/>
+                                </div>
+                            </div>
+                           <div class=" swiper-slide">
+                                <div class="small-img">
+                                    <img src=~/image/vertical-photo3.jpg/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</content>
+
+<script>
+
+    //let bigImg = document.querySelector('.big-img img');
+    //function showImg(pic){
+    //    bigImg.src = pic;
+    //}
+
+    //var swiper = new Swiper(".mySwiper", {
+    //    pagination: {
+    //      el: ".swiper-pagination",
+    //      type: "fraction",
+    //    },
+    //    navigation: {
+    //      nextEl: ".swiper-button-next",
+    //      prevEl: ".swiper-button-prev",
+    //    },
+    //  });
+
+</script>
+<script>
+      var swiper = new Swiper(".mySwiper", {
+        loop: false,
+        spaceBetween: 10,
+        slidesPerView: 4,
+        freeMode: true,
+        watchSlidesProgress: true,
+      });
+      var swiper2 = new Swiper(".mySwiper2", {
+          pagination: {
+            el: ".swiper-pagination",
+            type: "fraction",
+        },
+        loop: true,
+        spaceBetween: 10,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        thumbs: {
+          swiper: swiper,
+        },
+      });
+    </script>

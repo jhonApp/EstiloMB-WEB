@@ -5,7 +5,6 @@ namespace EstiloMB.Site.Controllers
 {
     public class ProdutoController : Controller
     {
-        [Authorize]
         public IActionResult Details()
         {
             return View();

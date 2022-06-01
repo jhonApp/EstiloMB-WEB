@@ -264,9 +264,10 @@
 }
 
 .swiper-pagination {
-    /*position: absolute;*/
+    position: absolute;
     text-align: center;
-    margin-top:5px;
+    margin-top: 5px;
+    color: white;
     transition: .3s opacity;
     transform: translate3d(0,0,0);
     z-index: 10
