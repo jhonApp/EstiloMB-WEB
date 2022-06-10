@@ -9,5 +9,10 @@ namespace EstiloMB.Site.Controllers
         {
             return View();
         }
+
+        public IActionResult Sacola()
+        {
+            return View();
+        }
     }
 }
