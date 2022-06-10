@@ -584,24 +584,30 @@ content {
         align-items: center;
         justify-content: center;
     }
-
-        .info-details div .radio-size:hover {
+        
+        /*.info-details div .radio-size:hover {
             background-color: black;
             color: white;
             transition: all 600ms ease-in-out;
-        }
-
-        /*.info-details div .radio-size:before {
-            content: '';
-            position: absolute;
-            width: 2.5em;
-            height: 2.5em;
-            border: 2px solid black;
-            background-color: transparent;
-            border-radius: 0%;
-            transition: all 600ms ease-in-out;
-            opacity: 0;
         }*/
+
+.input-size {
+    margin: 15px;
+    width: 2.5em;
+    height: 2.3em;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    cursor: pointer;
+    
+}
+
+    .input-size:checked + .radio-size {
+        background-color: black;
+        color: white;
+        transition: all 600ms ease-in-out;
+    }
+
         .info-details div .radio-size:checked:before,
         .info-details div .radio:checked:before {
             opacity: 1;
@@ -621,6 +627,13 @@ content {
             top: 10px;
             text-transform: capitalize;
         }
+
+.flex div,
+.input-size,
+.radio-size,
+.radio-size span {
+    user-select: none;
+}
 
 .swiper {
     width:85%;
@@ -643,8 +656,8 @@ input[type="checkbox"] {
     position: absolute;
     outline: none;
     opacity: 0;
-    width: 15px;
-    height: 15px;
+    /*width: 15px;
+    height: 15px;*/
     z-index: 1;
     cursor: pointer;
 }
@@ -787,15 +800,29 @@ input[type="checkbox"] {
         grid-column: span 2;
         margin-bottom: 10px;
     }
-    /* Footer
+
+    /* Button Comprar
 -------------------------------------------------- */
-    .footer {
-        bottom: 0;
-        width: 100%;
-        white-space: nowrap;
-        line-height: 10vh; /* Vertically center the text there */
-        background-color: #f3f3f3;
-    }
+.button-pay {
+    width: 100%;
+    border: none;
+    padding: 15px;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 1px;
+    background-color: rgb(75, 200, 138);
+    cursor: pointer;
+}
+
+/* Footer
+-------------------------------------------------- */
+.footer {
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 10vh; /* Vertically center the text there */
+    background-color: #f3f3f3;
+}
 
 /*------------------------------------------------------------------*/
 /*------------------------------------------------------[ ELEMENTS ]*/
