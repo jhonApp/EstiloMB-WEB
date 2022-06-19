@@ -880,10 +880,11 @@ input[type="checkbox"] {
 .card-sacola {
     display: grid;
     grid-template-areas: "resume-shop entrega-shop"
-                         "resume-shop valor-shop";
+        "resume-shop valor-shop";
+    grid-template-columns: 1fr 1fr;
     width: 90%;
     padding: 10px;
-    gap:5px;
+    gap: 5px;
     grid-template: 100px;
     background-color: white;
     height: 80%;
@@ -905,7 +906,6 @@ input[type="checkbox"] {
 
     .resume-shop {
         grid-area: resume-shop;
-        background-color: orange;
         width: 100%;
     }
 
@@ -913,11 +913,63 @@ input[type="checkbox"] {
             display: flex;
             flex: 1;
             flex-wrap: wrap;
-            background-color: black;
             border-bottom: solid 1px #d8d8d8;
             height: 35%;
         }
 
+            .resume-shop div .resume-info {
+                flex-basis: 50%;
+                border-bottom: solid 0px #d8d8d8;
+                display: grid;
+            }
+
+            .resume-shop div p {
+                font-size: 0.8rem;
+                margin: 5px;
+            }
+
+            .resume-shop div img {
+                width: 100px;
+                height: 100px;
+                margin: 10px;
+            }
+
+            .resume-shop div .remove-item {
+                /*flex-basis: 50%;*/
+                border-bottom: solid 0px #d8d8d8;
+            }
+
+#input-qtd {
+    -moz-appearance: textfield;
+    text-align: center;
+    border: none;
+    background-color:#fff;
+    color: black;
+}
+
+    #input-qtd::-webkit-outer-spin-button,
+    #input-qtd::-webkit-inner-spin-button{
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+button {
+    border: none;
+    background-color: #212529;
+    color: white;
+    cursor: pointer;
+}
+
+.title-qtd {
+    word-spacing: 12px;
+}
+/*#decrement {
+    padding: 15px 5px 15px 25px;
+}
+
+#increment {
+    padding: 15px 25px 15px 25px;
+}*/
 .entrega-shop {
     grid-area: entrega-shop;
     background-color: orange;

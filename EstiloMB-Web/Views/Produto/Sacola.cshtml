@@ -38,9 +38,19 @@
             <div class="card-sacola">
                 <div class="resume-shop">
                     <div>
-                        <div>teste</div>
-                        <div>teste</div>
-                        <div>teste</div>
+                        <img src="~/image/jeans.jpg" />
+                        <div class="resume-info">
+                            <p><strong>Calça de Moletom Feminina Jogger Preto AK by Riachuelo</strong></p>
+                            <p><span>Tamanho: </span><strong>P</strong></p>
+                            <p><span>Cor: </span><strong>Preto</strong></p>
+                            <p>
+                                <span class="title-qtd">Quantidade: </span>
+                                <button id="decrement" onclick="stepper(this)">-</button>
+                                <input type="number" min="0" max="100" value="1" id="input-qtd"/>
+                                <button id="increment" onclick="stepper(this)">+</button>
+                            </p>
+                        </div>
+                        <div class="remove-item">teste</div>
                     </div>
                 </div>
                 <div class="entrega-shop"></div>
@@ -50,3 +60,20 @@
         </div>
     </div>
 </content>
+<script>
+    function stepper(btn) {
+       let input = btn.closest('content').querySelector('#input-qtd');
+
+       let id = btn.getAttribute("id");
+       let min = input.getAttribute("min");
+       let max = input.getAttribute("max");
+       let val = input.getAttribute("value");
+       let newValue = (id == "increment") ? (parseInt(val) + 1) : (val - 1);
+
+       if(newValue >= min && newValue <= max) {
+           console.log("entrei")
+           input.setAttribute("value", newValue);
+       }
+
+    }
+</script>
