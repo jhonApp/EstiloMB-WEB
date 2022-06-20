@@ -13,6 +13,10 @@ a {
     text-decoration: none;
 }
 
+.none{
+    display: none;
+}
+
 /* Nav-Top
 -------------------------------------------------- */
 .nav-top {
@@ -187,10 +191,10 @@ nav {
 
 ul {
     padding: 0;
+    display: inline-flex;
 }
 
 .wrapper .nav-links {
-    display: inline-flex;
     align-items: center;
     margin-top: 6px;
 }
@@ -879,15 +883,15 @@ input[type="checkbox"] {
 
 .card-sacola {
     display: grid;
-    grid-template-areas: "resume-shop entrega-shop"
+    grid-template-areas: "entrega-shop valor-shop"
         "resume-shop valor-shop";
+    grid-template-rows: auto 1fr;
     grid-template-columns: 1fr 1fr;
     width: 90%;
     padding: 10px;
-    gap: 5px;
+    gap: 15px;
     grid-template: 100px;
-    background-color: white;
-    height: 80%;
+    /*height: 80%;*/
     margin: 0 auto;
     /*box-shadow: 0 0 1em rgb(0 0 0 / 10%);*/
 }
@@ -906,27 +910,34 @@ input[type="checkbox"] {
 
     .resume-shop {
         grid-area: resume-shop;
+        background-color: white;
+        max-height:10em;
         width: 100%;
     }
+
+        .resume-shop div:first-child {
+            border-bottom: 0;
+        }
 
         .resume-shop div {
             display: flex;
             flex: 1;
             flex-wrap: wrap;
             border-bottom: solid 1px #d8d8d8;
-            height: 35%;
+            margin: 20px;
+            /*height: 35%;*/
         }
 
             .resume-shop div .resume-info {
                 flex-basis: 50%;
-                border-bottom: solid 0px #d8d8d8;
+                margin-top: 1px;
+                border-bottom: 0;
                 display: grid;
             }
-
-            .resume-shop div p {
-                font-size: 0.8rem;
-                margin: 5px;
-            }
+                .resume-shop div p {
+                    font-size: 0.8rem;
+                    margin: 5px;
+                }
 
             .resume-shop div img {
                 width: 100px;
@@ -935,15 +946,26 @@ input[type="checkbox"] {
             }
 
             .resume-shop div .remove-item {
-                /*flex-basis: 50%;*/
+                display: flex;
                 border-bottom: solid 0px #d8d8d8;
+                justify-content: center;
+                margin-top: 5px;
+                align-content: space-between;
             }
+
+.remove-item .value-size {
+    word-spacing: 12px;
+    font-size: 1rem;
+    line-height: 1.125rem;
+    margin-block-end: 0.3em;
+    font-weight: 500;
+}
 
 #input-qtd {
     -moz-appearance: textfield;
     text-align: center;
     border: none;
-    background-color:#fff;
+    background-color: #fff;
     color: black;
 }
 
@@ -962,6 +984,8 @@ button {
 
 .title-qtd {
     word-spacing: 12px;
+    font-size: 0.9rem;
+    line-height: 1.125rem;
 }
 /*#decrement {
     padding: 15px 5px 15px 25px;
@@ -972,10 +996,40 @@ button {
 }*/
 .entrega-shop {
     grid-area: entrega-shop;
-    background-color: orange;
-    height: 100px;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 150px;
     width: 100%;
+    flex-direction: column;
 }
+
+    .entrega-shop .radio {
+        cursor: pointer;
+        appearance: none;
+        width: 6em;
+        height: 6em;
+        margin: 10px;
+        outline: none;
+        background: black;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+.title-entrega {
+    width: 90%;
+    height: 28px;
+}
+
+    .title-entrega h1 {
+        font-weight: 500;
+        line-height: 1.5625rem;
+        /*text-transform: uppercase;*/
+        font-size: 1rem;
+    }
 
 .valor-shop {
     grid-area: valor-shop;
@@ -998,6 +1052,68 @@ button {
 /*------------------------------------------------------[ ELEMENTS ]*/
 /*------------------------------------------------------------------*/
 
+.tooltip > tooltip-top {
+    width: 0;
+    height: 0;
+    bottom: 0;
+    margin-bottom: 0.5em;
+    box-shadow: 0 1px 1px grey;
+    transition: bottom 0.2s ease, opacity 0.5s ease;
+}
+
+.tooltip > tooltip-top, .tooltip > tooltip-bottom, .tooltip > tooltip-left, .tooltip > tooltip-right {
+    display: block;
+    position: absolute !important;
+    overflow: hidden;
+    opacity: 0;
+    font-size: 0.8rem;
+    font-weight: normal;
+    text-align: center;
+    text-transform: none;
+    line-height: initial;
+    color: var(--tooltip-text);
+    background-color: var(--tooltip-color);
+    border: 0px solid silver;
+    border-radius: 3px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+    .tooltip > tooltip-top:after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-top: 0.5em solid white;
+        border-left: 0.5em solid transparent;
+        border-right: 0.5em solid transparent;
+        margin-top: -1px;
+        filter: drop-shadow(0 2px 1px gray);
+        -webkit-filter: drop-shadow(0 2px 1px gray);
+    }
+
+.tooltip-top:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top: 0.5em solid white;
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+    margin-top: -1px;
+    filter: drop-shadow(0 2px 1px rgb(0, 0, 0, 0.5));
+    -webkit-filter: drop-shadow(0 2px 1px rgb(0, 0, 0, 0.5));
+}
+
+.icon {
+    display: inline-block;
+    /*font-size: 1em;*/
+    min-width: 1.5em;
+    text-align: center;
+}
+
 .icon {
     position: relative;
     display: inline-block;
@@ -1017,6 +1133,239 @@ button {
     .icon > * {
         position: relative;
     }
+
+.button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: 0;
+    border: 0;
+    padding: 0.5em 0.75em;
+    color: var(--color-secondary-text);
+    background-color: #333;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1em;
+    transition: background-color 0.2s ease;
+    min-width: 8em;
+}
+
+    .button:not(:disabled) {
+        cursor: pointer;
+    }
+
+    .button.circle {
+        padding: 0.5em;
+        border-radius: 50%;
+        min-width: unset;
+        width: 2em;
+        height: 2em;
+    }
+
+    .button.shadow {
+        box-shadow: 0 0.1em 0.2em grey;
+    }
+
+    .button:not(:disabled):hover {
+        background-color: var(--color-blue-dark);
+    }
+
+a.icon, button.icon {
+    position: relative;
+    outline: 0;
+    border: 0;
+    padding: 0.25em;
+    margin: 0 0.25em;
+    border-radius: 50%;
+    color: darkslategray;
+    background-color: transparent;
+    min-width: 1.5em;
+    height: 1.5em;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: center;
+}
+
+    
+
+.button.icon {
+    color: #393939;
+    background: none;
+    padding: 0;
+    border-radius: 50%;
+    /*font-size: 1.25em;*/
+    min-width: 1.5em;
+    width: 1.6em;
+    height: 1.6em;
+    text-align: center;
+    transition: color 0.1s ease;
+}
+
+    .button.icon > * {
+        position: relative;
+        /*color: inherit;
+            vertical-align: top;*/
+    }
+
+    .button.icon:before {
+        content: '\200b';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background-color: var(--color-blue);
+        transform: translate(-50%, -50%);
+        transition: width 0.1s ease, height 0.1s ease;
+    }
+
+    .button.icon:not(:disabled):hover {
+        color: white;
+        background-color: transparent;
+    }
+
+        .button.icon:not(:disabled):hover:before {
+            width: 1.6em;
+            height: 1.6em;
+        }
+
+    .button.red,
+    .button.icon.red:before {
+        color: white;
+        background-color: var(--color-red);
+    }
+
+        .button.red:hover {
+            background-color: var(--color-red-dark);
+        }
+
+    .button.icon.red {
+        color: var(--color-red);
+        background-color: transparent;
+    }
+
+    .button.blue,
+    .button.icon.blue:before {
+        color: white;
+        background-color: var(--color-blue);
+    }
+
+        .button.blue:hover {
+            background-color: var(--color-blue-dark);
+        }
+
+    .button.icon.blue {
+        color: var(--color-blue);
+        background-color: transparent;
+    }
+
+    .button.green,
+    .button.icon.green:before {
+        color: white;
+        background-color: var(--color-green);
+    }
+
+        .button.green:hover {
+            background-color: var(--color-green-dark);
+        }
+
+    .button.icon.green {
+        color: var(--color-green);
+        background-color: transparent;
+    }
+
+    .button.silver,
+    .button.icon.silver:before {
+        color: white;
+        background-color: var(--color-silver);
+    }
+
+        .button.silver:hover {
+            background-color: var(--color-silver-dark);
+        }
+
+    .button.orange,
+    .button.icon.orange:before {
+        color: white;
+        background-color: #ffa000;
+    }
+
+        .button.orange:hover {
+            background-color: #ffa000;
+        }
+
+    .button.icon.orange {
+        color: #ffa000;
+        background-color: transparent;
+    }
+    /*grey */
+    .button.icon.grey {
+        color: #939292;
+        background-color: transparent;
+    }
+
+        .button.grey,
+        .button.icon.grey:before {
+            color: white;
+            background-color: #939292;
+        }
+
+            .button.grey:hover {
+                background-color: #939292;
+            }
+
+    .button:not(:disabled):active,
+    .button.icon:not(:disabled):active:before {
+        color: white;
+        background-color: var(--color-tertiary-dark);
+    }
+
+    .button:disabled,
+    .button.icon:disabled {
+        color: white;
+        /*background-color: var(--color-silver);*/
+    }
+
+    .button.icon.disabled {
+        cursor: default;
+        color: var(--color-silver);
+    }
+
+        .button.icon.disabled:hover {
+            color: var(--color-silver);
+        }
+
+            .button.icon.disabled:hover:before {
+                width: 0;
+                height: 0;
+            }
+
+a.icon:before, button.icon:before {
+    content: '\200b';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    background-color: transparent;
+    transform: translate(-50%, -50%);
+    transition: width 0.1s ease, height 0.1s ease;
+}
+
+a.icon:not(:disabled).select:hover,
+button.icon:not(:disabled).select:hover {
+    background-color: black;
+    color: white;
+}
+
+a.button.icon,
+label.button.icon {
+    line-height: 1.6em;
+}
 
 .flex {
     display: flex;

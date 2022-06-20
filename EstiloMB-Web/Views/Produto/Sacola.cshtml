@@ -1,11 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Sacola";
-    
 }
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <link rel="stylesheet" href="~/css/site.css" />
+
+    <script type="text/javascript" src="~/js/fa/all.js"></script>
+    <script type="text/javascript" src="~/js/ChartJS/Chart.js"></script>
     <script type="text/javascript" src="~/js/site.js"></script>
     <script src="~/js/swipe.js"></script>
 </head>
@@ -44,16 +47,28 @@
                             <p><span>Tamanho: </span><strong>P</strong></p>
                             <p><span>Cor: </span><strong>Preto</strong></p>
                             <p>
-                                <span class="title-qtd">Quantidade: </span>
+                                <span class="title-qtd size-1em">Quantidade: </span>
                                 <button id="decrement" onclick="stepper(this)">-</button>
                                 <input type="number" min="0" max="100" value="1" id="input-qtd"/>
                                 <button id="increment" onclick="stepper(this)">+</button>
                             </p>
                         </div>
-                        <div class="remove-item">teste</div>
+                        <div class="remove-item">
+                            <button class="icon tooltip select">
+                                <i class="far fa-trash"></i>
+                            </button>
+                            <span class="value-size">R$120,00</span>
+                        </div>
                     </div>
                 </div>
-                <div class="entrega-shop"></div>
+                <div class="entrega-shop">
+                    <div class="title-entrega"><h1>Selecione uma opção para a entrega:</h1></div>
+                    <div class="flex">
+                        <p><input type="radio" name="radio1" class="radio" checked/></p>
+                        <p><input type="radio" name="radio1" class="radio" /></p>
+                        <p><input type="radio" name="radio1" class="radio" /></p>
+                    </div>
+                </div>
                 <div class="valor-shop"></div>
 
             </div>
