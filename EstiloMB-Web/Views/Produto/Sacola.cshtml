@@ -64,9 +64,18 @@
                 <div class="entrega-shop">
                     <div class="title-entrega"><h1>Selecione uma opção para a entrega:</h1></div>
                     <div class="flex">
-                        <p><input type="radio" name="radio1" class="radio" checked/></p>
-                        <p><input type="radio" name="radio1" class="radio" /></p>
-                        <p><input type="radio" name="radio1" class="radio" /></p>
+                        <div>
+                            <input type="radio" name="radio1" class="radio" id="op-entrega"/>
+                            <label class="text-entrega-uber w-100" for="op-entrega">Uber Flash</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="radio1" class="radio" id="op-entrega-correio"/>
+                            <label class="text-entrega-correios w-100" for="op-entrega-correio">Correios</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="radio1" class="radio" id="op-entrega-vendedor"/>
+                            <label class="text-entrega" for="op-entrega-vendedor">Combine com o vendedor</label>
+                        </div>
                     </div>
                 </div>
                 <div class="valor-shop"></div>

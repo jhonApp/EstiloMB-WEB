@@ -997,31 +997,59 @@ button {
 .entrega-shop {
     grid-area: entrega-shop;
     background-color: white;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     display: flex;
     height: 150px;
     width: 100%;
     flex-direction: column;
 }
-
+    .entrega-shop .radio:checked,
     .entrega-shop .radio {
         cursor: pointer;
         appearance: none;
-        width: 6em;
+        width: 7em;
         height: 6em;
         margin: 10px;
         outline: none;
-        background: black;
+        overflow: hidden;
+        background-color: #eeeeee;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
+        .entrega-shop .radio:checked {
+            border: 1px solid black;
+        }
+
+.text-entrega-correios,
+.text-entrega-uber,
+.text-entrega {
+    top: -77px;
+    left: 20px;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    word-wrap: break-word;
+    display: list-item;
+    list-style-type: none;
+    width: 70px;
+    font-size: 0.89rem;
+    font-weight: 500;
+}
+
+.text-entrega-uber {
+    top: -60px;
+}
+.text-entrega-correios {
+    top: -60px;
+}
+
 .title-entrega {
     width: 90%;
-    height: 28px;
+    height: 25%;
 }
 
     .title-entrega h1 {
