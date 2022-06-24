@@ -819,7 +819,7 @@ input[type="checkbox"] {
 -------------------------------------------------- */
 .wrapper-sacola {
     background-color: #f3f3f3;
-    height: 80%;
+    height: 100%;
 }
 .nav-main-sacola {
     display: grid;
@@ -1075,6 +1075,7 @@ button {
     left: 50%;
     width: 100%;
     margin-left: 80px;
+    margin-bottom: 15px;
 }
 
     .box input {
@@ -1124,6 +1125,10 @@ button {
 
 /* SELECT
 -------------------------------------------------- */
+.margin-entrega {
+    margin-left: 40px;
+}
+
 .box p {
     margin: 0;
 }
@@ -1132,8 +1137,29 @@ button {
     font-size: 0.79rem;
     word-wrap: break-word;
     display: list-item;
-    list-style-type: none;
+    
 }
+
+.box > span:nth-child(n+2):nth-child(-n+15) {
+    list-style-type: circle;
+    margin-left: 30px;
+}
+
+    .box > span:first-child {
+        list-style-type: none;
+    }
+
+.taxa {
+    display: flex;
+    font-size: 0.79rem;
+    gap: 10px;
+    align-items: baseline;
+    margin: 5px;
+}
+
+    .taxa span {
+        list-style-type: none;
+    }
 
 .custom-seletor {
     display: flex;
@@ -1143,16 +1169,20 @@ button {
     margin: 5px;
 }
 
-    .custom-seletor select {
-        width: 100px;
-        height: 25px;
-        border-radius: 3px;
-        font-size: 0.73rem;
-        outline: none;
-        appearance: none;
-        padding: 0 6px;
-        cursor: pointer;
-    }
+        .custom-seletor span {
+            list-style-type: none;
+        }
+
+        .custom-seletor select {
+            width: 100px;
+            height: 25px;
+            border-radius: 3px;
+            font-size: 0.73rem;
+            outline: none;
+            appearance: none;
+            padding: 0 6px;
+            cursor: pointer;
+        }
 
 option {
     list-style: none;
