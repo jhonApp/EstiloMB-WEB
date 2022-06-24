@@ -6,6 +6,5 @@
     } else {
         button.style.color = "rgb(182, 132, 235)";
     }
-
-    
 }
+

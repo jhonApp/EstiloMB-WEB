@@ -69,20 +69,43 @@
                             <label class="text-entrega-uber w-100" for="op-entrega">Uber Flash</label>
                         </div>
                         <div>
-                            <input type="radio" name="radio1" class="radio" id="op-entrega-correio"/>
+                            <input type="radio" name="radio1" class="radio" id="op-entrega-correio" onclick="hiddenGroup(this)"/>
                             <label class="text-entrega-correios w-100" for="op-entrega-correio">Correios</label>
                         </div>
                         <div>
-                            <input type="radio" name="radio1" class="radio" id="op-entrega-vendedor"/>
+                            <input type="radio" name="radio1" class="radio" id="op-entrega-vendedor" onclick="hiddenGroup(this)"/>
                             <label class="text-entrega" for="op-entrega-vendedor">Combine com o vendedor</label>
                         </div>
                     </div>
-                    <div class="info-none">
+                    <div class="info-none none">
                         <div class="box">
                             <form>
                                 <input type="text" id="consulta" data-bind="" placeholder="Digite seu CEP aqui"/>
                                 <input type="submit" id="search" data-bind="" value="calcular frete"/>
                             </form>
+                        </div>
+                    </div>
+                    <div class="info-none">
+                        
+                        <div class="box">
+                            <span><strong>Importante: </strong></span>
+                            <span>Entrega somente em estações da linha 8 diamante da CPTM;</span>
+                            <span>A taxa de entrega pode variar dependendo da estação selecionada;</span>
+                            <span>Fazemos entrega somente aos sábados.</span>
+                        </div>
+                        <div class="box">
+                            <label class="custom-seletor">
+                                <span>Selecione a Estação:</span>
+                                <select>
+                                    <option value="1">Carapicuíba</option>
+                                    <option value="1">Osasco</option>
+                                    <option value="1">General Miguel Costa</option>
+                                </select>
+                            </label>
+                            <label class="custom-seletor">
+                                <span>Taxa de Entrega:</span>
+                                <span>R$ 15,00</span>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -107,5 +130,17 @@
            input.setAttribute("value", newValue);
        }
 
+    }
+
+    function hiddenGroup(element) {
+        let apparence = element.closest('.entrega-shop').querySelector('.info-none');
+
+        if (element.checked)
+        {
+            apparence.classList.remove("none");
+
+        }else{
+            apparence.classList.add("none");
+        }
     }
 </script>

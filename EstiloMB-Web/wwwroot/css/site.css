@@ -1120,15 +1120,76 @@ button {
                 height: 240px;
             }
 
-/* Footer
+
+
+/* SELECT
 -------------------------------------------------- */
-.footer {
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 10vh; /* Vertically center the text there */
-    background-color: #f3f3f3;
+.box p {
+    margin: 0;
 }
+
+.box span {
+    font-size: 0.79rem;
+    word-wrap: break-word;
+    display: list-item;
+    list-style-type: none;
+}
+
+.custom-seletor {
+    display: flex;
+    font-size: 0.79rem;
+    gap: 10px;
+    align-items: baseline;
+    margin: 5px;
+}
+
+    .custom-seletor select {
+        width: 100px;
+        height: 25px;
+        border-radius: 3px;
+        font-size: 0.73rem;
+        outline: none;
+        appearance: none;
+        padding: 0 6px;
+        cursor: pointer;
+    }
+
+option {
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+    border-radius: 4px;
+    z-index: 1;
+    left: 2%;
+}
+
+.custom-seletor select option li {
+    
+}
+
+.custom-seletor::after {
+    content: '';
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent;
+    border-top-color: #222;
+    position: relative;
+    display: inline-block;
+    right: 30px;
+    top: 4px;
+}
+
+    
+
+    /* Footer
+-------------------------------------------------- */
+    .footer {
+        bottom: 0;
+        width: 100%;
+        white-space: nowrap;
+        line-height: 10vh; /* Vertically center the text there */
+        background-color: #f3f3f3;
+    }
 
 /*------------------------------------------------------------------*/
 /*------------------------------------------------------[ ELEMENTS ]*/
