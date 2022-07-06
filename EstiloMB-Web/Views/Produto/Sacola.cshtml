@@ -62,19 +62,34 @@
                     </div>
                 </div>
                 <div class="entrega-shop">
-                    <div class="title-entrega"><h1>Selecione uma opção para a entrega:</h1></div>
+                    <div class="title-entrega"><h1>Selecione uma opção para a entrega ou retire no local:</h1></div>
                     <div class="flex">
-                        <div>
-                            <input type="radio" name="radio1" class="radio" id="op-entrega"/>
-                            <label class="text-entrega-uber w-100" for="op-entrega">Uber Flash</label>
-                        </div>
-                        <div>
+                        <div class="menu-item-sacola">
                             <input type="radio" name="radio1" class="radio" id="op-entrega-correio" onclick="hiddenGroup(this)"/>
-                            <label class="text-entrega-correios w-100" for="op-entrega-correio">Correios</label>
+                            <div>
+                                <label class="text-entrega-correios w-100" for="op-entrega-correio">
+                                    <i class="fas fa-truck-loading" ></i>
+                                    Correios
+                                </label>
+                            </div>
                         </div>
-                        <div>
+                        <div class="menu-item-sacola">
                             <input type="radio" name="radio1" class="radio" id="op-entrega-vendedor" onclick="hiddenGroup(this)"/>
-                            <label class="text-entrega" for="op-entrega-vendedor">Combine com o vendedor</label>
+                            <div>
+                                <label class="text-entrega" for="op-entrega-vendedor">
+                                    <i class="fas fa-comments"></i>
+                                    Combine com o vendedor
+                                </label>
+                            </div>
+                        </div>
+                        <div class="menu-item-sacola">
+                            <input type="radio" name="radio1" class="radio" id="op-retire" onclick="hiddenGroup(this)"/>
+                            <div>
+                                <label class="text-entrega" for="op-retire">
+                                    <i class="fas fa-store-alt"></i>
+                                    Retire no local
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="info-none none" id="op-entrega-correio">
@@ -92,7 +107,7 @@
                             <span>A taxa de entrega pode variar dependendo da estação selecionada;</span>
                             <span>Fazemos entrega somente aos sábados.</span>
                         </div>
-                        <div class="box margin-entrega">
+                        <div class="margin-entrega">
                             <label class="custom-seletor">
                                 <span>Selecione a Estação:</span>
                                 <select>
@@ -107,9 +122,58 @@
                             </label>
                         </div>
                     </div>
+                    <div class="info-none none" id="op-retire">
+                        <div class="box margin-entrega">
+                            <span><strong>Endereço: </strong></span>
+                            <span>Rua: Dinamarca, n° 49, Bairro: Primeiro de Maio - Carapicuíba</span>
+                            <span>CEP: 06365-705</span>
+                        </div>
+                        <div class="margin-entrega">
+                            <label class="custom-seletor">
+                                <span>Dia da semana:</span>
+                                <select>
+                                    <option value="1">Segunda</option>
+                                    <option value="1">Terça</option>
+                                    <option value="1">Quarta</option>
+                                    <option value="1">Quinta</option>
+                                    <option value="1">Sexta</option>
+                                    <option value="1">Sábado</option>
+                                </select>
+                            </label>
+                            <label class="custom-seletor">
+                                <span>Período:</span>
+                                <select>
+                                    <option value="1">Manhã</option>
+                                    <option value="1">Tarde</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="valor-shop"></div>
-
+                <div class="valor-shop">
+                    <div class="title-resumo"><h1>Resumo do Pedido</h1></div>
+                    <div class="resumo">
+                        <div class="item-resumo">
+                            <div>
+                                <span>Produto(s):</span>
+                                <span>R$120,00</span>
+                            </div>
+                            <div>
+                                <span>Frete:</span>
+                                <span>R$15,00</span>
+                            </div>
+                        </div>
+                        <div class="total-resumo">
+                            <div>
+                                <span>Total:</span>
+                                <span>R$135,00</span>
+                            </div>
+                        </div>
+                        <button class="button-pay pay green">
+                            <span>IR PARA PAGAMENTO</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -134,18 +198,14 @@
     function hiddenGroup(element) {
         let apparence = element.closest('.entrega-shop').querySelectorAll('.info-none');
 
-        apparence.forEach(item){
+        apparence.forEach(function(item){
             if(item.id == element.id){
-                //TODO: Fazer a logica aqui
+                item.classList.remove("none");
             }
-        }
-
-        if (element.checked)
-        {
-            apparence.classList.remove("none");
-
-        }else{
-            apparence.classList.add("none");
-        }
+            else 
+            {
+                item.classList.add("none");
+            }
+        });
     }
 </script>

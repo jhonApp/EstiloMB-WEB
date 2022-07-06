@@ -997,10 +997,10 @@ button {
 .entrega-shop {
     grid-area: entrega-shop;
     background-color: white;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     display: flex;
-    height: auto;
+    min-height: 150px;
     width: 100%;
     flex-direction: column;
 }
@@ -1008,7 +1008,7 @@ button {
     .entrega-shop .radio {
         cursor: pointer;
         appearance: none;
-        width: 7em;
+        width: 12em;
         height: 6em;
         margin: 10px;
         outline: none;
@@ -1027,24 +1027,38 @@ button {
 .text-entrega-correios,
 .text-entrega-uber,
 .text-entrega {
-    top: -77px;
-    left: 20px;
     cursor: pointer;
+    text-align: center;
     text-align: center;
     position: relative;
     word-wrap: break-word;
-    display: list-item;
+    display: flex;
+    /* float: left; */
     list-style-type: none;
-    width: 70px;
+    width: 90px;
     font-size: 0.89rem;
+    align-items: center;
     font-weight: 500;
+    flex-direction: column;
 }
 
-.text-entrega-uber {
-    top: -60px;
+.menu-item-sacola {
+    display: block;
+    border: 0px solid blue;
 }
+
+    .menu-item-sacola div {
+        display: flex;
+        /* position: relative; */
+        margin-top: -73px;
+        align-items: flex-start;
+        gap: 5px;
+        cursor: pointer;
+        justify-content: space-around;
+    }
+
 .text-entrega-correios {
-    top: -60px;
+    /*top: -60px;*/
 }
 
 .title-entrega {
@@ -1061,8 +1075,6 @@ button {
 
 .info-none {
     width: 520px;
-    margin: 10px;
-    transition: .5s;
 }
 
 #consulta::-webkit-input-placeholder {
@@ -1075,14 +1087,14 @@ button {
     left: 50%;
     width: 100%;
     margin-left: 80px;
-    margin-bottom: 15px;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
     .box input {
         position: relative;
         display: inline-block;
         box-sizing: border-box;
-        transition: .5s;
     }
 
         .box input[type="text"] {
@@ -1114,19 +1126,79 @@ button {
                 border: 1px solid #9959dd;
             }
 
-            .valor-shop {
-                grid-area: valor-shop;
-                background-color: orange;
-                width: 100%;
-                height: 240px;
-            }
+.valor-shop {
+    grid-area: valor-shop;
+    background-color: white;
+    position: sticky;
+    width: 100%;
+    height: 260px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
 
+.resumo {
+    width: 90%;
+    height: 135px;
+    border: 1px dotted #939292;
+}
 
+.title-resumo {
+    width: 90%;
+    height: 20%;
+}
 
+    .title-resumo h1 {
+        font-weight: 500;
+        line-height: 1.5625rem;
+        /*text-transform: uppercase;*/
+        font-size: 1.1rem;
+    }
+
+.total-resumo,
+.item-resumo {
+    height: auto;
+    margin: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted #939292;
+}
+
+    .total-resumo div,
+    .item-resumo div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .total-resumo div span,
+    .item-resumo div span {
+        font-size: 0.83rem;
+        font-weight: 500;
+    }
+
+.total-resumo {
+    border-bottom: 0;
+}
+
+    .total-resumo div span {
+        font-size: 1.1rem;
+    }
+
+.pay {
+    margin-top: 9px;
+    border-radius: 3px;
+    height:45px;
+}
+
+.green {
+    background-color: seagreen;
+    color: white;
+}
 /* SELECT
 -------------------------------------------------- */
 .margin-entrega {
     margin-left: 40px;
+    margin-bottom: 20px;
 }
 
 .box p {
@@ -1174,13 +1246,14 @@ button {
         }
 
         .custom-seletor select {
-            width: 100px;
+            width: 150px;
             height: 25px;
             border-radius: 3px;
             font-size: 0.73rem;
             outline: none;
             appearance: none;
             padding: 0 6px;
+            text-overflow: ellipsis;
             cursor: pointer;
         }
 
@@ -1544,9 +1617,9 @@ label.button.icon {
     display: flex;
 }
 
-.flex div {
-    height:100px;
-}
+    .flex div {
+        height: auto;
+    }
 
 .line {
     border-bottom: 1px solid #e9e9e9;
