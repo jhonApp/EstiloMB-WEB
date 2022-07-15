@@ -19,14 +19,6 @@
 </head>
 <body>
     <div class="nav-main">
-        <div class="iten-user">
-            <div class="user">
-                <ul>
-                    <li><i class="far fa-user icon"></i></li>
-                    <li><span>Entrar / Cadastre-se</span></li>
-                </ul>
-            </div>
-        </div>
         <nav>
             <div class="wrapper">
                 <ul class="nav-links">
@@ -82,6 +74,18 @@
         <div class="itens">
             <div class="user">
                 <ul>
+                    <li>
+                        <button class="usuario icon"
+                                aria-expanded="false"
+                                onclick="expanding(this)">
+                            <i class="far fa-user"></i>
+                        </button>
+                        <div class="login-content hidden">
+                            <span>Que bom ver você por aqui!</span>
+                            <button>Entrar</button>
+                            <button class="button-conta">Quero criar a minha conta</button>
+                        </div>
+                    </li>
                     <li><i class="far fa-heart icon"></i></li>
                     <li><i class="far fa-shopping-cart icon"></i></li>
                 </ul>
@@ -101,3 +105,24 @@
     </footer>
 </body>
 </html>
+<script>
+
+function expanding(element) {
+
+    if(element.ariaExpanded == 'false'){
+        element.closest('li').querySelector('.login-content').classList.remove('hidden');
+        element.ariaExpanded = 'true';
+
+    }else {
+        element.closest('li').querySelector('.login-content').classList.add('hidden');
+        element.ariaExpanded = 'false';
+    }
+}
+
+//document.querySelector('.user > ul > li > .usuario').onclick = (element) =>{
+//    console.log(element)
+//    if(element.getAttribute('aria-expanded') == 'false'){
+//        //document.querySelector('.login-content').style.transform = 'perspective(1000px) rotateY(-180deg)';
+//    }
+//}
+</script>

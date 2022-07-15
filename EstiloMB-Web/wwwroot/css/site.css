@@ -42,17 +42,18 @@ a {
 .nav-main {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 5em;
+    grid-template-rows: 7em;
     height: auto;
     background-color: #B583EA;
     grid-template-areas: "iten-user nav itens";
+    box-shadow: 0px 3px 6px #0000000f;
 }
 
 
 /* LOGO-PRINCIPAL + ITENS-ENTRAR E SACOLA
 -------------------------------------------------- */
 .logo {
-    max-height: 6em;
+    max-height: 8em;
     /* margin-left: 5%; */
     /* margin-top: -10px; */
     margin: auto;
@@ -80,40 +81,106 @@ a {
 
     .iten-user,
     .itens .user {
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 500;
         color: white;
-        margin-top: 3px;
+        margin-top: 13px;
     }
 
         .iten-user .user ul li {
             padding: 5px;
         }
 
-.user ul {
-    margin: 0;
-    display: flex;
-    padding: 0;
-    list-style: none;
-    padding: 0.5em;
-}
+            .user ul {
+                margin: 0;
+                display: flex;
+                padding: 0;
+                list-style: none;
+                padding: 0.5em;
+            }
 
     .user ul li {
         padding: 10px;
     }
-    
-    
 
-/* SEARCH PRINCIPAL
+.itens .user button.icon {
+    position: relative;
+    top: -5px;
+    display: inline-block;
+    background: none; 
+    border: 0;
+    outline: 0;
+    padding: 0;
+    cursor: pointer;
+    min-width: 0;
+    min-height: 1.3em;
+    font-size: 1.3em;
+    text-align: center;
+    color: white;
+    fill: currentColor;
+}
+
+.login-content {
+    display: flex;
+    width: 300px;
+    height: 200px;
+    background-color: white;
+    border-radius: 5px;
+    right: 0;
+    margin: 10px 10px;
+    position: absolute;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+}
+
+    .login-content:after {
+        content: ' ';
+        width: 0px;
+        height: 0px;
+        border-top: 10px solid transparent;
+        border-left: 10px solid transparent;
+        border-bottom: 10px solid white;
+        border-right: 10px solid transparent;
+        left: 50%;
+        top: -20px;
+        position: absolute;
+    }
+
+    .login-content > span {
+        padding: 1rem;
+        text-align: center;
+        font-size: 1em;
+        font-weight: 500;
+        color: black;
+    }
+
+    .login-content > .button-conta,
+    .login-content > button {
+        padding: 1rem;
+        width: 80%;
+        height: 50px;
+        background-color: black;
+        color: white;
+        border-radius: 5px;
+        margin-bottom: 11px;
+    }
+
+    .login-content > .button-conta {
+        background-color: transparent;
+        border: 2px solid black;
+        color: black;
+    }
+
+    /* SEARCH PRINCIPAL
 -------------------------------------------------- */
-/*.cols:nth-child(1){
+    /*.cols:nth-child(1){
     margin-bottom: 0px;
 }*/
-
-#search::-webkit-input-placeholder {
-    color: #e0dfdf;
-    margin-left: 10px;
-}
+    #search::-webkit-input-placeholder {
+        color: #e0dfdf;
+        margin-left: 10px;
+    }
 
 .search {
     grid-area: search;
@@ -179,7 +246,7 @@ nav {
     grid-area: nav;
     width: 100%;
     z-index: 999;
-    margin-top: -10px;
+    margin-top: -15px;
     /* height: 65px; */
     /* line-height: 50px; */
     background-color: transparent;
@@ -196,7 +263,6 @@ ul {
 
 .wrapper .nav-links {
     align-items: center;
-    margin-top: 6px;
 }
 
 .nav-links li a {
@@ -819,7 +885,7 @@ input[type="checkbox"] {
 -------------------------------------------------- */
 .wrapper-sacola {
     background-color: #f3f3f3;
-    height: 100%;
+    height: auto;
 }
 .nav-main-sacola {
     display: grid;
@@ -875,7 +941,7 @@ input[type="checkbox"] {
             }*/
         .nav-main-sacola .wrapper .nav-links li.active:before {
             content: "";
-            background: url(../image/check-solid.svg) no-repeat center;
+            background: url(../image/check-solid-white.png) no-repeat center;
             background-size: 15px;
             background-color: #55b776;
             color: white;
@@ -1085,10 +1151,8 @@ button {
 .box {
     top: 50%;
     left: 50%;
-    width: 100%;
-    margin-left: 80px;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    /*margin-top: 40px;
+    margin-bottom: 40px;*/
 }
 
     .box input {
@@ -1206,7 +1270,6 @@ button {
 }
 
 .box span {
-    font-size: 0.79rem;
     word-wrap: break-word;
     display: list-item;
     
@@ -1232,6 +1295,10 @@ button {
     .taxa span {
         list-style-type: none;
     }
+
+.margin-left {
+    margin-left: 10px;
+}
 
 .custom-seletor {
     display: flex;
@@ -1379,6 +1446,14 @@ option {
     .icon > * {
         position: relative;
     }
+
+    li.icon:before {
+        background: #e1e1e1;
+    }
+
+.user > button.icon:hover {
+    background-color: #e1e1e1;
+}
 
 .button {
     position: relative;
@@ -1631,3 +1706,287 @@ label.button.icon {
     display: none;
 }
 
+.card-pagamento {
+    display: grid;
+    grid-template-areas:
+        "forma-pagamento valor-shop"
+        "forma-pagamento valor-shop";
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 400px;
+    width: 90%;
+    padding: 10px;
+    gap: 15px;
+    grid-template: 100px;
+    /* height: 80%; */
+    margin: 0 auto;
+    /* box-shadow: 0 0 1em rgb(0 0 0 / 10%); */
+}
+
+.forma-pagamento {
+    grid-area: forma-pagamento;
+    background-color: white;
+    /* justify-content: space-between; */
+    align-items: center;
+    display: flex;
+    min-height: 300px;
+    margin-bottom:20px;
+    width: 100%;
+    flex-direction: column;
+    box-shadow: 0px 3px 6px #0000000f;
+}
+
+.title-pagamento {
+    width: 95%;
+}
+
+    .title-pagamento h1 {
+        font-weight: 500;
+        line-height: 3rem;
+        /* text-transform: uppercase; */
+        font-size: 1.1rem;
+    }
+
+.content-menu-pagamento {
+    width: 95%;
+    display: flex;
+    box-sizing: border-box;
+}
+
+.menu-pagamento {
+    border-top: 1px dotted #BBB;
+    width: 260px;
+}
+
+    .menu-pagamento ul {
+        display: flex;
+        flex-direction: column;
+        margin-block-start: 0;
+        margin-block-end: 0;
+    }
+
+        .menu-pagamento ul li {
+            padding: 10px;
+            /*margin-top: 1px;
+            min-height: 28px;*/
+            text-transform: none;
+            list-style-type: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+            .menu-pagamento ul li:nth-child(2n) {
+                border-top: 1px dotted #BBB;
+                border-bottom: 1px dotted #BBB;
+            }
+
+            .menu-pagamento ul li span {
+                display: flex;
+                padding: 0 4px;
+                flex-direction: row;
+                justify-content: left;
+                align-items: center;
+            }
+
+                .menu-pagamento ul li span svg{
+                    color: black;
+                    margin: 0 12px 0 0 !important;
+                }
+
+                .valor-shop {
+                    grid-area: valor-shop;
+                    background-color: white;
+                    position: sticky;
+                    width: 100%;
+                    height: 260px;
+                    align-items: center;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+.pagamento-selecionado {
+    border-top: 1px dotted #BBB;
+    border-left: 1px dotted #BBB;
+    border-bottom: 1px dotted #BBB;
+    padding: 10px;
+    /*flex-grow: 0;
+    max-width: 66.666667%;*/
+    flex-basis: 100%;
+    margin-bottom: 30px;
+}
+
+.pagamento-selecionado form {
+    border-radius: 5px;/*
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 1);*/
+    padding: 20px;
+    
+}
+
+    .pagamento-selecionado form .inputBox {
+        margin-top: 10px;
+    }
+
+    .pagamento-selecionado form .inputBox span {
+        display: block;
+        color: #999;
+        padding-bottom: 5px;
+    }
+
+        .pagamento-selecionado form .inputBox input,
+        .pagamento-selecionado form .inputBox select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,.3);
+        }
+
+        .pagamento-selecionado form .inputBox select {
+            width: 150px;
+        }
+
+            .pagamento-selecionado form .flexbox {
+                display: flex;
+                gap: 15px;
+            }
+
+    .pagamento-selecionado form .flexbox {
+        flex: 1 1 150px;
+    }
+
+    .pagamento-selecionado form .submit-btn {
+        width: 100%;
+        background:linear-gradient(45deg, blueviolet, deeppink);
+        margin-top: 20px;
+        padding: 10px;
+        font-size: 20px;
+        color: #fff;
+        cursor: pointer;
+        transition: .2s linear;
+        
+    }
+
+    .pagamento-selecionado form .submit-btn:hover {
+        letter-spacing: 2px;
+        opacity: .8;
+    }
+
+    .pagamento-selecionado .card-container {
+        /*margin-bottom: -150px;*/
+        position: relative;
+        margin: 0 auto;
+        width: 45%;
+    }
+
+        .pagamento-selecionado .card-container .front {
+            height: 33%;
+            width: 100%;
+            margin-top: 30px;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg, blueviolet, deeppink);
+            border-radius: 5px;
+            backface-visibility: hidden;
+            /* box-shadow: 0 15px 25px rgb(0 0 0 / 20%); */
+            transform: perspective(1000px) rotateY(0deg);
+            padding: 20px;
+            transition: transform .4s ease-out;
+        }
+
+        .pagamento-selecionado .card-container .front .image {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 10px;
+        }
+
+        .pagamento-selecionado .card-container .front .image img {
+            height: 50px;
+        }
+
+        .pagamento-selecionado .card-container .front .card-number-box {
+            padding: 20px 0;
+            font-size: 22px;
+            color: white;
+        }
+
+        .pagamento-selecionado .card-container .front .flexbox {
+            display: flex;
+        }
+
+        .pagamento-selecionado .card-container .front .flexbox .box:nth-child(1){
+            margin-right: auto;
+        }
+
+            .pagamento-selecionado .card-container .front .flexbox .box {
+                font-size: 15px;
+                color: white;
+            }
+
+        .pagamento-selecionado .card-container .back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 82%;
+            width: 100%;
+            background: linear-gradient(45deg, blueviolet, deeppink);
+            border-radius: 5px;
+            padding: 20px;
+            text-align: right;
+             backface-visibility: hidden; 
+            /* box-shadow: 0 15px 25px rgb(0 0 0 / 20%); */
+            transform: perspective(1000px) rotateY(180deg);
+            transition: transform .4s ease-out;
+        }
+
+        .pagamento-selecionado .card-container .back .stripe {
+            background: #000;
+            width: 100%;
+            margin: 10px 0;
+            height: 50px;
+        }
+
+    .pagamento-selecionado .card-container .back .box {
+        padding: 0 20px;
+    }
+
+        .pagamento-selecionado .card-container .back .box span {
+            color: white;
+            font-size: 15px;
+        }
+
+        .pagamento-selecionado .card-container .back .box .cvv-box {
+            height: 30px;
+            padding: 5px;
+            margin-top: 5px;
+            color: #333;
+            background: #fff;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .pagamento-selecionado .card-container .back .box img {
+            margin-top: 30px;
+            height: 30px;
+        }
+
+    .pagamento-selecionado > .pix-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .pagamento-selecionado > .pix-container > img {
+            max-height: 250px;
+            max-width: 200px;
+            margin: 10px auto 24px;
+        }
+
+        .pagamento-selecionado > .pix-container > p {
+            margin:3px;
+            line-height: 1.5;
+        }
+
+        .expiration {
+            display: flex;
+            justify-content: space-evenly;
+            list-style: none;
+        }
