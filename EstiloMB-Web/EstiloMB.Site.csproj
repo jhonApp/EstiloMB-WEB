@@ -27,6 +27,7 @@
     <None Include="wwwroot\js\ChartJS\Chart.min.js" />
     <None Include="wwwroot\js\fa\all.js" />
     <None Include="wwwroot\js\fa\all.min.js" />
+    <None Include="wwwroot\Minimum\Minimum-1.7.js" />
   </ItemGroup>
 
   <ItemGroup>

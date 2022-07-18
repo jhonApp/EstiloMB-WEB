@@ -1,1 +1,185 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Login";
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <script type="text/javascript" src="~/js/fa/all.js"></script>
+    <script type="text/javascript" src="~/js/ChartJS/Chart.js"></script>
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <script type="text/javascript" src="~/Minimum/Minimum-1.7.js"></script>
+    <script src="~/js/swipe.js"></script>
+</head>
+<div class="nav-main-sacola">
+    <img class="logo" src="~/image/logo-oficial.png" alt=""/>
+</div>
+<content>
+    <div class="center">
+        <h2>Acesse com seu login ou cadastre-se!</h2>
+        <form action="~/Api/Login" method="post" onsubmit="return $user.login(this)">
+            <div class="txt_field">
+                <input type="text" name="" value="" required/>
+                <label>Email</label>
+            </div>
+            <div class="txt_field">
+                <input type="password" name="" value="" required/>
+                <label>Senha</label>
+            </div>
+            <div class="pass">Esqueceu a senha?</div>
+            <input type="submit" value="Login"/>
+            <div class="signup_link">
+                É novo por aqui? <a  href="~/Sistema/CriarConta">Cadastre-se</a>
+            </div>
+        </form>
+    </div>
+</content>
+@*<script>
+
+    var currentUser = false;
+    var loginCodeFunctions = [];
+
+    function onLoginCode(code, callback) {
+        loginCodeFunctions[code] = callback;
+    };
+
+    function login(element, selector) {
+        console.log(element);
+        let form = selector ? element.closest(selector) : element;
+        if (form.isBusy) { return false; }
+
+        let data = $min.read(form, form.data || {});
+
+        form.isBusy = true;
+        form.setAttribute("state", "loading");
+
+        $min.ajax({
+            url: form.action || form.href,
+            content: { Data: data },
+            headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+            },
+            onsuccess: function (response) {
+                form.isBusy = false;
+                form.removeAttribute("state");
+
+                if (loginCodeFunctions[response.Code] && !loginCodeFunctions[response.Code](form, response)) {
+                    return;
+                }
+
+                if (response.Code !== 0) {
+                    $ui.message(response.Message, "error");
+                    $min.bind(form, response.Data, "error");
+                    return;
+                }
+
+                let userInfo = document.querySelectorAll("[ui-content=user-info]");
+                if (userInfo) {
+                    for (let i = 0; i < userInfo.length; i++) {
+                        $min.bind(userInfo[i], response.Data);
+                    }
+                }
+
+                currentUser = response.Data;
+
+                $ui.message(response.Message, "success");
+            },
+            onfailure: function (httpCode, httpMessage) {
+                form.isBusy = false;
+                form.removeAttribute("state");
+
+                $ui.message(httpMessage, "error");
+            }
+        });
+
+        return false;
+    };
+
+    function logout(element, selector) {
+        let form = selector ? element.closest(selector) : element;
+        if (form.isBusy) { return false; }
+
+        let data = $min.read(form, form.data || {});
+
+        form.isBusy = true;
+        $min.ajax({
+            url: form.action || form.href,
+            content: { Data: data },
+            headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+            },
+            onsuccess: function (response) {
+                form.isBusy = false;
+
+                window.location.href = $min.root() + $ui.relativePath + response;
+            },
+            onfailure: function (httpCode, httpMessage) {
+                form.isBusy = false;
+
+                $ui.message(httpMessage, "error");
+            }
+        });
+
+        return false;
+    };
+
+    function forgot(element, selector) {
+        let form = selector ? element.closest(selector) : element;
+        if (form.isBusy) { return false; }
+
+        let data = $min.read(form, form.data || {});
+
+        form.isBusy = true;
+        $min.ajax({
+            url: form.action || form.href,
+            content: { Data: data },
+            headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+            },
+            onsuccess: function (response) {
+                form.isBusy = false;
+
+                if (response.Code !== 0) {
+                    $min.bind(form, response.Data, "error");
+                    return;
+                }
+
+                if ($user.onForgot) {
+                    $user.onForgot(form, response);
+                }
+
+                //$ui.message(response.Message, "success");
+            },
+            onfailure: function (httpCode, httpMessage) {
+                form.isBusy = false;
+
+                $ui.message(httpMessage, "error");
+            }
+        });
+
+        return false;
+    };
+
+    function toggleMenu(input) {
+        document.cookie = "navmenu=" + (input.checked ? "closed" : "open") + ";path=/";
+    };
+
+    function addRole(element) {
+        let cell = element.closest(".relative");
+        let roles = cell.querySelector("[data-array='Perfis']");
+
+        if (!roles.template) { roles.template = roles.querySelector(":scope > template"); }
+
+        let template = document.importNode(roles.template.content, true);
+        $min.bind(template, element.data);
+        roles.appendChild(template);
+
+        element.parentNode.parentNode.classList.add("hidden");
+        element.remove();
+    };
+</script>*@

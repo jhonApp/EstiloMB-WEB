@@ -1,4 +1,5 @@
-﻿using EstiloMB.Core;
+﻿using Chargeback.Core;
+using EstiloMB.Core;
 using EstiloMB.MVC;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,79 @@ namespace EstiloMB.Site.Controllers
         {
             _loc = loc;
             _viewRender = viewRender;
+        }
+
+        [HttpPost, Produces("application/json")]
+        public async Task<IActionResult> Login([FromBody] Request<Usuario> request)
+        {
+            //Response<Usuario> response = Usuario.Login(usuario.Email, usuario.Senha, usuario.NovaSenha, Request.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString());
+            Response<Usuario> response = Usuario.Login(request);
+
+            if (response.Code != ResponseCode.Sucess)
+            {
+                Response<JObject> error = new Response<JObject>();
+                error.Data = response.Validation?.ToJObject();
+                error.Code = response.Code;
+                error.Message = response.Message;
+
+                return Json(error);
+            }
+
+            ClaimsIdentity identity = new ClaimsIdentity("Login");
+            identity.AddClaim(new Claim("UsuarioID", response.Data.UsuarioID.ToString()));
+            identity.AddClaim(new Claim(ClaimTypes.Name, response.Data.Nome));
+
+            if (response.Data.Admin)
+            {
+                identity.AddClaim(new Claim("Admin", "true"));
+            }
+
+            if (response.Data.Kstack)
+            {
+                identity.AddClaim(new Claim("Kstack", "true"));
+            }
+            else
+            {
+                List<Claim> claims = new List<Claim>();
+
+                for (int i = 0; i < response.Data.Perfis.Count; i++)
+                {
+                    for (int j = 0; j < response.Data.Perfis[i].Perfil.Acoes.Count; j++)
+                    {
+                        if (!response.Data.Perfis[i].Perfil.Acoes[j].Habilitado) { continue; }
+                        if (claims.Any(e => e.Type == response.Data.Perfis[i].Perfil.Acoes[j].Nome)) { continue; }
+
+                        claims.Add(new Claim(response.Data.Perfis[i].Perfil.Acoes[j].Nome, "true"));
+                    }
+                }
+
+                for (int i = 0; i < claims.Count; i++)
+                {
+                    identity.AddClaim(claims[i]);
+                }
+            }
+
+            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+            try
+            {
+                await HttpContext.SignInAsync("Login", principal,
+                    new AuthenticationProperties
+                    {
+                        ExpiresUtc = request.Data.LembrarMe ? DateTime.UtcNow.AddYears(1) : DateTime.UtcNow.AddHours(8),
+                        AllowRefresh = true,
+                        IsPersistent = true
+                    });
+            }
+            catch (Exception ex)
+            {
+                Response error = new Response();
+                error.Code = ResponseCode.ServerError;
+                error.Message = ex.Message;
+
+                return Json(error);
+            }
+
+            return Json(response);
         }
 
         [Authorize, HttpPost, ValidateAntiForgeryToken, Produces("application/json")]
