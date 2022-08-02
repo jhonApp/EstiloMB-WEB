@@ -17,7 +17,6 @@ namespace Chargeback.Core
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UsuarioID { get; set; }
-        public int EmpresaID { get; set; }
 
         [MaxLength(50), LogProperty]
         public string Nome { get; set; }
@@ -28,18 +27,14 @@ namespace Chargeback.Core
         [MaxLength(50), LogProperty]
         public string Email { get; set; }
 
-        public bool Admin { get; set; }
-        public bool Kstack { get; set; }
-        public bool Aprovador { get; set; }
-
         public string ImageURL { get; set; }
         public string ResetSenhaChave { get; set; }
         public DateTime? ResetSenhaDataLimite { get; set; }
         public bool ResetSenhaLogin { get; set; }
-        public DateTime DataManutencao { get; set; }
-        public int? OperadorManutencao { get; set; }
-        public DateTime? DataAprovador { get; set; }
-        public int? OperadorAprovador { get; set; }
+        public DateTime RegistradoEm { get; set; }
+        public int? RegistradoPor { get; set; }
+        public DateTime? AtualizadoEm { get; set; }
+        public int? AtualizadoPor { get; set; }
         [LogProperty] public List<UsuarioPerfil> Perfis { get; set; }
 
         [NotMapped] public string NovaSenha { get; set; }
@@ -115,7 +110,7 @@ namespace Chargeback.Core
                 }
 
                 // - Verificando permissão.
-                if (!user.Data.Kstack && !user.Data.Admin && !user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
+                if (!user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
                 {
                     response.Code = ResponseCode.Denied;
                     response.Message = Text.AcessoNegado;
@@ -127,13 +122,7 @@ namespace Chargeback.Core
                     IQueryable<Usuario> query = database.Set<Usuario>()
                                                         .AsNoTracking()
                                                         .Include(e => e.Perfis)
-                                                        .Where(e => e.Kstack == false)
                                                         .OrderBy(e => e.Email);
-
-                    if (!user.Data.Kstack)
-                    {
-                        query = query.Where(e => e.EmpresaID == user.Data.EmpresaID);
-                    }
 
                     if (request.Data?.Perfis?.Count > 0)
                     {
@@ -188,7 +177,7 @@ namespace Chargeback.Core
                 }
 
                 // - Verificando permissão.
-                if (!user.Data.Kstack && !user.Data.Admin && !user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
+                if (!user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
                 {
                     response.Code = ResponseCode.Denied;
                     response.Message = Text.AcessoNegado;
@@ -222,20 +211,11 @@ namespace Chargeback.Core
                                                                               .FirstOrDefault(e => e.UsuarioID == request.Data.UsuarioID)
                                                                               : null;
 
-                    if (!user.Data.Kstack && original != null && original.EmpresaID != user.Data.EmpresaID)
-                    {
-                        response.Code = ResponseCode.Invalid;
-                        response.Message = Text.AcessoNegado;
-                        return response;
-                    }
-
-                    request.Data.Admin = user.Data.Kstack ? request.Data.Admin : original?.Admin ?? false;
-                    request.Data.Kstack = original?.Kstack ?? false;
                     //request.Data.Status = StatusRegistro.Ativo;
-                    request.Data.OperadorManutencao = original?.OperadorManutencao ?? request.UserID;
-                    request.Data.DataManutencao = original?.DataManutencao ?? DateTime.Now;
-                    request.Data.OperadorAprovador = request.UserID;
-                    request.Data.DataAprovador = DateTime.Now;
+                    request.Data.RegistradoPor = original?.RegistradoPor ?? request.UserID;
+                    request.Data.RegistradoEm = original?.RegistradoEm ?? DateTime.Now;
+                    request.Data.AtualizadoPor = request.UserID;
+                    request.Data.AtualizadoEm = DateTime.Now;
 
                     if (request.Data.UsuarioID == 0)
                     {
@@ -342,7 +322,7 @@ namespace Chargeback.Core
                 }
 
                 // - Verificando permissão.
-                if (!user.Data.Kstack && !user.Data.Admin && !user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
+                if (!user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
                 {
                     response.Code = ResponseCode.Denied;
                     response.Message = Text.AcessoNegado;
@@ -360,23 +340,11 @@ namespace Chargeback.Core
                         return response;
                     }
 
-                    if (!user.Data.Kstack && original.EmpresaID != user.Data.EmpresaID)
-                    {
-                        response.Code = ResponseCode.Invalid;
-                        response.Message = Text.AcessoNegado;
-                        return response;
-                    }
-
-                    if (original.Admin || original.Kstack)
-                    {
-                        response.Code = ResponseCode.BadRequest;
-                        response.Message = Text.UsuarioNaoPodeRemover;
-                        return response;
-                    }
-
                     //original.Status = StatusRegistro.Removido;
-                    original.DataAprovador = DateTime.Now;
-                    original.OperadorAprovador = request.UserID;
+                    request.Data.RegistradoPor = original?.RegistradoPor ?? request.UserID;
+                    request.Data.RegistradoEm = original?.RegistradoEm ?? DateTime.Now;
+                    request.Data.AtualizadoPor = request.UserID;
+                    request.Data.AtualizadoEm = DateTime.Now;
 
                     database.Set<Usuario>().Update(original);
                     database.SaveChanges();
@@ -534,8 +502,8 @@ namespace Chargeback.Core
 
                             user.Senha = AES.Encrypt(request.Data.NovaSenha, PasswordKey);
                             user.ResetSenhaLogin = false;
-                            user.DataAprovador = DateTime.Now;
-                            user.OperadorAprovador = user.UsuarioID;
+                            user.AtualizadoEm = DateTime.Now;
+                            user.AtualizadoPor = user.UsuarioID;
 
                             database.Update(user);
                             database.SaveChanges();
@@ -570,8 +538,8 @@ namespace Chargeback.Core
                         user.ResetSenhaChave = null;
                         user.ResetSenhaDataLimite = null;
                         user.Senha = AES.Encrypt(request.Data.NovaSenha, PasswordKey);
-                        user.DataAprovador = DateTime.Now;
-                        user.OperadorAprovador = user.UsuarioID;
+                        user.AtualizadoEm = DateTime.Now;
+                        user.AtualizadoPor = user.UsuarioID;
 
                         database.Update(user);
                         database.SaveChanges();

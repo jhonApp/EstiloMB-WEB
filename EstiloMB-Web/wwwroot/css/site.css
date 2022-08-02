@@ -2130,3 +2130,36 @@ input[type="submit"] {
     .signup_link a:hover {
         text-decoration: underline;
     }
+
+input ~ validation,
+select ~ validation,
+textarea ~ validation {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    /*display: block;*/
+    max-height: 0;
+    font-size: 0.75em;
+    line-height: 1.5em;
+    text-align: right;
+    border-radius: 10px;
+    padding: 0 0.5em;
+    color: red;
+    background-color: rgb(255, 235, 235);
+    overflow: hidden;
+    z-index: 1;
+    transition: color 0.2s ease, max-height 0.5s ease;
+}
+
+    input ~ validation:before,
+    select ~ validation:before,
+    textarea ~ validation:before {
+        content: '* ';
+    }
+
+.txt_field input.error:not(:focus) ~ validation,
+select.error:not(:focus) ~ validation,
+textarea.error:not(:focus) ~ validation {
+    max-height: 100px;
+    box-shadow: 0 0 1px 1px red;
+}

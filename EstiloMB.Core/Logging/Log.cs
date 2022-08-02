@@ -143,7 +143,7 @@ namespace Chargeback.Core
                 }
 
                 // - Verificando permissão.
-                if (!user.Data.Kstack && !user.Data.Admin && !user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Log)))
+                if (!user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Log)))
                 {
                     response.Code = ResponseCode.Denied;
                     response.Message = Text.AcessoNegado;

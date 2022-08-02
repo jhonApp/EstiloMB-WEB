@@ -1,0 +1,2125 @@
+﻿
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+    font-size: 14px;
+    line-height: 2em;
+}
+
+textarea,
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+img {
+    display: block;
+}
+
+pre {
+    margin: 0;
+}
+
+br, hr {
+    clear: both;
+}
+
+a {
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+}
+
+input[type=file] {
+    display: none;
+}
+
+/*------------------------------------------------------------------*/
+/*------------------------------------------------------------[ UI ]*/
+/*------------------------------------------------------------------*/
+
+[ui-content=pages] {
+    overflow: auto;
+    text-align: center;
+}
+
+    [ui-content=pages] > a {
+        display: inline-block;
+        padding: 0.1em 1em;
+        text-align: center;
+        color: orange;
+    }
+
+        [ui-content=pages] > a:hover {
+            color: white;
+            background-color: orange;
+        }
+
+        [ui-content=pages] > a.selected {
+            background-color: black;
+            color: white;
+            cursor: default;
+        }
+
+[ui-content=loading],
+[ui-content=empty],
+[ui-content=paging] {
+    display: none;
+}
+
+[ui-content=data][state=loading] ~ [ui-content=loading],
+[ui-content=data][state=empty] ~ [ui-content=empty],
+[ui-content=data][state=paging] ~ [ui-content=paging] {
+    display: block;
+}
+
+tbody[ui-content=data][state=loading] ~ tfoot > tr[ui-content=loading],
+tbody[ui-content=data][state=empty] ~ tfoot > tr[ui-content=empty],
+tbody[ui-content=data][state=paging] ~ tfoot > tr[ui-content=paging] {
+    display: table-row;
+}
+
+/*------------------------------------------------------------------*/
+/*----------------------------------------------------[ CONTAINERS ]*/
+/*------------------------------------------------------------------*/
+.col-0 {
+    width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.col-1 {
+    width: 8.33333333333333%;
+}
+
+.col-2 {
+    width: 16.66666666666667%;
+}
+
+.col-3 {
+    width: 25%;
+}
+
+.col-4 {
+    width: 33.33333333333333%;
+}
+
+.col-5 {
+    width: 41.66666666666667%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-7 {
+    width: 58.33333333333333%;
+}
+
+.col-8 {
+    width: 66.66666666666667%;
+}
+
+.col-9 {
+    width: 75%;
+}
+
+.col-10 {
+    width: 83.33333333333333%;
+}
+
+.col-11 {
+    width: 91.66666666666667%;
+}
+
+.col-12 {
+    width: 100%;
+}
+
+.cols {
+    clear: both;
+}
+
+    .cols:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+
+    .cols > .col-0,
+    .cols > .col-1,
+    .cols > .col-2,
+    .cols > .col-3,
+    .cols > .col-4,
+    .cols > .col-5,
+    .cols > .col-6,
+    .cols > .col-7,
+    .cols > .col-8,
+    .cols > .col-9,
+    .cols > .col-10,
+    .cols > .col-11,
+    .cols > .col-12 {
+        float: left;
+        padding: 0 0.5em;
+        min-height: 1px;
+        transition: width 0.2s ease, padding 0.2s ease;
+    }
+
+    .cols > .col-0 {
+        padding: 0;
+    }
+
+    .cols > .col-1:first-child,
+    .cols > .col-2:first-child,
+    .cols > .col-3:first-child,
+    .cols > .col-4:first-child,
+    .cols > .col-5:first-child,
+    .cols > .col-6:first-child,
+    .cols > .col-7:first-child,
+    .cols > .col-8:first-child,
+    .cols > .col-9:first-child,
+    .cols > .col-10:first-child,
+    .cols > .col-11:first-child,
+    .cols > .col-12 {
+        padding-left: 0;
+    }
+
+    .cols > .col-1:last-child,
+    .cols > .col-2:last-child,
+    .cols > .col-3:last-child,
+    .cols > .col-4:last-child,
+    .cols > .col-5:last-child,
+    .cols > .col-6:last-child,
+    .cols > .col-7:last-child,
+    .cols > .col-8:last-child,
+    .cols > .col-9:last-child,
+    .cols > .col-10:last-child,
+    .cols > .col-11:last-child,
+    .cols > .col-12 {
+        padding-right: 0;
+    }
+
+.toggle {
+
+}
+    .toggle > [data-value] {
+        display: none;
+    }
+
+        .toggle > [data-value].active {
+            display: block;
+        }
+
+/*------------------------------------------------------------------*/
+/*------------------------------------------------------[ TOOLTIPS ]*/
+/*------------------------------------------------------------------*/
+.tooltip-top,
+.tooltip-bottom,
+.tooltip-left,
+.tooltip-right {
+    display: none;
+}
+
+.tooltip {
+    position: relative;
+}
+
+    .tooltip > .tooltip-top,
+    .tooltip > .tooltip-bottom,
+    .tooltip > .tooltip-left,
+    .tooltip > .tooltip-right {
+        display: block;
+        position: absolute;
+        overflow: hidden;
+        opacity: 0;
+        font-size: 0.8rem;
+        font-weight: normal;
+        text-align: center;
+        text-transform: none;
+        line-height: initial;
+        color: black;
+        background-color: white;
+        border: 0px solid silver;
+        border-radius: 3px;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .tooltip > .tooltip-top {
+        width: 0;
+        height: 0;
+        bottom: 0;
+        margin-bottom: 0.5em;
+        box-shadow: 0 1px 1px gray;
+        transition: bottom 0.2s ease, opacity 0.5s ease;
+    }
+
+        .tooltip > .tooltip-top:after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: 0.5em solid white;
+            border-left: 0.5em solid transparent;
+            border-right: 0.5em solid transparent;
+            margin-top: -1px; /* = border-width */
+            filter: drop-shadow(0 2px 1px gray);
+            -webkit-filter: drop-shadow(0 2px 1px gray);
+        }
+
+    .tooltip:hover > .tooltip-top {
+        bottom: 100%;
+        left: 50%;
+        opacity: 1;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        /*border-width: 1px;*/
+        padding: 0.5em 1em;
+        transform: translateX(-50%);
+    }
+
+    .tooltip > .tooltip-bottom {
+        width: 0;
+        height: 0;
+        top: 0;
+        margin-top: 0.5em;
+        box-shadow: 0 1px 1px grey;
+        transition: top 0.2s ease, opacity 0.5s ease;
+    }
+
+        .tooltip > .tooltip-bottom:after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom: 0.5em solid white;
+            border-left: 0.5em solid transparent;
+            border-right: 0.5em solid transparent;
+            margin-bottom: -1px; /* = border-width */
+            /*filter: drop-shadow(0 -2px 1px gray);
+            -webkit-filter: drop-shadow(0 -2px 1px gray);*/
+        }
+
+    .tooltip:hover > .tooltip-bottom {
+        top: 100%;
+        left: 50%;
+        opacity: 1;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        /*border-width: 1px;*/
+        padding: 0.5em 1em;
+        transform: translateX(-50%);
+    }
+
+    .tooltip > .tooltip-left {
+        width: 0;
+        height: 0;
+        right: 0;
+        margin-right: 0.5em;
+        box-shadow: 1px 1px 1px gray;
+        transition: right 0.2s ease, opacity 0.5s ease;
+    }
+
+        .tooltip > .tooltip-left:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            border-top: 0.5em solid transparent;
+            border-bottom: 0.5em solid transparent;
+            border-left: 0.5em solid white;
+            margin-left: -1px; /* = border-width */
+            filter: drop-shadow(2px 1px 1px gray);
+            -webkit-filter: drop-shadow(2px 1px 1px gray);
+        }
+
+    .tooltip:hover > .tooltip-left {
+        top: 50%;
+        right: 100%;
+        opacity: 1;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        /*border-width: 1px;*/
+        padding: 0.5em 1em;
+        transform: translateY(-50%);
+    }
+
+    .tooltip > .tooltip-right {
+        width: 0;
+        height: 0;
+        left: 0;
+        margin-left: 0.5em;
+        box-shadow: -1px 1px 1px grey;
+        transition: left 0.2s ease, opacity 0.5s ease;
+    }
+
+        .tooltip > .tooltip-right:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translateY(-50%);
+            border-top: 0.5em solid transparent;
+            border-bottom: 0.5em solid transparent;
+            border-right: 0.5em solid white;
+            margin-right: -1px; /* = border-width */
+            filter: drop-shadow(-2px 1px 1px gray);
+            -webkit-filter: drop-shadow(-2px 1px 1px gray);
+        }
+
+    .tooltip:hover > .tooltip-right {
+        top: 50%;
+        left: 100%;
+        opacity: 1;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        /*border-width: 1px;*/
+        padding: 0.5em 1em;
+        transform: translateY(-50%);
+    }
+
+/*------------------------------------------------------------------*/
+/*-------------------------------------------------------[ LOADING ]*/
+/*------------------------------------------------------------------*/
+.loading-circle {
+    display: block;
+    position: relative;
+    min-height: 1.5em;
+}
+
+    .loading-circle div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 1.5em;
+        height: 1.5em;
+        margin: auto;
+        border: 4px solid #fff;
+        border-radius: 50%;
+        animation: loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: rgb(65, 105, 145) transparent transparent transparent;
+    }
+
+        .loading-circle div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .loading-circle div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .loading-circle div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+    .loading-circle.text:after {
+        content: attr(text);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin-top: 1.5em;
+    }
+
+@keyframes loading-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-bars {
+    /*position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    user-select: none;
+    transform: translate(-50%, -50%);*/
+    text-align: center;
+}
+
+    .loading-bars > span {
+        display: inline-block;
+        background-color: skyblue;
+        width: 0.25em;
+        min-height: 1.5em;
+        vertical-align: middle;
+    }
+
+        .loading-bars > span:nth-child(1) {
+            animation: loading-bar;
+            animation-delay: 100ms;
+            animation-duration: 400ms;
+            animation-direction: alternate;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            transform: scaleY(0);
+        }
+
+        .loading-bars > span:nth-child(2) {
+            animation: loading-bar;
+            animation-delay: 200ms;
+            animation-duration: 400ms;
+            animation-direction: alternate;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            transform: scaleY(0);
+        }
+
+        .loading-bars > span:nth-child(3) {
+            animation: loading-bar;
+            animation-delay: 300ms;
+            animation-duration: 400ms;
+            animation-direction: alternate;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            transform: scaleY(0);
+        }
+
+        .loading-bars > span:nth-child(4) {
+            animation: loading-bar;
+            animation-delay: 400ms;
+            animation-duration: 400ms;
+            animation-direction: alternate;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            transform: scaleY(0);
+        }
+
+@keyframes loading-bar {
+    0% {
+        transform: scaleY(0);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+.loading-circle.background,
+.loading-bars.background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+    .loading-circle.background:before,
+    .loading-bars.background:before {
+        content: '\200b';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+/*------------------------------------------------------------------*/
+/*--------------------------------------------------[ PROGRESS BAR ]*/
+/*------------------------------------------------------------------*/
+.progressbar[value] {
+    position: relative;
+    display: block;
+    min-height: 1.5em;
+    line-height: 1.5em;
+    border-radius: 3px;
+    text-align: center;
+}
+
+    .progressbar[value]:after {
+        content: attr(value) "%";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .progressbar[value]:before {
+        content: '\200b';
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background-color: transparent;
+        transition: width 0.5s ease, background-color 0.5s ease;
+    }
+
+.progressbar[value="0"]:before {
+    width: 0%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0));
+}
+
+.progressbar[value="1"]:before {
+    width: 1%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.01));
+}
+
+.progressbar[value="2"]:before {
+    width: 2%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.02));
+}
+
+.progressbar[value="3"]:before {
+    width: 3%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.03));
+}
+
+.progressbar[value="4"]:before {
+    width: 4%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.04));
+}
+
+.progressbar[value="5"]:before {
+    width: 5%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.05));
+}
+
+.progressbar[value="6"]:before {
+    width: 6%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.06));
+}
+
+.progressbar[value="7"]:before {
+    width: 7%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.07));
+}
+
+.progressbar[value="8"]:before {
+    width: 8%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.08));
+}
+
+.progressbar[value="9"]:before {
+    width: 9%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.09));
+}
+
+.progressbar[value="10"]:before {
+    width: 10%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.1));
+}
+
+.progressbar[value="11"]:before {
+    width: 11%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.11));
+}
+
+.progressbar[value="12"]:before {
+    width: 12%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.12));
+}
+
+.progressbar[value="13"]:before {
+    width: 13%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.13));
+}
+
+.progressbar[value="14"]:before {
+    width: 14%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.14));
+}
+
+.progressbar[value="15"]:before {
+    width: 15%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.15));
+}
+
+.progressbar[value="16"]:before {
+    width: 16%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.16));
+}
+
+.progressbar[value="17"]:before {
+    width: 17%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.17));
+}
+
+.progressbar[value="18"]:before {
+    width: 18%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.18));
+}
+
+.progressbar[value="19"]:before {
+    width: 19%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.19));
+}
+
+.progressbar[value="20"]:before {
+    width: 20%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.2));
+}
+
+.progressbar[value="21"]:before {
+    width: 21%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.21));
+}
+
+.progressbar[value="22"]:before {
+    width: 22%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.22));
+}
+
+.progressbar[value="23"]:before {
+    width: 23%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.23));
+}
+
+.progressbar[value="24"]:before {
+    width: 24%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.24));
+}
+
+.progressbar[value="25"]:before {
+    width: 25%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.25));
+}
+
+.progressbar[value="26"]:before {
+    width: 26%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.26));
+}
+
+.progressbar[value="27"]:before {
+    width: 27%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.27));
+}
+
+.progressbar[value="28"]:before {
+    width: 28%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.28));
+}
+
+.progressbar[value="29"]:before {
+    width: 29%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.29));
+}
+
+.progressbar[value="30"]:before {
+    width: 30%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.3));
+}
+
+.progressbar[value="31"]:before {
+    width: 31%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.31));
+}
+
+.progressbar[value="32"]:before {
+    width: 32%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.32));
+}
+
+.progressbar[value="33"]:before {
+    width: 33%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.33));
+}
+
+.progressbar[value="34"]:before {
+    width: 34%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.34));
+}
+
+.progressbar[value="35"]:before {
+    width: 35%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.35));
+}
+
+.progressbar[value="36"]:before {
+    width: 36%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.36));
+}
+
+.progressbar[value="37"]:before {
+    width: 37%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.37));
+}
+
+.progressbar[value="38"]:before {
+    width: 38%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.38));
+}
+
+.progressbar[value="39"]:before {
+    width: 39%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.39));
+}
+
+.progressbar[value="40"]:before {
+    width: 40%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.4));
+}
+
+.progressbar[value="41"]:before {
+    width: 41%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.41));
+}
+
+.progressbar[value="42"]:before {
+    width: 42%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.42));
+}
+
+.progressbar[value="43"]:before {
+    width: 43%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.43));
+}
+
+.progressbar[value="44"]:before {
+    width: 44%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.44));
+}
+
+.progressbar[value="45"]:before {
+    width: 45%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.45));
+}
+
+.progressbar[value="46"]:before {
+    width: 46%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.46));
+}
+
+.progressbar[value="47"]:before {
+    width: 47%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.47));
+}
+
+.progressbar[value="48"]:before {
+    width: 48%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.48));
+}
+
+.progressbar[value="49"]:before {
+    width: 49%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.49));
+}
+
+.progressbar[value="50"]:before {
+    width: 50%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.5));
+}
+
+.progressbar[value="51"]:before {
+    width: 51%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.51));
+}
+
+.progressbar[value="52"]:before {
+    width: 52%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.52));
+}
+
+.progressbar[value="53"]:before {
+    width: 53%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.53));
+}
+
+.progressbar[value="54"]:before {
+    width: 54%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.54));
+}
+
+.progressbar[value="55"]:before {
+    width: 55%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.55));
+}
+
+.progressbar[value="56"]:before {
+    width: 56%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.56));
+}
+
+.progressbar[value="57"]:before {
+    width: 57%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.57));
+}
+
+.progressbar[value="58"]:before {
+    width: 58%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.58));
+}
+
+.progressbar[value="59"]:before {
+    width: 59%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.59));
+}
+
+.progressbar[value="60"]:before {
+    width: 60%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.6));
+}
+
+.progressbar[value="61"]:before {
+    width: 61%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.61));
+}
+
+.progressbar[value="62"]:before {
+    width: 62%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.62));
+}
+
+.progressbar[value="63"]:before {
+    width: 63%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.63));
+}
+
+.progressbar[value="64"]:before {
+    width: 64%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.64));
+}
+
+.progressbar[value="65"]:before {
+    width: 65%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.65));
+}
+
+.progressbar[value="66"]:before {
+    width: 66%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.66));
+}
+
+.progressbar[value="67"]:before {
+    width: 67%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.67));
+}
+
+.progressbar[value="68"]:before {
+    width: 68%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.68));
+}
+
+.progressbar[value="69"]:before {
+    width: 69%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.69));
+}
+
+.progressbar[value="70"]:before {
+    width: 70%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.7));
+}
+
+.progressbar[value="71"]:before {
+    width: 71%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.71));
+}
+
+.progressbar[value="72"]:before {
+    width: 72%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.72));
+}
+
+.progressbar[value="73"]:before {
+    width: 73%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.73));
+}
+
+.progressbar[value="74"]:before {
+    width: 74%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.74));
+}
+
+.progressbar[value="75"]:before {
+    width: 75%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.75));
+}
+
+.progressbar[value="76"]:before {
+    width: 76%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.76));
+}
+
+.progressbar[value="77"]:before {
+    width: 77%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.77));
+}
+
+.progressbar[value="78"]:before {
+    width: 78%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.78));
+}
+
+.progressbar[value="79"]:before {
+    width: 79%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.79));
+}
+
+.progressbar[value="80"]:before {
+    width: 80%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.8));
+}
+
+.progressbar[value="81"]:before {
+    width: 81%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.81));
+}
+
+.progressbar[value="82"]:before {
+    width: 82%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.82));
+}
+
+.progressbar[value="83"]:before {
+    width: 83%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.83));
+}
+
+.progressbar[value="84"]:before {
+    width: 84%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.84));
+}
+
+.progressbar[value="85"]:before {
+    width: 85%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.85));
+}
+
+.progressbar[value="86"]:before {
+    width: 86%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.86));
+}
+
+.progressbar[value="87"]:before {
+    width: 87%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.87));
+}
+
+.progressbar[value="88"]:before {
+    width: 88%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.88));
+}
+
+.progressbar[value="89"]:before {
+    width: 89%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.89));
+}
+
+.progressbar[value="90"]:before {
+    width: 90%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.9));
+}
+
+.progressbar[value="91"]:before {
+    width: 91%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.91));
+}
+
+.progressbar[value="92"]:before {
+    width: 92%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.92));
+}
+
+.progressbar[value="93"]:before {
+    width: 93%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.93));
+}
+
+.progressbar[value="94"]:before {
+    width: 94%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.94));
+}
+
+.progressbar[value="95"]:before {
+    width: 95%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.95));
+}
+
+.progressbar[value="96"]:before {
+    width: 96%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.96));
+}
+
+.progressbar[value="97"]:before {
+    width: 97%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.97));
+}
+
+.progressbar[value="98"]:before {
+    width: 98%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.98));
+}
+
+.progressbar[value="99"]:before {
+    width: 99%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 0.99));
+}
+
+.progressbar[value="100"]:before {
+    width: 100%;
+    background: linear-gradient(135deg, rgb(250, 250, 50) 15%, rgba(50, 225, 50, 1));
+}
+
+/*------------------------------------------------------------------*/
+/*----------------------------------------------------[ LIST ITEMS ]*/
+/*------------------------------------------------------------------*/
+.list {
+}
+
+    .list:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+
+    .list[items='1'] > .item {
+        width: 100%;
+    }
+
+    .list[items='2'] > .item {
+        float: left;
+        width: 49.5%;
+    }
+
+        .list[items='2'] > .item:nth-child(2n-1) {
+            clear: both;
+        }
+
+        .list[items='2'] > .item:not(:nth-child(2n-1)) {
+            margin-left: 1%;
+        }
+
+        .list[items='2'] > .item:nth-child(n+3) {
+            margin-top: 1%;
+        }
+
+    .list[items='3'] > .item {
+        float: left;
+        width: 32.66666666666667%;
+    }
+
+        .list[items='3'] > .item:nth-child(3n-2) {
+            clear: both;
+        }
+
+        .list[items='3'] > .item:not(:nth-child(3n-2)) {
+            margin-left: 1%;
+        }
+
+        .list[items='3'] > .item:nth-child(n+4) {
+            margin-top: 1%;
+        }
+
+    .list[items='4'] > .item {
+        float: left;
+        width: 24.25%;
+    }
+
+        .list[items='4'] > .item:nth-child(4n-3) {
+            clear: both;
+        }
+
+        .list[items='4'] > .item:not(:nth-child(4n-3)) {
+            margin-left: 1%;
+        }
+
+        .list[items='4'] > .item:nth-child(n+5) {
+            margin-top: 1%;
+        }
+
+    .list[items='5'] > .item {
+        float: left;
+        width: 19.2%;
+    }
+
+        .list[items='5'] > .item:nth-child(5n-4) {
+            clear: both;
+        }
+
+        .list[items='5'] > .item:not(:nth-child(5n-4)) {
+            margin-left: 1%;
+        }
+
+        .list[items='5'] > .item:nth-child(n+6) {
+            margin-top: 1%;
+        }
+
+@media only screen and (max-width: 400px) {
+    .list:not([items]) > .item {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        clear: both;
+    }
+
+        .list:not([items]) > .item:nth-child(n+1) {
+            margin-top: 0.5em;
+        }
+}
+
+@media only screen and (min-width: 401px) and (max-width: 600px) {
+    .list:not([items]) > .item {
+        float: left;
+        width: 49.5%;
+    }
+
+        .list:not([items]) > .item:nth-child(2n-1) {
+            clear: both;
+        }
+
+        .list:not([items]) > .item:not(:nth-child(2n-1)) {
+            margin-left: 1%;
+        }
+
+        .list:not([items]) > .item:nth-child(n+3) {
+            margin-top: 1%;
+        }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 800px) {
+    .list:not([items]) > .item {
+        float: left;
+        width: 32.66666666666667%;
+    }
+
+        .list:not([items]) > .item:nth-child(3n-2) {
+            clear: both;
+        }
+
+        .list:not([items]) > .item:not(:nth-child(3n-2)) {
+            margin-left: 1%;
+        }
+
+        .list:not([items]) > .item:nth-child(n+4) {
+            margin-top: 1%;
+        }
+}
+
+@media only screen and (min-width: 801px) and (max-width: 1000px) {
+    .list:not([items]) > .item {
+        float: left;
+        width: 24.25%;
+    }
+
+        .list:not([items]) > .item:nth-child(4n-3) {
+            clear: both;
+        }
+
+        .list:not([items]) > .item:not(:nth-child(4n-3)) {
+            margin-left: 1%;
+        }
+
+        .list:not([items]) > .item:nth-child(n+5) {
+            margin-top: 1%;
+        }
+}
+
+@media only screen and (min-width: 1001px) {
+    .list:not([items]) > .item {
+        float: left;
+        width: 19.2%;
+    }
+
+        .list:not([items]) > .item:nth-child(5n-4) {
+            clear: both;
+        }
+
+        .list:not([items]) > .item:not(:nth-child(5n-4)) {
+            margin-left: 1%;
+        }
+
+        .list:not([items]) > .item:nth-child(n+6) {
+            margin-top: 1%;
+        }
+}
+
+.list > .item {
+    transform: scale(0);
+    animation: pop-animation;
+    animation-duration: 300ms;
+    animation-fill-mode: forwards;
+}
+
+    .list > .item:nth-child(2) {
+        animation-delay: 50ms;
+    }
+
+    .list > .item:nth-child(3) {
+        animation-delay: 100ms;
+    }
+
+    .list > .item:nth-child(4) {
+        animation-delay: 150ms;
+    }
+
+    .list > .item:nth-child(5) {
+        animation-delay: 200ms;
+    }
+
+    .list > .item:nth-child(6) {
+        animation-delay: 250ms;
+    }
+
+    .list > .item:nth-child(7) {
+        animation-delay: 300ms;
+    }
+
+    .list > .item:nth-child(8) {
+        animation-delay: 350ms;
+    }
+
+    .list > .item:nth-child(9) {
+        animation-delay: 400ms;
+    }
+
+    .list > .item:nth-child(10) {
+        animation-delay: 450ms;
+    }
+
+    .list > .item:nth-child(11) {
+        animation-delay: 500ms;
+    }
+
+    .list > .item:nth-child(12) {
+        animation-delay: 550ms;
+    }
+
+    .list > .item:nth-child(13) {
+        animation-delay: 600ms;
+    }
+
+    .list > .item:nth-child(14) {
+        animation-delay: 650ms;
+    }
+
+    .list > .item:nth-child(15) {
+        animation-delay: 700ms;
+    }
+
+    .list > .item:nth-child(16) {
+        animation-delay: 750ms;
+    }
+
+    .list > .item:nth-child(17) {
+        animation-delay: 800ms;
+    }
+
+    .list > .item:nth-child(18) {
+        animation-delay: 850ms;
+    }
+
+    .list > .item:nth-child(19) {
+        animation-delay: 900ms;
+    }
+
+    .list > .item:nth-child(20) {
+        animation-delay: 950ms;
+    }
+
+    .list > .item:nth-child(21) {
+        animation-delay: 1000ms;
+    }
+
+    .list > .item:nth-child(22) {
+        animation-delay: 1050ms;
+    }
+
+    .list > .item:nth-child(23) {
+        animation-delay: 1100ms;
+    }
+
+    .list > .item:nth-child(24) {
+        animation-delay: 1150ms;
+    }
+
+    .list > .item:nth-child(25) {
+        animation-delay: 1200ms;
+    }
+
+    .list > .item:nth-child(26) {
+        animation-delay: 1250ms;
+    }
+
+    .list > .item:nth-child(27) {
+        animation-delay: 1300ms;
+    }
+
+    .list > .item:nth-child(28) {
+        animation-delay: 1350ms;
+    }
+
+    .list > .item:nth-child(29) {
+        animation-delay: 1400ms;
+    }
+
+    .list > .item:nth-child(30) {
+        animation-delay: 1450ms;
+    }
+
+/*------------------------------------------------------------------*/
+/*----------------------------------------------------------[ ???? ]*/
+/*------------------------------------------------------------------*/
+
+list {
+    position: absolute;
+    z-index: 1;
+}
+
+    list > loading,
+    list > empty,
+    list > data {
+        background-color: white;
+        /*border: 1px solid silver;*/
+        border-radius: 3px;
+        box-shadow: 0 0 0 1px silver;
+        display: none;        
+    }
+
+    list[state=loading] > loading {
+        display: block;
+    }
+
+    list[state=empty] > empty {
+        display: block;
+    }
+
+    list[state=loaded] > data {
+        display: block;
+    }
+
+.list-item {
+    cursor: pointer;
+    padding: 0 0.5em;
+}
+
+    .list-item:first-child {
+        border-radius: 3px 3px 0 0;
+    }
+
+    .list-item:last-child {
+        border-radius: 0 0 3px 3px;
+    }
+
+    .list-item:hover,
+    .list-item.hover {
+        background-color: orange;
+    }
+
+/*------------------------------------------------------------------*/
+/*------------------------------------------------------[ CALENDAR ]*/
+/*------------------------------------------------------------------*/
+.ui-calendar {
+    background-color: white;
+    position: absolute;
+    z-index: 1;
+}
+
+    .ui-calendar.bottom {
+        top: 100%;
+    }
+    .ui-calendar.top {
+        bottom: 100%;
+    }
+    .ui-calendar.left {
+        right: 0;
+    }
+    .ui-calendar.right {
+        left: 0;
+    }
+    .ui-calendar.center {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .ui-calendar .weeks {
+        display: table;
+        width: 100%;
+    }
+
+        .ui-calendar .weeks .weekdays,
+        .ui-calendar .weeks .week {
+            display: table-row;
+        }
+
+            .ui-calendar .weeks .weekdays > *,
+            .ui-calendar .weeks .week > * {
+                display: table-cell;
+            }
+
+    .ui-calendar > .month {
+        display: block;
+        text-align: center;
+    }
+
+    .ui-calendar .weeks .weekdays > *,
+    .ui-calendar .weeks .week > * {
+        text-align: center;
+        width: 3em;
+        height: 2em;
+        vertical-align: middle;
+    }
+
+/*------------------------------------------------------------------*/
+/*------------------------------------------------------[ MESSAGES ]*/
+/*------------------------------------------------------------------*/
+#ui-messages {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 1em;
+    z-index: 10;
+}
+
+    #ui-messages > .ui-message {
+        display: flex;
+        align-items: center;
+        float: right;
+        cursor: pointer;
+        clear: both;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 3px 6px #00000029;
+        padding: 0.5em 1em;
+        margin-bottom: 0.5em;
+        overflow: hidden;
+        max-width: 100%;
+        max-height: 5em;
+        transition: max-height 0.5s ease 0.5s, max-width 0.5s ease, padding-left 0.5s ease, padding-right 0.5s ease, padding-top 0.5s ease 0.5s, padding-bottom 0.5s ease 0.5s;
+    }
+
+        #ui-messages > .ui-message.closing {
+            max-width: 0;
+            max-height: 0;
+            padding: 0;
+            white-space: nowrap;
+        }
+
+        #ui-messages > .ui-message .icon-success {
+            color: green;
+        }
+
+        #ui-messages > .ui-message .icon-error {
+            color: red;
+        }
+
+        #ui-messages > .ui-message .icon-alert {
+            color: orange;
+        }
+
+        #ui-messages > .ui-message .icon-success,
+        #ui-messages > .ui-message .icon-error,
+        #ui-messages > .ui-message .icon-alert {
+            font-size: 1.2em;
+            display: none;
+            margin-right: 0.5em;
+        }
+
+        #ui-messages > .ui-message.success .icon-success,
+        #ui-messages > .ui-message.error .icon-error,
+        #ui-messages > .ui-message.alert .icon-alert {
+            display: inline-block;
+        }
+
+        #ui-messages > .ui-message > .ui-text {
+            display: inline-block;
+        }
+
+/*------------------------------------------------------------------*/
+/*---------------------------------------------------------[ POPUP ]*/
+/*------------------------------------------------------------------*/
+.ui-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;    
+    -ms-transform: translate(-50.1%, -50.1%);
+    transform: translate(-50.1%, -50.1%);
+    width: auto;
+    max-width: 400px;
+    overflow: auto;
+    border-radius: 0.2em;
+    background-color: white;
+    box-shadow: 1px 1px 5px black;
+    box-sizing: border-box;
+    will-change: transform;
+    z-index: 1;
+}
+
+    .ui-popup > .left-bar {
+        background-color: orange;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 10px;
+        width: 2.5em;
+        text-align: center;
+        color: white;
+        padding-top: 10px;
+        font-size: 2.5em;
+    }
+
+    .ui-popup > .title {
+        padding: 0.5em;
+        padding-left: 6.25em;
+        margin: 0;
+        font-size: 120%;
+        font-weight: bold;
+        color: orange;
+        border-bottom: 2px solid orange;
+        background-color: transparent;
+    }
+
+    .ui-popup > .text {
+        padding: 0.5em;
+        padding-left: 7.5em;
+    }
+
+    .ui-popup > .bottom-bar {
+        padding: 0.5em;
+        text-align: right;
+        font-size: 1.2em;
+    }
+
+    .ui-popup .confirm,
+    .ui-popup .cancel {
+        cursor: pointer;
+        display: inline-block;
+        padding: 0.5em;
+        background-color: transparent;
+        border: 0;
+        transition: color 0.2s ease;
+    }
+
+    .ui-popup .confirm {
+        color: green;
+    }
+
+    .ui-popup .cancel {
+        color: red;
+    }
+
+        .ui-popup .confirm > span,
+        .ui-popup .cancel > span {
+            position: relative;
+            display: block;
+            margin-bottom: 0.5em;
+            font-size: 150%;
+        }
+
+        .ui-popup .confirm:hover > span,
+        .ui-popup .cancel:hover > span {
+            color: white;
+        }
+
+        .ui-popup .confirm > span:before,
+        .ui-popup .cancel > span:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background-color: silver;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease;
+        }
+
+    .ui-popup .confirm > span:before {
+        background-color: green;
+    }
+
+    .ui-popup .cancel > span:before {
+        background-color: red;
+    }
+
+        .ui-popup .confirm > span > svg,
+        .ui-popup .cancel > span > svg {
+            position: relative;
+        }
+
+        .ui-popup .confirm:hover > span:before,
+        .ui-popup .cancel:hover > span:before {
+            width: 2em;
+            height: 2em;
+        }
+
+        .ui-popup .confirm > .fa-check-circle,
+        .ui-popup .cancel > .fa-times-circle {
+            vertical-align: -0.25em;
+            font-size: 1.5em;
+        }
+
+.popupground {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: auto;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/*------------------------------------------------------------------*/
+/*----------------------------------------------------------[ CHAT ]*/
+/*------------------------------------------------------------------*/
+chat {
+    position: absolute;
+    margin: 0.5em;
+    font-size: 1.5em;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+}
+
+    chat > a {
+        line-height: 2em;
+    }
+
+    chat > .chat-window {
+        position: absolute;
+        min-width: 0;
+        max-width: 0;
+        min-height: 0;
+        max-height: 0;
+        overflow: hidden;
+        background-color: white;
+        border: 0px solid silver;
+        border-radius: 0.5em;
+        bottom: 100%;
+        right: 0;
+        margin: 0.5em 0;
+        display: flex;
+        font-size: initial;
+        transition: min-height 0.1s ease, max-height 0.1s ease, min-width 0.1s ease, max-width 0.1s ease, border-width 0.1s ease;
+    }
+
+        chat > .chat-window > .user-list {
+            flex: 0 1 200px;
+            border-left: 1px solid silver;
+            overflow-y: auto;
+        }
+
+            chat > .chat-window > .user-list > .user {
+                display: block;
+                padding: 0.5em;
+            }
+
+                chat > .chat-window > .user-list > .user:hover {
+                    background-color: var(--color-secondary);
+                    color: var(--color-secondary-text);
+                }
+
+        chat > .chat-window > .message-box {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+            chat > .chat-window > .message-box > .message-text {
+                flex: 1 1 auto;
+                overflow-y: auto;
+            }
+
+            chat > .chat-window > .message-box > .message-input {
+                position: relative;
+                display: block;
+                flex: 0 1 auto;
+                border-top: 1px solid silver;
+            }
+
+                chat > .chat-window > .message-box > .message-input > .loading-bars {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+
+                chat > .chat-window > .message-box > .message-input > input {
+                    display: block;
+                    width: 100%;
+                    border: 0;
+                    outline: 0;
+                    padding: 0.5em;
+                    padding-right: 2em;
+                    font-family: inherit;
+                    font-size: inherit;
+                }
+
+                chat > .chat-window > .message-box > .message-input > button {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    padding: 0.25em;
+                    font-size: 1.5em;
+                    line-height: 0.8em;
+                    color: gray;
+                    background: none;
+                    cursor: pointer;
+                    min-width: 1.25em;
+                    text-align: center;
+                    border: 0;
+                    outline: 0;
+                    display: block;
+                    transition: color 0.2s ease;
+                }
+
+                    chat > .chat-window > .message-box > .message-input > button:hover {
+                        color: var(--color-secondary);
+                    }
+
+    chat > input[type=checkbox] {
+        display: none;
+    }
+
+        chat > input[type=checkbox]:checked + .chat-window {
+            min-height: 40vh;
+            max-height: 90vh;
+            min-width: 600px;
+            max-width: 90vw;
+            border-width: 1px;
+        }
+
+/*------------------------------------------------------------------*/
+/*---------------------------------------------------------[ PAGES ]*/
+/*------------------------------------------------------------------*/
+.pages {
+    position: relative;
+    overflow: auto;
+}
+
+    .pages > .page {
+        width: 100%;
+        height: 100%;
+        transition: all 0.25s ease;
+        overflow: auto;
+    }
+
+        .pages > .page + .page {
+            position: absolute;
+        }
+
+        .pages > .page.left {
+            transform: translateX(-100%);
+            animation: height-shrink;
+            animation-delay: 0.25s;
+            animation-duration: 0.25s;
+            animation-fill-mode: forwards;
+        }
+
+            .pages > .page.left + .page {
+                animation: slide-left;
+                animation-duration: 0.25s;
+                animation-fill-mode: forwards;
+            }
+
+        .pages > .page.right {
+            transform: translateX(100%);
+        }
+
+            .pages > .page.right + .page {
+                animation: slide-right;
+                animation-duration: 0.25s;
+                animation-fill-mode: forwards;
+            }
+
+        .pages > .page + .page.cover {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+@keyframes height-shrink {
+    0% {
+        height: 100%;
+    }
+
+    100% {
+        height: 0;
+    }
+}
+
+@keyframes slide-left {
+    0% {
+        top: 0;
+        left: 100%;
+    }
+
+    100% {
+        top: 0;
+        left: 0;
+    }
+}
+
+@keyframes slide-right {
+    0% {
+        top: 0;
+        left: -100%;
+    }
+
+    100% {
+        top: 0;
+        left: 0;
+    }
+}
+
+/*------------------------------------------------------------------*/
+/*----------------------------------------------------------[ MENU ]*/
+/*------------------------------------------------------------------*/
+.menu {
+    position: relative;
+}
+
+    .menu > .to-right {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        max-width: 0;
+        max-height: 0;
+        overflow: hidden;
+        z-index: 1;
+        opacity: 0;
+        white-space: nowrap;
+        transition: 0.2s ease max-width, 0.2s ease opacity;
+    }
+
+    .menu:hover > .to-right {
+        max-height: 100vh;
+        max-width: 50vw;
+        opacity: 1;
+        overflow: visible;
+    }
+
+    .menu > .to-bottom {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 100%;
+        max-width: 0;
+        max-height: 0;
+        overflow: hidden;
+        z-index: 1;
+        opacity: 0;
+        white-space: nowrap;
+        transition: 0.2s ease max-width, 0.2s ease opacity;
+    }
+
+    .menu:hover > .to-bottom {
+        max-height: 100vh;
+        max-width: 50vw;
+        opacity: 1;
+        overflow: visible;
+    }
+
+/*------------------------------------------------------------------*/
+/*----------------------------------------------------[ ANIMATIONS ]*/
+/*------------------------------------------------------------------*/
+.pulse {
+    animation-name: pulse;
+    animation-duration: 200ms;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    75% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.pulse-center {
+    animation-name: pulse-center;
+    animation-duration: 200ms;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+}
+
+@keyframes pulse-center {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    75% {
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.opacity-animation {
+    animation-name: opacity-animation;
+    animation-duration: 200ms;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+}
+
+@keyframes opacity-animation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.scale-animation {
+    animation-name: scale-animation;
+    animation-duration: 200ms;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+}
+
+@keyframes scale-animation {
+    0% {
+        transform: scale(0.9);
+    }
+
+    90% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.row-animation {
+    animation: row-animation;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+}
+
+@keyframes row-animation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.pop-animation {
+    animation: pop-animation;
+    animation-duration: 0.3s;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+}
+
+@keyframes pop-animation {
+    0% {
+        transform: scale(0.25);
+    }
+
+    75% {
+        transform: scale(1.025);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/*------------------------------------------------------------------*/
+/*-----------------------------------------------------------[ LOG ]*/
+/*------------------------------------------------------------------*/
+
+.log-details {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 0.9em;
+    /*letter-spacing: 2px;*/
+    /*line-height: 1.2em;*/
+}
+
+    .log-details .entity {
+        display: inline-block;
+        vertical-align: top;
+        border: 0px solid silver;
+        border-radius: 5px;
+        padding: 0 0.5em;
+        box-shadow: 1px 1px 3px grey;
+        margin-bottom: 0.25em;
+        line-height: inherit;
+    }
+
+        .log-details .entity.label[label="Removido"] {
+            color: red;
+        }
+
+        .log-details .entity.label[label="Adicionado"] {
+            color: teal;
+        }
+
+    /*.log-details .property:not(:first-child) {
+        margin-top: 0.25em;
+    }*/
+
+    .log-details .description {
+        display: inline-block;
+        vertical-align: top;
+        font-weight: bold;
+    }
+
+        .log-details .description:after {
+            display: inline;
+            content: ":";
+        }
+
+    .log-details .value {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+        .log-details .value.modified {
+            color: red;
+        }
+
+            .log-details .value.modified:after {
+                content: '\279C';
+                display: inline-block;
+                margin-left: 0.2em;
+                color: black;
+            }
+
+            .log-details .value.modified + .value {
+                color: teal;
+            }
+
+    .log-details .cols {
+        margin: 0;
+    }

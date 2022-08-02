@@ -9,13 +9,6 @@ if (!Array.prototype.remove) {
 };
 
 if (!String.prototype.format) {
-    //String.prototype.format = function () {
-    //    let args = arguments;
-    //    return this.replace(/{(\d+)}/g, function (match, number) {
-    //        return typeof args[number] != 'undefined' ? args[number] : match;
-    //    });
-    //};
-
     String.prototype.format = function () {
         let str = this.toString();
         if (arguments.length) {
@@ -3825,6 +3818,7 @@ if (!String.prototype.format) {
     $user.onForgot = false;
 
     $user.login = function (element, selector) {
+        
         let form = selector ? element.closest(selector) : element;
         if (form.isBusy) { return false; }
 
@@ -3843,7 +3837,6 @@ if (!String.prototype.format) {
             onsuccess: function (response) {
                 form.isBusy = false;
                 form.removeAttribute("state");
-
                 if (loginCodeFunctions[response.Code] && !loginCodeFunctions[response.Code](form, response)) {
                     return;
                 }

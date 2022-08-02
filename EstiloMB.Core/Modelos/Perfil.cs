@@ -12,21 +12,14 @@ namespace Chargeback.Core
     public class Perfil
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PerfilID { get; set; }
-        public int EmpresaID { get; set; }
+        public int ID { get; set; }
 
         [Required, MaxLength(50), LogProperty]
         public string Nome { get; set; }
-
-        [MaxLength(100), LogProperty]
-        public string Descricao { get; set; }
+        public int Status { get; set; }
 
         [LogProperty]
         public List<Acao> Acoes { get; set; }
-        public DateTime RegistradoEm { get; set; }
-        public int? RegistradoPor { get; set; }
-        public DateTime AtualizadoEm { get; set; }
-        public int? AtualizadoPor { get; set; }
 
         public static Response<List<Perfil>> Listar(Request<Perfil> request)
         {
@@ -44,7 +37,7 @@ namespace Chargeback.Core
                 }
 
                 // - Verificando permissão.
-                if (!user.Data.Kstack && !user.Data.Admin && !user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
+                if (!user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
                 {
                     response.Code = ResponseCode.Denied;
                     response.Message = Text.AcessoNegado;
@@ -57,22 +50,6 @@ namespace Chargeback.Core
                                                      .AsNoTracking()
                                                      .Include(e => e.Acoes)
                                                      .OrderBy(e => e.Nome);
-
-                    if (!user.Data.Kstack)
-                    {
-                        query = query.Where(e => e.EmpresaID == user.Data.EmpresaID);
-                    }
-
-                    if (request.Data != null && request.Data.EmpresaID != 0)
-                    {
-                        query = query.Where(e => e.EmpresaID == request.Data.EmpresaID);
-                    }
-
-                    if (request.Filter?.Count > 0)
-                    {
-                        query = query.Where(e => !request.Filter.Select(r => r.PerfilID).Contains(e.PerfilID));
-                    }
-
                     // - Aplicando filtros.
                     //for (int i = 0; i < criterias.Length; i++)
                     //{
@@ -130,7 +107,7 @@ namespace Chargeback.Core
                     response.Validation = Validation.Validate(request.Data);
 
                     // - Validação de mesmo nome.
-                    if (database.Set<Perfil>().Count(e => e.Nome == request.Data.Nome && e.PerfilID != request.Data.PerfilID && e.EmpresaID == request.Data.EmpresaID) > 0)
+                    if (database.Set<Perfil>().Count(e => e.Nome == request.Data.Nome && e.ID != request.Data.ID) > 0)
                     {
                         response.Validation.IsValid = false;
                         response.Validation.Add<Perfil>(Text.PerfilNomeJaRegistrado, e => e.Nome);
@@ -145,33 +122,12 @@ namespace Chargeback.Core
                     }
 
                     // - Obtendo o original.
-                    Perfil original = response.Data.PerfilID != 0 ? database.Set<Perfil>()
+                    Perfil original = response.Data.ID != 0 ? database.Set<Perfil>()
                                                                             .AsNoTracking()
                                                                             .Include(e => e.Acoes)
-                                                                            .FirstOrDefault(e => e.PerfilID == request.Data.PerfilID)
+                                                                            .FirstOrDefault(e => e.ID == request.Data.ID)
                                                                             : null;
-
-                    if (!user.Data.Kstack && original != null && original.EmpresaID != user.Data.EmpresaID)
-                    {
-                        response.Code = ResponseCode.Invalid;
-                        response.Message = Text.AcessoNegado;
-                        return response;
-                    }
-
-                    request.Data.EmpresaID = original?.EmpresaID ?? (!user.Data.Kstack ? user.Data.EmpresaID : request.Data.EmpresaID);
-                    if (request.Data.EmpresaID == 0)
-                    {
-                        response.Code = ResponseCode.BadRequest;
-                        response.Message = Text.ErroRequisicao;
-                        return response;
-                    }
-
-                    request.Data.RegistradoPor = original?.RegistradoPor ?? request.UserID;
-                    request.Data.RegistradoEm = original?.RegistradoEm ?? DateTime.Now;
-                    request.Data.AtualizadoPor = request.UserID;
-                    request.Data.AtualizadoEm = DateTime.Now;
-
-                    if (request.Data.PerfilID == 0)
+                    if (request.Data.ID == 0)
                     {
                         database.Set<Perfil>().Add(request.Data);
                         database.SaveChanges();
@@ -179,7 +135,7 @@ namespace Chargeback.Core
                         new Log()
                         {
                             Entity = Text.Perfis,
-                            EntityID = request.Data.PerfilID,
+                            EntityID = request.Data.ID,
                             LogType = LogTipo.Historico,
                             UserID = request.UserID,
                             Message = Text.PerfilAdicionado
@@ -202,7 +158,7 @@ namespace Chargeback.Core
                         new Log()
                         {
                             Entity = Text.Perfis,
-                            EntityID = request.Data.PerfilID,
+                            EntityID = request.Data.ID,
                             LogType = LogTipo.Historico,
                             UserID = request.UserID,
                             Message = Text.PerfilAtualizado
@@ -224,7 +180,7 @@ namespace Chargeback.Core
                 new Log()
                 {
                     Entity = Text.Perfis,
-                    EntityID = request.Data.PerfilID,
+                    EntityID = request.Data.ID,
                     LogType = LogTipo.Exception,
                     UserID = request.UserID,
                     Message = ex.Message + (ex.InnerException != null ? ", " + ex.InnerException.Message : "")
@@ -252,7 +208,7 @@ namespace Chargeback.Core
                 }
 
                 // - Verificando permissão.
-                if (!user.Data.Kstack && !user.Data.Admin && !user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
+                if (!user.Data.Perfis.Any(e => e.Perfil.Acoes.Any(e => e.Nome == Text.Aprovador && e.Habilitado == true)))
                 {
                     response.Code = ResponseCode.Denied;
                     response.Message = Text.AcessoNegado;
@@ -262,7 +218,7 @@ namespace Chargeback.Core
                 using (Database<Perfil> database = new Database<Perfil>())
                 {
                     // - Obtendo o original.
-                    Perfil original = database.Set<Perfil>().FirstOrDefault(e => e.PerfilID == request.Data.PerfilID);
+                    Perfil original = database.Set<Perfil>().FirstOrDefault(e => e.ID == request.Data.ID);
                     if (original == null)
                     {
                         response.Code = ResponseCode.BadRequest;
@@ -270,23 +226,13 @@ namespace Chargeback.Core
                         return response;
                     }
 
-                    if (!user.Data.Kstack && original.EmpresaID != user.Data.EmpresaID)
-                    {
-                        response.Code = ResponseCode.Invalid;
-                        response.Message = Text.AcessoNegado;
-                        return response;
-                    }
-
-                    original.AtualizadoEm = DateTime.Now;
-                    original.AtualizadoPor = request.UserID;
-
                     database.Set<Perfil>().Update(original);
                     database.SaveChanges();
 
                     new Log()
                     {
                         Entity = Text.Perfis,
-                        EntityID = request.Data.PerfilID,
+                        EntityID = request.Data.ID,
                         LogType = LogTipo.Historico,
                         UserID = request.UserID,
                         Message = Text.PerfilRemovido
@@ -307,7 +253,7 @@ namespace Chargeback.Core
                 new Log()
                 {
                     Entity = Text.Perfis,
-                    EntityID = request.Data.PerfilID,
+                    EntityID = request.Data.ID,
                     LogType = LogTipo.Exception,
                     UserID = request.UserID,
                     Message = ex.Message + (ex.InnerException != null ? ", " + ex.InnerException.Message : "")

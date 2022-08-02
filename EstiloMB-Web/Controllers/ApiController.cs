@@ -44,34 +44,22 @@ namespace EstiloMB.Site.Controllers
             identity.AddClaim(new Claim("UsuarioID", response.Data.UsuarioID.ToString()));
             identity.AddClaim(new Claim(ClaimTypes.Name, response.Data.Nome));
 
-            if (response.Data.Admin)
+            List<Claim> claims = new List<Claim>();
+
+            for (int i = 0; i < response.Data.Perfis.Count; i++)
             {
-                identity.AddClaim(new Claim("Admin", "true"));
+                for (int j = 0; j < response.Data.Perfis[i].Perfil.Acoes.Count; j++)
+                {
+                    if (!response.Data.Perfis[i].Perfil.Acoes[j].Habilitado) { continue; }
+                    if (claims.Any(e => e.Type == response.Data.Perfis[i].Perfil.Acoes[j].Nome)) { continue; }
+
+                    claims.Add(new Claim(response.Data.Perfis[i].Perfil.Acoes[j].Nome, "true"));
+                }
             }
 
-            if (response.Data.Kstack)
+            for (int i = 0; i < claims.Count; i++)
             {
-                identity.AddClaim(new Claim("Kstack", "true"));
-            }
-            else
-            {
-                List<Claim> claims = new List<Claim>();
-
-                for (int i = 0; i < response.Data.Perfis.Count; i++)
-                {
-                    for (int j = 0; j < response.Data.Perfis[i].Perfil.Acoes.Count; j++)
-                    {
-                        if (!response.Data.Perfis[i].Perfil.Acoes[j].Habilitado) { continue; }
-                        if (claims.Any(e => e.Type == response.Data.Perfis[i].Perfil.Acoes[j].Nome)) { continue; }
-
-                        claims.Add(new Claim(response.Data.Perfis[i].Perfil.Acoes[j].Nome, "true"));
-                    }
-                }
-
-                for (int i = 0; i < claims.Count; i++)
-                {
-                    identity.AddClaim(claims[i]);
-                }
+                identity.AddClaim(claims[i]);
             }
 
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);

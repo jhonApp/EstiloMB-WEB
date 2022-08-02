@@ -24,8 +24,8 @@ namespace EstiloMB.Site
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication("Home")
-                    .AddCookie("Home", c => {
+            services.AddAuthentication("Login")
+                    .AddCookie("Login", c => {
                         c.Cookie.Name = "EstiloMB";
                         c.ClaimsIssuer = "EstiloMB";
                         c.LoginPath = new PathString("/Home/Index");

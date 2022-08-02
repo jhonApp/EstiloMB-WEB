@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Chargeback.Core
 {
-    [Table("UsuarioPerfil")]
+    [Table("Usuario.Perfil")]
     public class UsuarioPerfil
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
