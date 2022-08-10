@@ -24,6 +24,10 @@ namespace Chargeback.Core
         [MaxLength(50), LogProperty]
         public string Senha { get; set; }
 
+        [MaxLength(20), LogProperty]
+        public string Celular { get; set; }
+        public DateTime DataNascimento { get; set; }
+
         [MaxLength(50), LogProperty]
         public string Email { get; set; }
 
@@ -35,6 +39,7 @@ namespace Chargeback.Core
         public int? RegistradoPor { get; set; }
         public DateTime? AtualizadoEm { get; set; }
         public int? AtualizadoPor { get; set; }
+        public bool IsAdmin { get; set; }
         [LogProperty] public List<UsuarioPerfil> Perfis { get; set; }
 
         [NotMapped] public string NovaSenha { get; set; }

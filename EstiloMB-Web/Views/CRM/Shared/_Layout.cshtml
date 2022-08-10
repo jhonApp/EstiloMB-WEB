@@ -1,0 +1,101 @@
+﻿@using EstiloMB.Core;
+@using EstiloMB.Site;
+@using EstiloMB.MVC;
+@addTagHelper *, MyWebApp
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] EstiloMB</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/sistema.css" />
+    <link rel="stylesheet" href="~/css/swiper.css" />
+    
+	<script type="text/javascript" src="~/js/fa/all.js"></script>
+    <script type="text/javascript" src="~/js/ChartJS/Chart.js"></script>
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <script src="~/js/swipe.js"></script>
+</head>
+<body>
+    <div class="nav-main">
+        <nav>
+            
+            <div class="wrapper">
+                <ul class="nav-links">
+                    <li class="nav-space">
+                        <img class="logo" src="~/image/logo-oficial.png" alt=""/>
+                    </li>
+                    <li>
+                        <a href="~/CRM/Index">Dashbord</a>
+                    </li>
+                    <li>
+                        <a>Cadastros</a>
+                    </li>
+                    <li>
+                        <a href="~/Estoque/Produto">Estoque</a>
+                    </li>
+                    <li>
+                        <a>Financeiro</a>
+                    </li>
+                    <li>
+                        <a>Administração</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="itens">
+            <div class="user">
+                <ul>
+                    <li><span> @User.Identity.Name </span></li>
+                    <li>
+                        <button class="usuario icon"
+                                aria-expanded="false"
+                                onclick="expanding(this)">
+                            <i class="far fa-user"></i>
+                        </button>
+                        <div class="login-content hidden">
+                            <span>Que bom ver você por aqui!</span>
+                            <a  href="~/Sistema/Login">Entrar</a>
+                            <a href="~/Sistema/CriarConta" class="button-conta">Quero criar a minha conta</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <header>
+        
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="border-top footer text-muted">
+        &copy; 2022 - EstiloMB_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </footer>
+</body>
+</html>
+<script>
+
+function expanding(element) {
+
+    if(element.ariaExpanded == 'false'){
+        element.closest('li').querySelector('.login-content').classList.remove('hidden');
+        element.ariaExpanded = 'true';
+
+    }else {
+        element.closest('li').querySelector('.login-content').classList.add('hidden');
+        element.ariaExpanded = 'false';
+    }
+}
+
+//document.querySelector('.user > ul > li > .usuario').onclick = (element) =>{
+//    console.log(element)
+//    if(element.getAttribute('aria-expanded') == 'false'){
+//        //document.querySelector('.login-content').style.transform = 'perspective(1000px) rotateY(-180deg)';
+//    }
+//}
+</script>

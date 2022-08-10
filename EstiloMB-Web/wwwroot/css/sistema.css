@@ -1,0 +1,32 @@
+﻿.logo{
+
+}
+
+.nav-main {
+    display: grid;
+    grid-template-columns: 5%;
+    grid-template-rows: 7em;
+    height: auto;
+    background-color: #B583EA;
+    grid-template-areas: "iten-user nav itens";
+    box-shadow: 0px 3px 6px #0000000f;
+}
+
+.nav-space {
+    margin-right: 10%;
+}
+
+.user ul li {
+    padding: 5px;
+}
+
+.iten-user, .itens .user {
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    margin-top: 32px;
+}
+
+.grafico-card{
+    height: 390px;
+}

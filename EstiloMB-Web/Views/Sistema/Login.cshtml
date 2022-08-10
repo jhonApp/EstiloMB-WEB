@@ -62,10 +62,11 @@
     });
 
     $user.onLoginCode(@((int)ResponseCode.Sucess), function (form, response) {
-        if(response.Data.IsAdmin != 0){
-            window.location.href = $min.root() + $ui.relativePath + "CRM/Index";
-        }else {
-            window.location.href = $min.root() + $ui.relativePath + "Home/Index";
+       
+        if(response.Data.IsAdmin != 0) {
+            location.href = $min.root() + $ui.relativePath + "CRM/Index";
+        } else {
+            location.href = $min.root() + $ui.relativePath + "Home/Index";
         }
         
     });
