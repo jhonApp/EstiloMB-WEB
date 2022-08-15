@@ -2,6 +2,16 @@
 
 }
 
+.title > h1{
+    padding: 20px;
+}
+
+.content-sis {
+    height: 200px;
+    display: grid;
+    grid-template-rows: 10% 1fr;
+}
+
 .nav-main {
     display: grid;
     grid-template-columns: 5%;
@@ -13,7 +23,7 @@
 }
 
 .nav-space {
-    margin-right: 10%;
+    margin-right: 7.5em;
 }
 
 .user ul li {
@@ -29,4 +39,53 @@
 
 .grafico-card{
     height: 390px;
+}
+
+/***************************Cadastro***************************/
+.nav-opcoes {
+    height: 100px;
+    background-color: transparent;
+    box-shadow: 0px 3px 6px #0000000f;
+}
+
+    .nav-opcoes > nav {
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-opcoes > nav > .wrapper {
+        margin-top: 20px;
+    }
+        .nav-opcoes > nav > .wrapper > .nav-links > li {
+            padding: 15px;
+        }
+
+            .nav-opcoes > nav > .wrapper > .nav-links > li > a {
+                color: #B583EA;
+            }
+
+table {
+    background-color: #f3f3f3;
+    width: 100%;
+}
+
+    table tr {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background-color: rgb(240, 240, 240);
+    }
+
+.button-new {
+    padding: 10px 20px;
+    outline: none;
+    border-radius: 6px;
+}
+
+.search-crm {
+    padding: 7px 20px;
+    border-radius: 6px;
+    border: 1px solid black;
+    outline: none;
 }

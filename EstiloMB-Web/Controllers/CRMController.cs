@@ -14,5 +14,9 @@ namespace EstiloMB.Site.Controllers
         {
             return View();
         }
+        public IActionResult Cadastro()
+        {
+            return View();
+        }
     }
 }
