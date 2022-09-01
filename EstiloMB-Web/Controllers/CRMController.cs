@@ -10,7 +10,7 @@ namespace EstiloMB.Site.Controllers
             return View();
         }
 
-        public IActionResult Produto()
+        public IActionResult Produtos()
         {
             return View();
         }

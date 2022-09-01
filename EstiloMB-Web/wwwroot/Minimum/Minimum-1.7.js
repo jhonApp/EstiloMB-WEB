@@ -1559,8 +1559,20 @@ if (!String.prototype.format) {
     $ui.relativePath = "";
 
     if (window.location.host.includes(".com.br")) {
-        $ui.relativePath = "Chargeback/";
+        $ui.relativePath = "EstiloMB/";
     }
+
+    $ui.checkEmpty = function (data) {
+        console.log(data)
+        if (!data) { return; }
+
+        if (data.children.length === 0 || data.children.length === 1 && data.children[0].nodeName.toUpperCase() === "TEMPLATE") {
+            data.setAttribute("state", "empty");
+        }
+        else {
+            data.setAttribute("state", "default");
+        }
+    };
 
     // - Privates
     var emptyBusyMessage = "No busy message set.";
@@ -1629,6 +1641,7 @@ if (!String.prototype.format) {
     };
 
     var load = function (contents, pageOffset) {
+        
         if (contents.isBusy || !contents.url) {
             //$ui.message(contents.info.messageBusy || emptyBusyMessage, "alert"); 
             return;
@@ -2510,24 +2523,29 @@ if (!String.prototype.format) {
         load(contents, -1);
     };
 
-    $ui.popup = function (button, itemSelector, containerSelector, templateID) {
-        let container = button.closest(containerSelector);
-        let contents = init(container);
+    $ui.popup = function (container, item, template, dataUrl) {
+        if (!container) {
+            return console.log("ERROR in $ui.popup(container, item, template, dataUrl): The container parameter must be a valid element.");
+        }
 
-        let item = !itemSelector ? false : typeof itemSelector === "string" ? button.closest(itemSelector) : itemSelector;
+        if (!template) {
+            return console.log("ERROR in $ui.popup(container, item, template, dataUrl): The template parameter must be a valid element.");
+        }
 
-        let popup = $min.popup(document.getElementById(templateID));
-        popup.isPopup = true;
-        popup.contents = contents;
+        let data = container.querySelector("[ui-content=data][data-url='" + dataUrl + "']") || container.querySelector("[ui-content=data]") || false;
+        let popup = $min.popup(template);
+        popup.isChildData = true;
+        popup.parentData = data;
 
         if (item) {
             popup.original = item;
-            popup.data = item.data;            
+            popup.data = item.data;
             $min.bind(popup, item.data);
         }
         else {
             popup.isNew = true;
         }
+        return popup;
     };
 
     $ui.filter = function (element, containerSelector, propertyName) {

@@ -1,0 +1,188 @@
+﻿@using EstiloMB.MVC;
+@inject Localization loc
+@{
+    ViewData["Title"] = "Cadastro";
+    Layout = "~/Views/CRM/Shared/_Layout.cshtml";
+}
+<content>
+    <div class="nav-opcoes">
+        <nav>
+            <div class="wrapper">
+                <ul class="nav-links">
+                    <li>
+                        <a href="~/CRM/Index">Produtos</a>
+                    </li>
+                    <li>
+                        <a href="~/CRM/Cadastro">Categoria</a>
+                    </li>
+                    <li>
+                        <a href="~/Estoque/Produto">Cupons</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <section class="page content-sis" ui="container" id="produto">
+        <div class="item">
+            <div class="table-header">
+                <p>Cadastro de Produtos</p>
+                <div>
+                    <input class="search-crm" placeholder="Buscar..." />
+                    <button class="button-new" onclick="popup(this)">
+                        Adicionar Produto
+                    </button>
+                </div>
+            </div>
+            <table class="table left-edit">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Imagem</th>
+                        <th>Categoria</th>
+                        <th>Tamanhos</th>
+                        <th>Cores</th>
+                        <th>Valor</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody ui-content="data" ui-load="auto" data-url="Api/Produto/Listar">
+                    <template>
+                        <tr class="opacity-animation" >
+                            <td>
+                                <span data-bind="Nome"></span>
+                                <input type="hidden" name="ID" data-bind="ID" />
+                            </td>
+                            <td>
+                                <span data-bind="Descricao"></span>
+                            </td>
+                            <td>
+                                <img src="~/image/look.jpg" />
+                                <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                            </td>
+                            <td> <span data-bind="Categoria.Nome" onbind="bindar(data)"></span></td>
+                            <td><span data-bind="Tamanho"></span></td>
+                            <td><span data-bind="Cor"></span></td>
+                            <td><span data-bind="Valor"></span></td>
+                            <td>
+                                <button class="icon tooltip salvar">
+                                    <span class="tooltip-top">Salvar</span>
+                                    <i class="fas fa-check-circle"></i>
+                                </button>
+                                <button class="icon tooltip remover">
+                                    <span class="tooltip-top">Remover</span>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+                @*<tfoot>
+                    <!-- Empty -->
+                    <tr ui-content="empty">
+                        <td class="text-center" colspan="10">
+                            @loc["Nenhum registro encontrado."]
+                        </td>
+                    </tr>
+
+                    <!-- Loading -->
+                    <tr ui-content="loading">
+                        <td colspan="10">
+                            <div class="loading-bars">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>*@
+            </table>
+
+            <div class="popup-overlay">
+                <div class="popup-box-container">
+                    <a onclick="popup(this)" class="close"><i class="far fa-times icon"></i></a>
+                    <div class="title">Produto</div>
+                    <form action="#">
+                        <div class="user-details">
+
+                            @*--Nome--*@
+                            <div class="label">
+                                <span class="details"> Nome</span>
+                                <input type="text"/>
+                            </div>
+
+                            @*--Descrição--*@
+                            <div class="label">
+                                <span class="details"> Descrição</span>
+                                <textarea type="text" rows="4" cols="50"></textarea>
+                            </div>
+
+                             @*--Categoria--*@
+                            <div class="label">
+                                <span class="details"> Categoria</span>
+                                <input type="text"/>
+                            </div>
+
+                             @*--Cor--*@
+                            <div class="label">
+                                <span class="details">Cor</span>
+                                <input type="text"/>
+                            </div>
+
+                            @*--Valor--*@
+                            <div class="label">
+                                <span class="details">Valor</span>
+                                <input type="text"/>
+                            </div>
+
+                            @*--Tamanho--*@
+                            <div class="label">
+                                <div class="gender-details">
+                                <input type="radio" name="gender" id="dot-1"/>
+                                <input type="radio" name="gender" id="dot-2"/>
+                                <input type="radio" name="gender" id="dot-3"/>
+                                <span class="gender-title">Tamanho</span>
+                                <div class="category">
+                                    <label for="dot-1">
+                                        <span class="dot one"></span>
+                                        <span class="gender">P</span>
+                                    </label>
+                                    <label for="dot-2">
+                                        <span class="dot two"></span>
+                                        <span class="gender">M</span>
+                                    </label>
+                                    <label for="dot-3">
+                                        <span class="dot tree"></span>
+                                        <span class="gender">G</span>
+                                    </label>
+                                    <label for="dot-3">
+                                        <span class="dot tree"></span>
+                                        <span class="gender">GG</span>
+                                    </label>
+                                </div>
+                            </div>
+                            </div>
+                            
+                            
+                        </div>
+                        <div class="button-cadastro">
+                            <input type="submit" value="Salvar"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</content>
+
+<script type="text/javascript">
+
+    $ui.update(document.getElementById("produto"));
+
+    function bindar(data){
+        console.log(data);
+    }
+
+</script>

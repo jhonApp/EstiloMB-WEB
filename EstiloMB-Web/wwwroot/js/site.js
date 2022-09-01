@@ -8,3 +8,16 @@
     }
 }
 
+function popup(element) {
+    
+    let popupBox = element.closest('section').querySelector('.popup-overlay');
+
+    if (element.className == 'button-new') {
+        popupBox.classList.add('active');
+
+    } else {
+        console.log("entrei primeiro")
+        popupBox.classList.remove('active');
+    }
+
+}
