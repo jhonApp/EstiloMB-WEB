@@ -57,5 +57,9 @@ namespace EstiloMB.Core
         internal const string SenhaNaoPodeSerIgualAnterior = "A nova senha não pode ser igual à senha anterior.";
         #endregion
 
+        #region [Categoria]
+        internal const string Categoria = "Categoria";
+        #endregion
+
     }
 }

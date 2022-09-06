@@ -1,4 +1,4 @@
-﻿using EstiloMB.Core;
+﻿using Chargeback.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Reflection;
 
-namespace Chargeback.Core
+namespace EstiloMB.Core
 {
     [Table("Usuario")]
     public class Usuario
@@ -47,7 +47,7 @@ namespace Chargeback.Core
         [NotMapped] public byte[] ImageData { get; set; }
 
         public const string PasswordKey = "123abc456def";
-        public const int KstackID = 1;
+        public const int EstiloMbID = 3;
 
         public static Response<Usuario> Carregar(int userID)
         {

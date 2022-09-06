@@ -1,4 +1,5 @@
-﻿@using EstiloMB.MVC;
+﻿@using EstiloMB.Core;
+@using EstiloMB.MVC;
 @inject Localization loc
 @{
     ViewData["Title"] = "Cadastro";
@@ -104,73 +105,117 @@
                 <div class="popup-box-container">
                     <a onclick="popup(this)" class="close"><i class="far fa-times icon"></i></a>
                     <div class="title">Produto</div>
-                    <form action="#">
+                    <div class="falaAEE">
                         <div class="user-details">
-
-                            @*--Nome--*@
-                            <div class="label">
-                                <span class="details"> Nome</span>
-                                <input type="text"/>
-                            </div>
-
-                            @*--Descrição--*@
-                            <div class="label">
-                                <span class="details"> Descrição</span>
-                                <textarea type="text" rows="4" cols="50"></textarea>
-                            </div>
-
-                             @*--Categoria--*@
-                            <div class="label">
-                                <span class="details"> Categoria</span>
-                                <input type="text"/>
-                            </div>
-
-                             @*--Cor--*@
-                            <div class="label">
-                                <span class="details">Cor</span>
-                                <input type="text"/>
-                            </div>
-
-                            @*--Valor--*@
-                            <div class="label">
-                                <span class="details">Valor</span>
-                                <input type="text"/>
-                            </div>
-
-                            @*--Tamanho--*@
-                            <div class="label">
-                                <div class="gender-details">
-                                <input type="radio" name="gender" id="dot-1"/>
-                                <input type="radio" name="gender" id="dot-2"/>
-                                <input type="radio" name="gender" id="dot-3"/>
-                                <span class="gender-title">Tamanho</span>
-                                <div class="category">
-                                    <label for="dot-1">
-                                        <span class="dot one"></span>
-                                        <span class="gender">P</span>
-                                    </label>
-                                    <label for="dot-2">
-                                        <span class="dot two"></span>
-                                        <span class="gender">M</span>
-                                    </label>
-                                    <label for="dot-3">
-                                        <span class="dot tree"></span>
-                                        <span class="gender">G</span>
-                                    </label>
-                                    <label for="dot-3">
-                                        <span class="dot tree"></span>
-                                        <span class="gender">GG</span>
-                                    </label>
+                            <div class="cols">
+                                @*--Imagem--*@
+                                <div class="col-12">
+                                    <div class="card-prod-image">
+                                        <div class="top">
+                                            <p>Drag & drop imagem upload</p>
+                                            <button type="button" onclick="$produto.addImages(this.closest('.card-prod-image'))">Upload</button>
+                                        </div>
+                                        <form class="form">
+                                            <span class="inner">Drag & drop image here or <span class="select">Browse</span></span>
+                                            <input name="file" type="file" class="file" multiple/>
+                                        </form>
+                                        <div class="img-container">
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="cols">
+                                @*--Nome--*@
+                                <div class="col-5">
+                                    <div class="label">
+                                        <span class="details"> Nome</span>
+                                        <input type="text"/>
+                                    </div>
+                                </div>
+
+                                @*--Descrição--*@
+                                <div class="col-6">
+                                    <div class="label">
+                                        <span class="details"> Descrição</span>
+                                        <textarea type="text" rows="4" cols="50"></textarea>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            
+                            <div class="cols">
+                                @*--Categoria--*@
+                                <div class="col-3">
+                                    <div class="label">
+                                        @{
+                                            List<Categoria> categorias = null;
+                                            categorias = Categoria.Listar(new Request<Categoria>() { UserID = Usuario.EstiloMbID })?.Data;
+                                        }
+                                        <span class="details">Categoria</span>
+                                        <select name="TipoCanalComunicacaoID"
+                                                required="required"
+                                                required-error="@loc["Este campo é obrigatório."]"
+                                                onblur="$min.validate(this)">
+                                            <option value="">@loc["- Selecione -"]</option>
+                                            @for (int i = 0; i < categorias.Count; i++)
+                                            {
+                                                <option value="@categorias[i].ID">@categorias[i].Nome</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                @*--Cor--*@
+                                <div class="col-4">
+                                    <div class="label">
+                                        <span class="details">Cor</span>
+                                        <input type="text"/>
+                                    </div>
+                                </div>
+
+                                @*--Valor--*@
+                                <div class="col-4">
+                                    <div class="label">
+                                        <span class="details">Valor</span>
+                                        <input type="text"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cols">
+                                <div class="col-4">
+                                    @*--Tamanho--*@
+                                    <div class="label">
+                                        <div class="gender-details">
+                                            <input type="radio" name="gender" id="dot-1"/>
+                                            <input type="radio" name="gender" id="dot-2"/>
+                                            <input type="radio" name="gender" id="dot-3"/>
+                                            <span class="gender-title">Tamanho</span>
+                                            <div class="category">
+                                                <label for="dot-1">
+                                                    <span class="dot one"></span>
+                                                    <span class="gender">P</span>
+                                                </label>
+                                                <label for="dot-2">
+                                                    <span class="dot two"></span>
+                                                    <span class="gender">M</span>
+                                                </label>
+                                                <label for="dot-3">
+                                                    <span class="dot tree"></span>
+                                                    <span class="gender">G</span>
+                                                </label>
+                                                <label for="dot-3">
+                                                    <span class="dot tree"></span>
+                                                    <span class="gender">GG</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="button-cadastro">
                             <input type="submit" value="Salvar"/>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -185,4 +230,79 @@
         console.log(data);
     }
 
+    function addFile(element) {
+        
+    }
+
+    (function($produto) {
+
+        let files = [];
+        let container = document.querySelector('.img-container');
+
+        const showImages = () => {
+            
+            let images = '';
+
+            files.forEach((e, i) => {
+                images += `<div class="image">
+                                <img src="${URL.createObjectURL(e)}" alt="image"/>
+                                <span onclick="$produto.removeImage(${i})">&times;</span>
+                            </div>`
+            });
+            
+            container.innerHTML = images;
+        }
+
+        $produto.addImages = function(element) {
+            //let files = [];
+            /*button = element.querySelector('.top button')*/
+            let form = element.querySelector('.form');
+            let text = element.querySelector('.inner');
+            let browser = element.querySelector('.select');
+            let input = element.querySelector('.form input');
+        
+            input.click();
+
+            //input change events
+            input.addEventListener('change', () => {
+                let file = input.files;
+
+                for (let i = 0; i < file.length; i++) {
+                    if(files.every(e => e.name != file[i].name)){
+                        files.push(file[i]);
+                    }
+                }
+
+                form.reset();
+                showImages();
+            });
+
+            showImages();
+
+            //const delImage = index => {
+                
+            //}
+
+            //form.addEventListener('dragover', e => {
+            //    e.preventDefault();
+
+            //    form.classList.add('dragover');
+            //    text.innerHTML = 'Drop images here';
+            //});
+
+            //form.addEventListener('dragleave', e => {
+            //    e.preventDefault();
+
+            //    form.classList.remove('dragover');
+            //    text.innerHTML = 'Drag & drop image here or <span class="select" onclick="addFile(this.closest('.card-prod-image'))">Browse</span>';
+            //});
+        };
+
+        $produto.removeImage = function(index) {
+
+            files.splice(index, 1);
+            showImages()
+        };
+
+    })(window.$produto = window.$produto || {});
 </script>
