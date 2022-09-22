@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Cadastro";
     Layout = "~/Views/CRM/Shared/_Layout.cshtml";
+    IList<Cor> cores = Cor.Listar(new Request<Cor>() { UserID = Usuario.EstiloMbID })?.Data;
 }
 <content>
     <div class="nav-opcoes">
@@ -105,117 +106,272 @@
                 <div class="popup-box-container">
                     <a onclick="popup(this)" class="close"><i class="far fa-times icon"></i></a>
                     <div class="title">Produto</div>
-                    <div class="falaAEE">
-                        <div class="user-details">
-                            <div class="cols">
-                                @*--Imagem--*@
-                                <div class="col-12">
-                                    <div class="card-prod-image">
-                                        <div class="top">
-                                            <p>Drag & drop imagem upload</p>
-                                            <button type="button" onclick="$produto.addImages(this.closest('.card-prod-image'))">Upload</button>
-                                        </div>
-                                        <form class="form">
-                                            <span class="inner">Drag & drop image here or <span class="select">Browse</span></span>
-                                            <input name="file" type="file" class="file" multiple/>
-                                        </form>
-                                        <div class="img-container">
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="cols">
-                                @*--Nome--*@
-                                <div class="col-5">
-                                    <div class="label">
-                                        <span class="details"> Nome</span>
-                                        <input type="text"/>
-                                    </div>
-                                </div>
-
-                                @*--Descrição--*@
-                                <div class="col-6">
-                                    <div class="label">
-                                        <span class="details"> Descrição</span>
-                                        <textarea type="text" rows="4" cols="50"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="cols">
-                                @*--Categoria--*@
-                                <div class="col-3">
-                                    <div class="label">
-                                        @{
-                                            List<Categoria> categorias = null;
-                                            categorias = Categoria.Listar(new Request<Categoria>() { UserID = Usuario.EstiloMbID })?.Data;
-                                        }
-                                        <span class="details">Categoria</span>
-                                        <select name="TipoCanalComunicacaoID"
-                                                required="required"
-                                                required-error="@loc["Este campo é obrigatório."]"
-                                                onblur="$min.validate(this)">
-                                            <option value="">@loc["- Selecione -"]</option>
-                                            @for (int i = 0; i < categorias.Count; i++)
-                                            {
-                                                <option value="@categorias[i].ID">@categorias[i].Nome</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-
-                                @*--Cor--*@
-                                <div class="col-4">
-                                    <div class="label">
-                                        <span class="details">Cor</span>
-                                        <input type="text"/>
-                                    </div>
-                                </div>
-
-                                @*--Valor--*@
-                                <div class="col-4">
-                                    <div class="label">
-                                        <span class="details">Valor</span>
-                                        <input type="text"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="cols">
-                                <div class="col-4">
-                                    @*--Tamanho--*@
-                                    <div class="label">
-                                        <div class="gender-details">
-                                            <input type="radio" name="gender" id="dot-1"/>
-                                            <input type="radio" name="gender" id="dot-2"/>
-                                            <input type="radio" name="gender" id="dot-3"/>
-                                            <span class="gender-title">Tamanho</span>
-                                            <div class="category">
-                                                <label for="dot-1">
-                                                    <span class="dot one"></span>
-                                                    <span class="gender">P</span>
-                                                </label>
-                                                <label for="dot-2">
-                                                    <span class="dot two"></span>
-                                                    <span class="gender">M</span>
-                                                </label>
-                                                <label for="dot-3">
-                                                    <span class="dot tree"></span>
-                                                    <span class="gender">G</span>
-                                                </label>
-                                                <label for="dot-3">
-                                                    <span class="dot tree"></span>
-                                                    <span class="gender">GG</span>
-                                                </label>
+                    <aside>
+                        <form class="overflow">
+                            <div class="user-details">
+                                <div class="cols">
+                                    @*--Imagem--*@
+                                    <div class="col-12">
+                                        <div class="card-prod-image">
+                                            <div class="top">
+                                                <div>
+                                                    <p>Escolha as imagens de sua preferência</p>
+                                                    <p class="text-alert">Você poderá escolher até 4 imagens</p>
+                                                </div>
+                                                <button type="button" onclick="$produto.addImages(this, this.closest('.card-prod-image'))">Selecionar</button>
+                                                <input name="file" type="file" class="file" multiple/>
                                             </div>
+                                            <div class="img-container"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cols">
+                                    @*--Nome--*@
+                                    <div class="col-5">
+                                        <div class="label">
+                                            <span class="details"> Nome</span>
+                                            <input type="text"
+                                                   required="required"
+                                                   name="Nome" data-bind="Nome"
+                                                   required-error="@loc["Este campo é obrigatório."]"
+                                                   maxlength="50"
+                                                   maxlength-error="@loc["Este campo não pode ter mais do que 50 caracteres."]"
+                                                   onblur="$min.validate(this)"/>
+                                            <validation data-bind="Nome" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                        </div>
+                                    </div>
+
+                                    @*--Descrição--*@
+                                    <div class="col-6">
+                                        <div class="label">
+                                            <span class="details">Descrição</span>
+                                            <textarea type="text"
+                                                      rows="4" cols="50"
+                                                      name="Descricao" data-bind="Descricao"
+                                                      required="required"
+                                                      onblur="$min.validate(this)"
+                                                      required-error="@loc["Este campo é obrigatório."]"
+                                                      maxlength="255"
+                                                      maxlength-error="@loc["Este campo não pode ter mais do que 255 caracteres."]"></textarea>
+                                            <validation data-bind="Descricao" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cols">
+                                    @*--Categoria--*@
+                                    <div class="col-3">
+                                        <div class="label">
+                                            @{
+                                                List<Categoria> categorias = null;
+                                                categorias = Categoria.Listar(new Request<Categoria>() { UserID = Usuario.EstiloMbID })?.Data;
+                                            }
+                                            <span class="details">Categoria</span>
+                                            <select name="CategoriaID"
+                                                    data-bind="CategoriaID"
+                                                    required="required"
+                                                    required-error="@loc["Este campo é obrigatório."]"
+                                                    onblur="$min.validate(this)">
+                                                <option value="">@loc["- Selecione -"]</option>
+                                                @for (int i = 0; i < categorias.Count; i++)
+                                                {
+                                                    <option value="@categorias[i].ID">@categorias[i].Nome</option>
+                                                }
+                                            </select>
+                                            <validation data-bind="CategoriaID" data-group="error" onbind="$ui.bindError(this)"></validation>
+
+                                        </div>
+                                    </div>
+
+                                    @*--Cor--*@
+                                    @*<div class="col-4">
+                                        <div class="label" data-array="ProdutoCores">
+                                            <input type="hidden" name="ProdutoID"/>
+                                            <span class="details">Cor</span>
+                                            <div class="select-btn" name="CorID" onclick="$produto.changeOpen(this)">
+                                                <span class="btn-text">- Selecione -</span>
+                                                <span class="arrow-dwn">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </span>
+                                            </div>
+                                            <ul data-array="ProdutoCor" class="list-items">
+                                                @for (int i = 0; i < cores.Count; i++)
+                                                {
+                                                    <li class="item">
+                                                        <span class="checkbox">
+                                                            <i class="fas fa-check check-icon"></i>
+                                                        </span>
+                                                        <span class="item-text">@cores[i].Nome</span>
+                                                        <span class="item-text hidden">@cores[i].ID</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>*@
+
+                                    <div class="col-4">
+                                        <div class="label" multiselect>
+                                            <span class="details">Cor</span>
+                                            <!-- Caixa de selecionados -->
+                                            <div class="select-btn" select-btn onclick="$multiSelector.showCheckBoxes(this)">
+                                                <template id="seletor" class="btn-text">
+                                                    <a onclick="$multiSelector.remover(this)">
+                                                        <span></span>
+                                                        <i>x</i>
+                                                    </a>
+                                                </template>
+                                                @*<span class="btn-text">- Selecione -</span>
+                                                <span class="arrow-dwn">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </span>*@
+                                            </div>
+
+                                            <ul data-array="ProdutosCor" class="list-items" id="checkboxes">
+                                                @for (int i = 0; i < cores.Count; i++)
+                                                {
+                                                    <li class="item cont" for="cor[@i]">
+                                                        <input type="hidden" name="CorID" value="@cores[i].ID" />
+                                                        <input type="hidden" name="ID" value="0" />
+
+                                                        <span class="checkbox">
+                                                            <i class="fas fa-check check-icon"></i>
+                                                        </span>
+                                                        
+                                                        <span class="item-text hidden"
+                                                            tag-bind="@cores[i].ID"
+                                                            name="IsChecked"
+                                                            id="cor[@i]"
+                                                            onclick="$multiSelector.selecionando(this)"
+                                                            onbind="$multiSelector.tagBind(this, data.ProdutosCor, 'CorID','$multiSelector.selecionando(this)')">
+                                                        </span>
+                                                        <span class="item-text" >@cores[i].Nome</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    @*<div class="col-4">
+                                        <!-- MuliSeletor -->
+                                        <div class=" multiselect" multiselect>
+                                            <!-- Caixa de selecionados -->
+                                            <div class="select-btn" selectBox onclick="$multiSelector.showCheckBoxes(this)">
+                                                <template id="seletor">
+                                                    <a onclick="$multiSelector.remover(this)">
+                                                        <span></span>
+                                                        <i>x</i>
+                                                    </a>
+                                                </template>
+                                            </div>
+
+                                            <!-- Opções de seleção -->
+                                            <div data-array="ProdutoCor" id="checkboxes">
+                                                @for (int i = 0; i < cores.Count; i++)
+                                                {
+                                                    <input type="hidden" name="CorID" value="@cores[i].ID" />
+                                                    <input type="hidden" name="ProdutoID" value="0" />
+
+                                                    <label for="cores[@i]" class="cont">
+                                                        <input type="checkbox"
+                                                               name="IsChecked" tag-bind="@cores[i].ID"
+                                                               id="cores[@i]"
+                                                               onclick="$multiSelector.selecionando(this)"
+                                                               onbind="$multiSelector.tagBind(this, data.ModelosPortos, 'PortosID','$multiSelector.selecionando(this)')" />
+
+                                                        <span>@cores[i].Nome</span>
+                                                    </label>
+                                                }
+                                            </div>
+
+                                            <!-- Validação -->
+                                            <label class="label">
+                                                <input type="hidden" name="Validation" onvalidation="$agro.validarMultiSelector(this.closest('[multiselect]'))" onvalidation-error="@loc["Por favor, selecione ao menos um item. "]" />
+                                                <validation data-bind="Validation" data-group="error" onbind="$form.error(this)"></validation>
+                                            </label>
+                                        </div>
+                                    </div>*@
+
+                                    @*--Tamanho--*@
+                                    <div class="col-4">
+                                        <div class="label">
+                                            <span class="details">Tamanho</span>
+                                            <div class="select-btn" onclick="$produto.changeOpen(this)">
+                                                <span class="btn-text">- Selecione -</span>
+                                                <span class="arrow-dwn">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </span>
+                                            </div>
+                                            <ul class="list-items">
+                                                <li class="item">
+                                                    <span class="checkbox">
+                                                        <i class="fas fa-check check-icon"></i>
+                                                    </span>
+                                                    <span class="item-text">P</span>
+                                                </li>
+                                                <li class="item">
+                                                    <span class="checkbox">
+                                                        <i class="fas fa-check check-icon"></i>
+                                                    </span>
+                                                    <span class="item-text">M</span>
+                                                </li>
+                                                <li class="item">
+                                                    <span class="checkbox">
+                                                        <i class="fas fa-check check-icon"></i>
+                                                    </span>
+                                                    <span class="item-text">G</span>
+                                                </li>
+                                                <li class="item">
+                                                    <span class="checkbox">
+                                                        <i class="fas fa-check check-icon"></i>
+                                                    </span>
+                                                    <span class="item-text">GG</span>
+                                                </li>
+                                                <li class="item">
+                                                    <span class="checkbox">
+                                                        <i class="fas fa-check check-icon"></i>
+                                                    </span>
+                                                    <span class="item-text">G1</span>
+                                                </li>
+                                                <li class="item">
+                                                    <span class="checkbox">
+                                                        <i class="fas fa-check check-icon"></i>
+                                                    </span>
+                                                    <span class="item-text">G1</span>
+                                                </li>
+                                                <li class="item">
+                                                    <span class="checkbox">
+                                                        <i class="fas fa-check check-icon"></i>
+                                                    </span>
+                                                    <span class="item-text">G1</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cols">
+                                    @*--Valor--*@
+                                    <div class="col-3">
+                                        <div class="label">
+                                            <span class="details">Valor</span>
+                                            <input type="text" value="R$ 0,00" onkeyup="$mask.moeda(this)"
+                                                    required="required"
+                                                    required-error="@loc["Este campo é obrigatório."]"
+                                                    onblur="$min.validate(this)"/>
+                                                    <input type="hidden" name="Valor" data-bind="Valor" />
+                                            <validation data-bind="Valor" data-group="error" onbind="$ui.bindError(this)"></validation>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                         <div class="button-cadastro">
-                            <input type="submit" value="Salvar"/>
+                            <input type="submit" 
+                                value="Salvar" 
+                                onclick="$ui.save(this, 'aside')" 
+                                data-url="Api/Produto/Salvar"
+                                ui-saved-message="@loc["Registro atualizado."]"/>
                         </div>
-                    </div>
+                    </aside>
+                    
                 </div>
             </div>
         </div>
@@ -228,10 +384,6 @@
 
     function bindar(data){
         console.log(data);
-    }
-
-    function addFile(element) {
-        
     }
 
     (function($produto) {
@@ -253,13 +405,9 @@
             container.innerHTML = images;
         }
 
-        $produto.addImages = function(element) {
-            //let files = [];
-            /*button = element.querySelector('.top button')*/
-            let form = element.querySelector('.form');
+        $produto.addImages = function(button, element) {
             let text = element.querySelector('.inner');
-            let browser = element.querySelector('.select');
-            let input = element.querySelector('.form input');
+            let input = element.querySelector('.top input');
         
             input.click();
 
@@ -267,35 +415,13 @@
             input.addEventListener('change', () => {
                 let file = input.files;
 
-                for (let i = 0; i < file.length; i++) {
+                for (let i = 0; i < 4; i++) {
                     if(files.every(e => e.name != file[i].name)){
                         files.push(file[i]);
                     }
                 }
-
-                form.reset();
                 showImages();
             });
-
-            showImages();
-
-            //const delImage = index => {
-                
-            //}
-
-            //form.addEventListener('dragover', e => {
-            //    e.preventDefault();
-
-            //    form.classList.add('dragover');
-            //    text.innerHTML = 'Drop images here';
-            //});
-
-            //form.addEventListener('dragleave', e => {
-            //    e.preventDefault();
-
-            //    form.classList.remove('dragover');
-            //    text.innerHTML = 'Drag & drop image here or <span class="select" onclick="addFile(this.closest('.card-prod-image'))">Browse</span>';
-            //});
         };
 
         $produto.removeImage = function(index) {
@@ -303,6 +429,71 @@
             files.splice(index, 1);
             showImages()
         };
+
+        $produto.changeOpen = function(element) {
+            
+            if(element.className != "open"){
+
+                element.classList.toggle("open");
+                $produto.selectItem(element);
+                return;
+            }
+
+            element.classList.remove("open");
+        }
+
+        $produto.selectItem = function(element) {
+
+            let items = element.closest(".label").querySelectorAll(".item");
+           
+
+            items.forEach(item => {
+                item.addEventListener("click", () => {
+                    let result = "";
+                    item.classList.toggle("checked");
+
+                    let checked = element.closest(".label").querySelectorAll(".checked"),
+                        btnText = element.closest(".label").querySelector(".btn-text"),
+                        colorID = 0;
+
+                        for(let i = 0; i < checked.length; i++){
+
+                            if(checked[i].className == "item checked"){
+                                result += checked[i].innerText + ", ";
+
+                                let color = result.slice(0, -2) + '';
+                                btnText.innerText = color;
+                            }else{
+
+                                btnText.innerText = "Selecione apenas 4 cores";
+                            }
+                        }
+
+                        if(result == ""){ btnText.innerText = "- Selecione -"; } else { $produto.fillArray(element, colorID) }
+                });
+            });
+        }
+
+        $produto.fillArray = function(element, id) {
+
+            if(element.closest(".label").hasAttribute("data-array")){
+                let parametro = {
+                            ID: 0,
+                            ProdutoID: 0,
+                            CorID: parseInt(id)
+                        };
+
+                let obj = {
+                            ProdutoCores: parametro
+                        };
+
+                let array = element.closest('[data-array="ProdutoCores"]');
+                $min.bind(array, obj);
+
+                console.log(obj)
+                console.log(array)
+            }
+        }
 
     })(window.$produto = window.$produto || {});
 </script>

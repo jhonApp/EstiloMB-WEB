@@ -61,5 +61,15 @@ namespace EstiloMB.Core
         internal const string Categoria = "Categoria";
         #endregion
 
+        #region [Cor]
+        internal const string Cor = "Cor";
+        #endregion
+
+        #region [Produto]
+        internal const string Produto = "Produto";
+        internal const string ProdutoNomeJaRegistrado = "ProdutoNomeJaRegistrado";
+        internal const string ProdutoCriado = "ProdutoCriado";
+        #endregion
+
     }
 }

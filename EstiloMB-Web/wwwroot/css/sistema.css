@@ -1,4 +1,4 @@
-﻿*{
+﻿* {
     box-sizing: inherit;
 }
 
@@ -79,7 +79,27 @@ span {
 
 table {
     width: 100%;
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+    border-spacing: 0;
+    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 50%);
+    /* border-collapse: collapse; */
+    background-color: powderblue;
 }
+
+    table thead tr > th:first-child {
+        /* border-radius: 5px 0 0 0; */
+        border-top-left-radius: 5px;
+    }
+
+    table th {
+        background-color: lightseagreen;
+        color: white;
+        padding: 0.5em 1em;
+        font-weight: normal;
+        vertical-align: middle;
+    }
 
 .table-header {
     display: flex;
@@ -242,17 +262,18 @@ button.icon:not(:disabled).remover:hover {
 
 .active {
     opacity: 1;
-    z-index: 1;
+    z-index: 9999;
 }
 
 .popup-box-container {
     background-color: #fff;
     width: 50%;
-    height: 80vh;
+    height: auto;
     padding: 15px;
     position: absolute;
     left: 50%;
-    top: 10%;
+    /*overflow: hidden;*/
+    top: 2%;
     transform: translate(-50%);
     -webkit-transform: translate(-50%);
 }
@@ -292,27 +313,28 @@ form .user-details .label {
 
 .user-details .label textarea,
 .user-details .label select,
-.user-details .label input {
+.user-details .label input,
+.user-details .label div {
     height: 25px;
     width: 92%;
     outline: none;
     border-radius: 5px;
     border: 1px solid #ccc;
-    font-size: 16px;
+    font-size: 13px;
     padding-left: 15px;
     border-bottom-width: 2px;
     transition: all 0.3s ease;
 }
-    .user-details .label .details {
-        display: block;
-        font-weight: 500;
-        margin-bottom: 5px;
-    }
-
-
-.user-details .label select {
-    height: 27px;
+.user-details .label .details {
+    display: block;
+    font-weight: 500;
+    font-size: 15px;
 }
+
+
+/*.user-details .label select,  {
+    height: 27px;
+}*/
 
 .user-details .label textarea {
     height: 65px;
@@ -320,7 +342,6 @@ form .user-details .label {
 }
 
 form .gender-details .gender-title {
-    font-size: 20px;
     font-weight: 500;
     margin-top: 0.5em;
 }
@@ -356,13 +377,13 @@ form input[type="radio"]{
     display: none;
 }
 
-form .button-cadastro {
+.button-cadastro {
     height: 45px;
-    margin: 45px 0;
+    margin: 15px 0;
     display: flex;
 }
 
-    form .button-cadastro input {
+    .button-cadastro input {
         height: 100%;
         width: 100%;
         outline: none;
@@ -374,7 +395,7 @@ form .button-cadastro {
         background: linear-gradient(135deg, #71b7e6, #9b59b6);
     }
 
-        form .button-cadastro input:hover {
+        .button-cadastro input:hover {
             background: linear-gradient(-135deg, #71b7e6, #9b59b6);
         }
 
@@ -513,12 +534,15 @@ form .button-cadastro {
     }
 
 .card-prod-image {
+    max-height: 150px;
     height: auto;
     padding: 15px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    /* box-shadow: 0 0 5px rgb(0 0 0 / 15%); */
     border-radius: 5px;
     overflow: hidden;
-    background: #fafbff;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    /* background: #fafbff;*/
 }
 
 .card-prod-image .top {
@@ -528,10 +552,11 @@ form .button-cadastro {
     width: 100%;
 }
 
+    .card-prod-image .top .text-alert,
     .card-prod-image .top p {
-        font-size: 0.9rem;
+        font-size: 15px;
         font-weight: 600;
-        color: #878a9a;
+        color: black;
     }
 
     .card-prod-image .top button {
@@ -556,22 +581,36 @@ form .button-cadastro {
         transform: translateY(5px);
     }
 
-.form {
-    width: 100%;
-    height: 160px;
-    border-radius: 5px;
-    border: 2px dashed #d5d5e1;
-    color: #c8c9dd;
-    font-size: 0.9rem;
-    font-weight: 500;
-    position: relative;
-    background: #dfe3f259;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
-    margin-top: 20px;
-}
+    .card-prod-image .top div {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .card-prod-image .top div .text-alert {
+            margin: 0;
+            font-size: 0.7rem;
+        }
+
+        .card-prod-image .top div p {
+            margin-bottom: 0;
+        }
+
+    .form {
+        width: 100%;
+        height: 160px;
+        border-radius: 5px;
+        border: 2px dashed #d5d5e1;
+        color: #c8c9dd;
+        font-size: 0.9rem;
+        font-weight: 500;
+        position: relative;
+        background: #dfe3f259;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        user-select: none;
+        margin-top: 20px;
+    }
 
 .form .select {
     color: #5256ad;
@@ -579,7 +618,7 @@ form .button-cadastro {
     cursor: pointer;
 }
 
-    .form input {
+    .top input {
         display: none;
     }
 
@@ -650,3 +689,118 @@ form .button-cadastro {
         .img-container .image > span:hover {
             opacity: 0.8;
         }
+
+
+.select-btn {
+    display: flex;
+    /*flex-direction: column;*/
+    height: 27px;
+    margin-top: 3px;
+    outline: none;
+    border-radius: 5px;
+    border-width: 1px 1px 2px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    border-image: initial;
+    font-size: 11px;
+    /*padding-left: 15px;*/
+    border-bottom-width: 2px;
+    transition: all 0.3s ease 0s;
+    align-items: center;
+    /*padding: 0 16px;*/
+    border-radius: 5px;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+    .select-btn .btn-text {
+        font-size: 13.5px;
+        font-weight: 400;
+        text-align: justify;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .select-btn .arrow-dwn {
+        display: flex;
+        height: 21px;
+        width: 21px;
+        color: black;
+        font-size: 14px;
+        align-items: center;
+        justify-content: center;
+    }
+
+.list-items {
+    position: absolute;
+    margin-top: 55px;
+    z-index: 1;
+    top: 13px;
+    right: 0px;
+    min-width: 84%;
+    border-radius: 5px;
+    display: flex;
+    padding: 16px;
+    box-shadow: 0 5px 10px rgb(0 0 0 / 10%);
+    flex-direction: column;
+    background-color: #fff;
+    border-width: 1px 1px 2px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    display: none;
+    overflow: auto;
+    height: 15vh;
+}
+
+
+
+.select-btn.open ~ .list-items {
+    display: block;
+}
+
+    .list-items .item {
+        display: flex;
+        align-items: center;
+        /* height: 50px; */
+        cursor: pointer;
+        list-style: none;
+        transition: 0.3s;
+        padding: 0 10px;
+        border-radius: 8px;
+    }
+
+    .list-items .item:hover {
+        background-color: #e7edfe;
+    }
+
+    .item .item-text {
+        font-size: 13px;
+        font-weight: 400;
+        color: #333;
+    }
+
+.item .checkbox {
+    display: flex;
+    align-items: center;
+    height: 16px;
+    width: 16px;
+    justify-content: center;
+    border-radius: 4px;
+    margin-right: 12px;
+    border: 1.5px solid #c0c0c0;
+    transition: all 0.3s ease-in-out;
+}
+
+.checkbox .check-icon {
+    font-size: 9px;
+    transform: scale(0);
+    color: black;
+}
+
+.checked > .checkbox .check-icon {
+    transform: scale(1);
+}
+
+/*.overflow {
+    overflow: auto;
+}*/

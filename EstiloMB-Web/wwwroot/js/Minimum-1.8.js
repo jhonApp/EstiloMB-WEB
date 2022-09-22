@@ -36,7 +36,7 @@ if (!String.prototype.format) {
     };
 
     // - Returns the first [element] where the [predicate] returns true.
-    $min.find = function (element, predicate) {        
+    $min.find = function (element, predicate) {
         for (let i = 0; i < element.childNodes.length; i++) {
             if (element.childNodes[i].nodeType !== 1) { continue; }
 
@@ -669,7 +669,6 @@ if (!String.prototype.format) {
     // </label>    
     var lastInvalidElement;
     $min.validate = function (element, focusInvalidElement) {
-        
         let name = element.nodeName.toUpperCase();
         if (name === "INPUT" || name === "SELECT" || name === "TEXTAREA") {
             if (element.disabled && element.hasAttribute("onvalid")) {
@@ -1642,7 +1641,7 @@ if (!String.prototype.format) {
     };
 
     var load = function (contents, pageOffset) {
-        
+
         if (contents.isBusy || !contents.url) {
             //$ui.message(contents.info.messageBusy || emptyBusyMessage, "alert"); 
             return;
@@ -1659,7 +1658,7 @@ if (!String.prototype.format) {
         if (contents.hasAttribute("onfilter")) {
             contents.request.Filter = eval(contents.getAttribute("onfilter").replace("this", "contents"));
         }
-        
+
         $min.ajax({
             url: $min.root() + $ui.relativePath + contents.url,
             content: contents.request,
@@ -1985,7 +1984,6 @@ if (!String.prototype.format) {
     $ui.save = function (button, itemSelector, callback) {
         let url = button.getAttribute("data-url") || false;
         if (!url) { console.log("No @data-url attribute found on the element calling $ui.save(this)."); return false; }
-
         let item = button.closest(itemSelector);
         if (item.isBusy) { return $ui.message(button.getAttribute("ui-busy-message") || emptyBusyMessage, "alert"); }
 
@@ -2285,7 +2283,7 @@ if (!String.prototype.format) {
 
                     popup.close();
                     $ui.message(getMessage(button.getAttribute("ui-deleted-message"), data), "success");
-                    
+
 
                     if (callback) {
                         callback(button, itemSelector, response);
@@ -2465,7 +2463,7 @@ if (!String.prototype.format) {
 
                         popup.close();
                         $ui.message(getMessage(button.getAttribute("ui-deleted-message"), data), "success");
-                        
+
 
                         if (callback) {
                             callback(button, itemSelector, response);
@@ -2611,7 +2609,7 @@ if (!String.prototype.format) {
         if (!targetSelect.hasAttribute("data-property")) {
             return console.log("No @data-property attribute found on the target <select name='" + targetSelect.name + "'>.");
         }
-        
+
         if (!targetSelect.defaultOptions) {
             targetSelect.defaultOptions = [];
             $min.forEach(targetSelect, function (element) {
@@ -2679,11 +2677,11 @@ if (!String.prototype.format) {
                             if (callBack) {
                                 currentValue.queuedCallbacks.push(callBack);
                             }
-                            
+
                             let data = { Data: {} };
                             data.Data[select.name] = value;
                             currentValue.status = 1;
-                            
+
                             $min.ajax({
                                 url: $min.root() + $ui.relativePath + childSelect.getAttribute("data-url"),
                                 content: data,
@@ -3837,7 +3835,7 @@ if (!String.prototype.format) {
     $user.onForgot = false;
 
     $user.login = function (element, selector) {
-        
+
         let form = selector ? element.closest(selector) : element;
         if (form.isBusy) { return false; }
 
