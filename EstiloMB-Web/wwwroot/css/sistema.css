@@ -83,9 +83,9 @@ table {
     width: 100%;
     border-radius: 5px;
     border-spacing: 0;
-    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 50%);
+    box-shadow: 0 0 1px 0 rgb(0 0 0 / 30%);
     /* border-collapse: collapse; */
-    background-color: powderblue;
+    /*background-color: powderblue;*/
 }
 
     table thead tr > th:first-child {
@@ -143,8 +143,9 @@ thead th {
 
 th, td {
     border-bottom: 1px solid #dcdcdc;
-    padding:10px 20px;
+    padding: 5px 10px;
     word-break: break-all;
+    font-size: 14px;
     text-align: center;
 }
 
@@ -310,25 +311,29 @@ form .user-details .label {
 }
 
 
-
+.multiselect-container,
 .user-details .label textarea,
 .user-details .label select,
 .user-details .label input,
 .user-details .label div {
-    height: 25px;
-    width: 92%;
+    height: 30px;
+    width: 100%;
     outline: none;
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 13px;
-    padding-left: 15px;
-    border-bottom-width: 2px;
+    box-sizing: border-box;
+    /* padding-left: 13px; */
+    padding: 0 0.5em;
+    padding-top: 0.2em;
+    /* border-bottom-width: 2px; */
     transition: all 0.3s ease;
 }
 .user-details .label .details {
     display: block;
     font-weight: 500;
     font-size: 15px;
+    padding-top: 10px;
 }
 
 
@@ -442,7 +447,7 @@ form input[type="radio"]{
 }
 
 .col-6 {
-    width: 54%;
+    width: 50%;
 }
 
 .col-7 {
@@ -471,7 +476,7 @@ form input[type="radio"]{
 
 .cols {
     clear: both;
-    display: contents;
+    display: flex;
 }
 
     .cols:after {
@@ -801,6 +806,283 @@ form input[type="radio"]{
     transform: scale(1);
 }
 
-/*.overflow {
-    overflow: auto;
-}*/
+.button-icon {
+    position: relative;
+    outline: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    color: darkslategray;
+    background-color: transparent;
+    min-width: 1.5em;
+    height: 1.5em;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: center;
+    transition: color 0.2s ease;
+}
+
+.tooltip-top {
+    left: 50%;
+    bottom: 100%;
+    margin-bottom: 0.5em;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 50%);
+}
+
+.tooltip-top, .tooltip-bottom, .tooltip-left, .tooltip-right {
+    position: absolute;
+    overflow: hidden;
+    opacity: 0;
+    font-size: 0.8rem;
+    font-weight: normal;
+    text-align: center;
+    text-transform: none;
+    line-height: initial;
+    word-break: normal;
+    overflow-wrap: normal;
+    color: black;
+    background-color: white;
+    border: 0px solid silver;
+    border-radius: 3px;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    max-height: 0;
+    z-index: 2;
+    transition: top 0.2s ease, bottom 0.2s ease, left 0.2s ease, right 0.2s ease, opacity 0.5s ease;
+}
+
+.button-icon.gold:before {
+    background-color: white;
+}
+
+.button-icon:before {
+    content: '\200b';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgb(255, 255, 255);
+    transform: translate(-50%, -50%);
+    transition: width 0.1s ease, height 0.1s ease;
+}
+
+/*------------------------------------------------------------------*/
+/*-------------------------------------------------------[ LOADING ]*/
+/*------------------------------------------------------------------*/
+.loading-circle {
+    display: block;
+    position: relative;
+    min-height: 1.5em;
+}
+
+    .loading-circle div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 1.5em;
+        height: 1.5em;
+        margin: auto;
+        border: 4px solid #fff;
+        border-radius: 50%;
+        animation: loading-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: rgb(65, 105, 145) transparent transparent transparent;
+    }
+
+        .loading-circle div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .loading-circle div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .loading-circle div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+    .loading-circle.text:after {
+        content: attr(text);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin-top: 1.5em;
+    }
+
+@keyframes loading-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-bars {
+    /*position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    user-select: none;
+    transform: translate(-50%, -50%);*/
+    text-align: center;
+}
+
+    .loading-bars > span {
+        display: inline-block;
+        background-color: skyblue;
+        width: 0.25em;
+        min-height: 1.5em;
+        vertical-align: middle;
+    }
+
+        .loading-bars > span:nth-child(1) {
+            animation: loading-bar;
+            animation-delay: 100ms;
+            animation-duration: 400ms;
+            animation-direction: alternate;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            transform: scaleY(0);
+        }
+
+        .loading-bars > span:nth-child(2) {
+            animation: loading-bar;
+            animation-delay: 200ms;
+            animation-duration: 400ms;
+            animation-direction: alternate;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            transform: scaleY(0);
+        }
+
+        .loading-bars > span:nth-child(3) {
+            animation: loading-bar;
+            animation-delay: 300ms;
+            animation-duration: 400ms;
+            animation-direction: alternate;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            transform: scaleY(0);
+        }
+
+        .loading-bars > span:nth-child(4) {
+            animation: loading-bar;
+            animation-delay: 400ms;
+            animation-duration: 400ms;
+            animation-direction: alternate;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+            transform: scaleY(0);
+        }
+
+@keyframes loading-bar {
+    0% {
+        transform: scaleY(0);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+.loading-circle.background,
+.loading-bars.background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+    .loading-circle.background:before,
+    .loading-bars.background:before {
+        content: '\200b';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+
+[ui-content=loading],
+[ui-content=empty],
+[ui-content=paging] {
+    display: none;
+}
+
+[ui-content=data][state=loading] ~ [ui-content=loading],
+[ui-content=data][state=empty] ~ [ui-content=empty],
+[ui-content=data][state=paging] ~ [ui-content=paging] {
+    display: block;
+}
+
+tbody[ui-content=data][state=loading] ~ tfoot > tr[ui-content=loading],
+tbody[ui-content=data][state=empty] ~ tfoot > tr[ui-content=empty],
+tbody[ui-content=data][state=paging] ~ tfoot > tr[ui-content=paging] {
+    display: table-row;
+}
+
+/*------------------------------------------------------------------*/
+/*----------------------------------------------------------[ ???? ]*/
+/*------------------------------------------------------------------*/
+
+list {
+    position: absolute;
+    z-index: 1;
+}
+
+    list > loading,
+    list > empty,
+    list > data {
+        background-color: white;
+        /*border: 1px solid silver;*/
+        border-radius: 3px;
+        box-shadow: 0 0 0 1px silver;
+        display: none;
+    }
+
+    list[state=loading] > loading {
+        display: block;
+    }
+
+    list[state=empty] > empty {
+        display: block;
+    }
+
+    list[state=loaded] > data {
+        display: block;
+    }
+
+    .top-multiselect {
+        margin-top: 10px;
+    }
+
+
+.multiselect-container {
+   align-items: center;
+   margin-top:20px;
+}
+
+.label {
+    position: relative;
+    display: block;
+    line-height: 2em;
+}
+
+.user-details {
+    position: relative;
+    display: block;
+    line-height: 2em;
+}

@@ -103,7 +103,7 @@ function popup(element) {
         if (validacao) {
 
             template = document.importNode(selectBox.querySelector("#seletor").content, true).firstElementChild;
-            template.querySelector("span").innerHTML = element.nextElementSibling.innerText;;
+            template.querySelector("span").innerHTML = element.nextElementSibling.innerText;
             template.seletor = element;
             element.tag = selectBox.appendChild(template);
         }

@@ -1,6 +1,7 @@
 ﻿@using EstiloMB.Core;
 @using EstiloMB.Site;
 @using EstiloMB.MVC;
+@inject Localization loc
 @addTagHelper *, MyWebApp
 
 <!DOCTYPE html>
@@ -75,6 +76,40 @@
     <main role="main" class="pb-3">
             @RenderBody()
     </main>
+    <div id="ui-messages">
+        <template>
+            <div class="ui-message" onclick="this.className += ' closing'">
+                <i class="fas fa-check-circle icon-success"></i>
+                <i class="fas fa-times-circle icon-error"></i>
+                <i class="fas fa-exclamation-triangle icon-alert"></i>
+
+                <div class="ui-text" ui-content="text"></div>
+            </div>
+        </template>
+    </div>
+    <template id="ui-popup">
+        <div class="ui-popup pulse-center">
+
+            <div class="left-bar">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+
+            <div class="title" ui-content="title">@loc["Confirmação"]</div>
+            <div class="text" ui-content="text"></div>
+
+            <div class="bottom-bar">
+                <button class="confirm" ui-action="confirm">
+                    <span><i class="far fa-check"></i></span>
+                    @loc["Confirmar"]
+                </button>
+
+                <button class="cancel" ui-action="cancel">
+                    <span><i class="far fa-times"></i></span>
+                    @loc["Cancelar"]
+                </button>
+            </div>
+        </div>
+    </template>
     <footer class="border-top footer text-muted">
         &copy; 2022 - EstiloMB_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </footer>

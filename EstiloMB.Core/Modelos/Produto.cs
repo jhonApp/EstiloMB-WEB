@@ -15,21 +15,18 @@ namespace EstiloMB.Core
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        public int CategoriaID { get; set; }
 
         [Required, MaxLength(255), LogProperty]
         public string Nome { get; set; }
 
         [Required, MaxLength(255), LogProperty]
         public string Descricao { get; set; }
-        public List<ProdutoTamanho> Tamanhos { get; set; }
         public decimal Valor { get; set; }
-        public List<ProdutoCor> ProdutosCor { get; set; }
-        public string ImageURL { get; set; }
-        [NotMapped] public byte[] ImageData { get; set; }
 
-        [ForeignKey("CategoriaID")]
-        public Categoria Categoria { get; set; }
+        public List<ProdutoImagem> ProdutoImagens { get; set; }
+        public List<ProdutoCategoria> ProdutoCategorias { get; set; }
+        public List<ProdutoTamanho> ProdutoTamanhos { get; set; }
+        public List<ProdutoCor> ProdutoCores { get; set; }
 
         public static Response<List<Produto>> Listar(Request<Produto> request)
         {
@@ -50,7 +47,6 @@ namespace EstiloMB.Core
                 {
                     IQueryable<Produto> query = database.Set<Produto>()
                                                        .AsNoTracking()
-                                                       .Include(e => e.Categoria)
                                                        .OrderBy(e => e.ID);
 
                     response.Total = query.Count();

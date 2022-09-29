@@ -1913,27 +1913,36 @@ if (!String.prototype.format) {
         load(contents);
     };
 
-    $ui.add = function (button, containerSelector, callback) {
-        let container = typeof containerSelector === "string" ? button.closest(containerSelector) : containerSelector;
+    $ui.add = function (container, dataUrl, callback) {
+        if (!container) {
+            return console.log("ERROR in $ui.add(container, dataUrl, callback): The container parameter must be a valid element.");
+        }
 
-        let contents = init(container);
-        if (!contents) { return false; }
+        let data = dataUrl ? container.querySelector("[ui-content=data][data-url='" + dataUrl + "']") : container.querySelector("[ui-content=data]");
+        if (!data) {
+            return console.log("ERROR in $ui.add(container, dataUrl, callback): No element with the attribute [ui-content=data] found within the container:", container);
+        }
 
-        let template = document.importNode(contents.template.content, true);
+        data.template = data.template || data.querySelector(":scope > template") || false;
+        if (!data.template) {
+            return console.log("ERROR in $ui.add(container, dataUrl): A <template> element was not found in:", data);
+        }
+
+        let template = document.importNode(data.template.content, true);
         template.firstElementChild.isNew = true;
         let element = template.firstElementChild;
 
-        if (button.getAttribute("insert-at") === "last") {
-            contents.appendChild(template);
+        if (data.getAttribute("insert-at") === "end") {
+            data.appendChild(template);
         }
         else {
-            contents.insertBefore(template, contents.firstElementChild || null);
+            data.insertBefore(template, data.firstElementChild || null);
         }
 
-        isEmpty(contents);
+        $ui.checkEmpty(data);
 
         if (callback) {
-            callback(button, containerSelector, element);
+            callback(element);
         }
 
         return element;
@@ -2491,13 +2500,25 @@ if (!String.prototype.format) {
         }
     };
 
-    $ui.remove = function (button, itemSelector) {
-        let item = button.closest(itemSelector);
-        let contents = item.closest("[ui-content=data]");
+    //$ui.remove = function (button, itemSelector) {
+    //    let item = button.closest(itemSelector);
+    //    let contents = item.closest("[ui-content=data]");
+
+    //    item.remove();
+
+    //    isEmpty(contents);
+    //};
+
+    $ui.remove = function (item) {
+        if (!item) {
+            return console.log("ERROR in $ui.remove(item): The item parameter must be a valid element.");
+        }
+
+        let data = item.closest("[ui-content=data]");
 
         item.remove();
 
-        isEmpty(contents);
+        $ui.checkEmpty(data);
     };
 
     $ui.restore = function (button, itemSelector) {

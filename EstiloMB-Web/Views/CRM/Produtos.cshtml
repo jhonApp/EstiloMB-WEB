@@ -5,6 +5,7 @@
     ViewData["Title"] = "Cadastro";
     Layout = "~/Views/CRM/Shared/_Layout.cshtml";
     IList<Cor> cores = Cor.Listar(new Request<Cor>() { UserID = Usuario.EstiloMbID })?.Data;
+    IList<Tamanho> tamanhos = Tamanho.Listar(new Request<Tamanho>() { UserID = Usuario.EstiloMbID })?.Data;
 }
 <content>
     <div class="nav-opcoes">
@@ -107,7 +108,7 @@
                     <a onclick="popup(this)" class="close"><i class="far fa-times icon"></i></a>
                     <div class="title">Produto</div>
                     <aside>
-                        <form class="overflow">
+                        <div class="overflow">
                             <div class="user-details">
                                 <div class="cols">
                                     @*--Imagem--*@
@@ -127,7 +128,7 @@
                                 </div>
                                 <div class="cols">
                                     @*--Nome--*@
-                                    <div class="col-5">
+                                    <div class="col-12">
                                         <div class="label">
                                             <span class="details"> Nome</span>
                                             <input type="text"
@@ -142,7 +143,7 @@
                                     </div>
 
                                     @*--Descrição--*@
-                                    <div class="col-6">
+                                    @*<div class="col-6">
                                         <div class="label">
                                             <span class="details">Descrição</span>
                                             <textarea type="text"
@@ -155,11 +156,11 @@
                                                       maxlength-error="@loc["Este campo não pode ter mais do que 255 caracteres."]"></textarea>
                                             <validation data-bind="Descricao" data-group="error" onbind="$ui.bindError(this)"></validation>
                                         </div>
-                                    </div>
+                                    </div>*@
                                 </div>
                                 <div class="cols">
                                     @*--Categoria--*@
-                                    <div class="col-3">
+                                    <div class="col-6">
                                         <div class="label">
                                             @{
                                                 List<Categoria> categorias = null;
@@ -181,175 +182,8 @@
 
                                         </div>
                                     </div>
-
-                                    @*--Cor--*@
-                                    @*<div class="col-4">
-                                        <div class="label" data-array="ProdutoCores">
-                                            <input type="hidden" name="ProdutoID"/>
-                                            <span class="details">Cor</span>
-                                            <div class="select-btn" name="CorID" onclick="$produto.changeOpen(this)">
-                                                <span class="btn-text">- Selecione -</span>
-                                                <span class="arrow-dwn">
-                                                    <i class="fas fa-chevron-down"></i>
-                                                </span>
-                                            </div>
-                                            <ul data-array="ProdutoCor" class="list-items">
-                                                @for (int i = 0; i < cores.Count; i++)
-                                                {
-                                                    <li class="item">
-                                                        <span class="checkbox">
-                                                            <i class="fas fa-check check-icon"></i>
-                                                        </span>
-                                                        <span class="item-text">@cores[i].Nome</span>
-                                                        <span class="item-text hidden">@cores[i].ID</span>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    </div>*@
-
-                                    <div class="col-4">
-                                        <div class="label" multiselect>
-                                            <span class="details">Cor</span>
-                                            <!-- Caixa de selecionados -->
-                                            <div class="select-btn" select-btn onclick="$multiSelector.showCheckBoxes(this)">
-                                                <template id="seletor" class="btn-text">
-                                                    <a onclick="$multiSelector.remover(this)">
-                                                        <span></span>
-                                                        <i>x</i>
-                                                    </a>
-                                                </template>
-                                                @*<span class="btn-text">- Selecione -</span>
-                                                <span class="arrow-dwn">
-                                                    <i class="fas fa-chevron-down"></i>
-                                                </span>*@
-                                            </div>
-
-                                            <ul data-array="ProdutosCor" class="list-items" id="checkboxes">
-                                                @for (int i = 0; i < cores.Count; i++)
-                                                {
-                                                    <li class="item cont" for="cor[@i]">
-                                                        <input type="hidden" name="CorID" value="@cores[i].ID" />
-                                                        <input type="hidden" name="ID" value="0" />
-
-                                                        <span class="checkbox">
-                                                            <i class="fas fa-check check-icon"></i>
-                                                        </span>
-                                                        
-                                                        <span class="item-text hidden"
-                                                            tag-bind="@cores[i].ID"
-                                                            name="IsChecked"
-                                                            id="cor[@i]"
-                                                            onclick="$multiSelector.selecionando(this)"
-                                                            onbind="$multiSelector.tagBind(this, data.ProdutosCor, 'CorID','$multiSelector.selecionando(this)')">
-                                                        </span>
-                                                        <span class="item-text" >@cores[i].Nome</span>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    @*<div class="col-4">
-                                        <!-- MuliSeletor -->
-                                        <div class=" multiselect" multiselect>
-                                            <!-- Caixa de selecionados -->
-                                            <div class="select-btn" selectBox onclick="$multiSelector.showCheckBoxes(this)">
-                                                <template id="seletor">
-                                                    <a onclick="$multiSelector.remover(this)">
-                                                        <span></span>
-                                                        <i>x</i>
-                                                    </a>
-                                                </template>
-                                            </div>
-
-                                            <!-- Opções de seleção -->
-                                            <div data-array="ProdutoCor" id="checkboxes">
-                                                @for (int i = 0; i < cores.Count; i++)
-                                                {
-                                                    <input type="hidden" name="CorID" value="@cores[i].ID" />
-                                                    <input type="hidden" name="ProdutoID" value="0" />
-
-                                                    <label for="cores[@i]" class="cont">
-                                                        <input type="checkbox"
-                                                               name="IsChecked" tag-bind="@cores[i].ID"
-                                                               id="cores[@i]"
-                                                               onclick="$multiSelector.selecionando(this)"
-                                                               onbind="$multiSelector.tagBind(this, data.ModelosPortos, 'PortosID','$multiSelector.selecionando(this)')" />
-
-                                                        <span>@cores[i].Nome</span>
-                                                    </label>
-                                                }
-                                            </div>
-
-                                            <!-- Validação -->
-                                            <label class="label">
-                                                <input type="hidden" name="Validation" onvalidation="$agro.validarMultiSelector(this.closest('[multiselect]'))" onvalidation-error="@loc["Por favor, selecione ao menos um item. "]" />
-                                                <validation data-bind="Validation" data-group="error" onbind="$form.error(this)"></validation>
-                                            </label>
-                                        </div>
-                                    </div>*@
-
-                                    @*--Tamanho--*@
-                                    <div class="col-4">
-                                        <div class="label">
-                                            <span class="details">Tamanho</span>
-                                            <div class="select-btn" onclick="$produto.changeOpen(this)">
-                                                <span class="btn-text">- Selecione -</span>
-                                                <span class="arrow-dwn">
-                                                    <i class="fas fa-chevron-down"></i>
-                                                </span>
-                                            </div>
-                                            <ul class="list-items">
-                                                <li class="item">
-                                                    <span class="checkbox">
-                                                        <i class="fas fa-check check-icon"></i>
-                                                    </span>
-                                                    <span class="item-text">P</span>
-                                                </li>
-                                                <li class="item">
-                                                    <span class="checkbox">
-                                                        <i class="fas fa-check check-icon"></i>
-                                                    </span>
-                                                    <span class="item-text">M</span>
-                                                </li>
-                                                <li class="item">
-                                                    <span class="checkbox">
-                                                        <i class="fas fa-check check-icon"></i>
-                                                    </span>
-                                                    <span class="item-text">G</span>
-                                                </li>
-                                                <li class="item">
-                                                    <span class="checkbox">
-                                                        <i class="fas fa-check check-icon"></i>
-                                                    </span>
-                                                    <span class="item-text">GG</span>
-                                                </li>
-                                                <li class="item">
-                                                    <span class="checkbox">
-                                                        <i class="fas fa-check check-icon"></i>
-                                                    </span>
-                                                    <span class="item-text">G1</span>
-                                                </li>
-                                                <li class="item">
-                                                    <span class="checkbox">
-                                                        <i class="fas fa-check check-icon"></i>
-                                                    </span>
-                                                    <span class="item-text">G1</span>
-                                                </li>
-                                                <li class="item">
-                                                    <span class="checkbox">
-                                                        <i class="fas fa-check check-icon"></i>
-                                                    </span>
-                                                    <span class="item-text">G1</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="cols">
                                     @*--Valor--*@
-                                    <div class="col-3">
+                                    <div class="col-6">
                                         <div class="label">
                                             <span class="details">Valor</span>
                                             <input type="text" value="R$ 0,00" onkeyup="$mask.moeda(this)"
@@ -361,8 +195,155 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="cols">
+                                    @*--Cor--*@
+                                    <div class="col-6">
+                                        <div class="label top-multiselect">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-0">
+                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
+                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
+                                                                <i class="far fa-plus"></i>
+                                                            </button>
+                                                        </th>
+                                                        <th>@loc["Cores"]</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-array="ProdutoCores" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
+                                                    <template>
+                                                        <tr>
+                                                            <td class="col-0 text-center">
+                                                                <button class="button-icon red"
+                                                                        onclick="$ui.remove(this.closest('tr'))">
+                                                                    <span class="tooltip-top">@loc["Remover"]</span>
+                                                                    <i class="far fa-times"></i>
+                                                                </button>
+
+                                                                <!--IDs-->
+                                                                <input type="hidden" name="ID" data-property="ID" />
+                                                            </td>
+                                                            <td>
+                                                                <label>
+                                                                    <select name="CorID" data-property="CorID"
+                                                                            required="required"
+                                                                            class="multiselect-container"
+                                                                            required-error="@loc["Este campo é obrigatório."]"
+                                                                            onblur="$min.validate(this)"
+                                                                            onvalidation="validateSameValue(this)"
+                                                                            onvalidation-error="@loc["Este porto já está registrado."]">
+                                                                        @for (int i = 0; i < cores.Count; i++)
+                                                                        {
+                                                                            <option value="@cores[i].ID">@cores[i].Nome</option>
+                                                                        }
+                                                                    </select>
+                                                                    <span class="validation" data-property="CorID" data-group="error" onbind="$ui.error(this)"></span>
+                                                                   @* <span class="label">@loc["Cor"]</span>*@
+                                                                </label>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                                <tfoot>
+                                                    <!-- Empty -->
+                                                    <tr ui-content="empty">
+                                                        <td class="text-center" colspan="10">
+                                                            @loc["Nenhum registro encontrado."]
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Loading -->
+                                                    <tr ui-content="loading">
+                                                        <td colspan="10">
+                                                            <div class="loading-bars">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    @*--Tamanho--*@
+                                    <div class="col-6">
+                                        <div class="label top-multiselect">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-0">
+                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
+                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
+                                                                <i class="far fa-plus"></i>
+                                                            </button>
+                                                        </th>
+                                                        <th>@loc["Tamanhos"]</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-array="ProdutoTamanhos" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
+                                                    <template>
+                                                        <tr>
+                                                            <td class="col-0 text-center">
+                                                                <button class="button-icon red"
+                                                                        onclick="$ui.remove(this.closest('tr'))">
+                                                                    <span class="tooltip-top">@loc["Remover"]</span>
+                                                                    <i class="far fa-times"></i>
+                                                                </button>
+
+                                                                <!--IDs-->
+                                                                <input type="hidden" name="ID" data-property="ID" />
+                                                            </td>
+
+                                                            <td>
+                                                                <label>
+                                                                    <select name="TamanhoID" data-property="TamanhoID"
+                                                                            required="required"
+                                                                            class="multiselect-container"
+                                                                            required-error="@loc["Este campo é obrigatório."]"
+                                                                            onblur="$min.validate(this)"
+                                                                            onvalidation="validateSameValue(this)"
+                                                                            onvalidation-error="@loc["Este porto já está registrado."]">
+                                                                        @for (int i = 0; i < tamanhos.Count; i++)
+                                                                        {
+                                                                            <option value="@tamanhos[i].ID">@tamanhos[i].Nome</option>
+                                                                        }
+                                                                    </select>
+                                                                    <span class="validation" data-property="TamanhoID" data-group="error" onbind="$ui.error(this)"></span>
+                                                                   @* <span class="label">@loc["Cor"]</span>*@
+                                                                </label>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                                <tfoot>
+                                                    <!-- Empty -->
+                                                    <tr ui-content="empty">
+                                                        <td class="text-center" colspan="10">
+                                                            @loc["Nenhum registro encontrado."]
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Loading -->
+                                                    <tr ui-content="loading">
+                                                        <td colspan="10">
+                                                            <div class="loading-bars">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                        </div>
                         <div class="button-cadastro">
                             <input type="submit" 
                                 value="Salvar" 
@@ -385,6 +366,19 @@
     function bindar(data){
         console.log(data);
     }
+
+    function validateSameValue(select) {
+        let tbody = select.closest("tbody");
+        let selects = tbody.querySelectorAll("[name=" + select.name + "]");
+
+        for (let i = 0; i < selects.length; i++) {
+            if (selects[i].value === select.value && selects[i] !== select) {
+                return false;
+            }
+        }
+
+        return true;
+    };
 
     (function($produto) {
 
@@ -410,12 +404,13 @@
             let input = element.querySelector('.top input');
         
             input.click();
-
+            //console.log(input.files)
             //input change events
             input.addEventListener('change', () => {
                 let file = input.files;
-
+                
                 for (let i = 0; i < 4; i++) {
+                    console.log(file[i].name)
                     if(files.every(e => e.name != file[i].name)){
                         files.push(file[i]);
                     }
