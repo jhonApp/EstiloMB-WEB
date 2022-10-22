@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -22,6 +23,7 @@ namespace EstiloMB.Core
         [Required, MaxLength(255), LogProperty]
         public string Descricao { get; set; }
         public decimal Valor { get; set; }
+        public int Status { get; set; }
 
         public List<ProdutoImagem> ProdutoImagens { get; set; }
         public List<ProdutoCategoria> ProdutoCategorias { get; set; }
@@ -113,6 +115,10 @@ namespace EstiloMB.Core
                     // - Modelo original.
                     Produto original = response.Data.ID != 0 ? database.Set<Produto>()
                                                                             .AsNoTracking()
+                                                                            .Include(e => e.ProdutoCategorias)
+                                                                            .Include(e => e.ProdutoCores)
+                                                                            .Include(e => e.ProdutoImagens)
+                                                                            .Include(e => e.ProdutoTamanhos)
                                                                             .FirstOrDefault(e => e.ID == request.Data.ID)
                                                                             : null;
 
@@ -150,6 +156,103 @@ namespace EstiloMB.Core
                        .Data(null, request.Data)
                        .Save();
                     }
+
+                    string directory = Environment.CurrentDirectory + "\\wwwroot\\Produtos";
+
+                    //currentDirectory = directory + "Perfil\\";
+                    if (!Directory.Exists(directory)) { Directory.CreateDirectory(directory); }
+
+                    for (int i = 0; i < request.Data.ProdutoImagens?.Count; i++)
+                    {
+                        ProdutoImagem originalFile = request.Data.ProdutoImagens[i].ID > 0 ? original?.ProdutoImagens.FirstOrDefault(e => e.ID == request.Data.ProdutoImagens[i].ID) : null;
+
+                        // - Imagem vazia ou nova imagem, apagando a anterior se existir.
+                        if ((request.Data.ProdutoImagens[i].ImageURL == null || request.Data.ProdutoImagens[i].ImageData != null) && originalFile != null)
+                        {
+                            File.Delete(directory + originalFile.ImageURL);
+                        }
+
+                        // - Salvando o novo arquivo recebido
+                        if (request.Data.ProdutoImagens[i].ImageData != null && request.Data.ProdutoImagens[i].ImageData.Length > 0)
+                        {
+                            try
+                            {
+                                File.WriteAllBytes(directory + "\\" + request.Data.ProdutoImagens[i].ImageURL, request.Data.ProdutoImagens[i].ImageData);
+                            }
+                            catch //(Exception ex)
+                            {
+                                database.Set<ProdutoImagem>().Remove(request.Data.ProdutoImagens[i]);
+                            }
+                        }
+                    }
+
+                }
+
+                response.Code = ResponseCode.Sucess;
+                response.Message = JHIException.Sucesso;
+            }
+            catch (Exception ex)
+            {
+                response.Code = ResponseCode.ServerError;
+                response.Message = ex.Message + (ex.InnerException != null ? ", " + ex.InnerException.Message : "");
+
+                new Log()
+                {
+                    Entity = Text.Produto,
+                    LogType = LogTipo.Exception,
+                    UserID = request.UserID,
+                    Message = ex.Message + (ex.InnerException != null ? ", " + ex.InnerException.Message : "")
+                }
+               .Data(request.Data)
+               .Save();
+            }
+
+            return response;
+        }
+
+        public static Response<Produto> Remover(Request<Produto> request)
+        {
+            Response<Produto> response = new Response<Produto>() { Data = request.Data };
+
+            try
+            {
+                // - Usuário que chamou esta ação.
+                Response<Usuario> usuario = Usuario.Carregar(request.UserID);
+                if (usuario.Code != ResponseCode.Sucess)
+                {
+                    response.Code = usuario.Code;
+                    response.Message = usuario.Message;
+                    return response;
+                }
+
+                using (Database<Produto> database = new Database<Produto>())
+                {
+                    // - Modelo original.
+                    Produto original = response.Data.ID != 0 ? database.Set<Produto>()
+                                                                            .AsNoTracking()
+                                                                            .FirstOrDefault(e => e.ID == request.Data.ID)
+                                                                            : null;
+                    if (original == null)
+                    {
+                        response.Code = ResponseCode.BadRequest;
+                        response.Message = JHIException.ErroRequisicao;
+                        return response;
+                    }
+
+                    database.Set<Produto>().Update(request.Data);
+                    database.SaveChanges();
+
+                    new Log()
+                    {
+                        Entity = Text.Produto,
+                        EntityID = request.Data.ID,
+                        LogType = LogTipo.Historico,
+                        UserID = request.UserID,
+                        Message = Text.Produto
+                    }
+                       .Parameters(usuario.Data.Nome)
+                       .Data(null, request.Data)
+                       .Save();
                 }
 
                 response.Code = ResponseCode.Sucess;

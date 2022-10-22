@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chargeback.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,7 +13,7 @@ namespace EstiloMB.Core
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public int ProdutoID { get; set; }
-        public string ImageURL { get; set; }
+        [Required, MaxLength(255), LogProperty] public string ImageURL { get; set; }
         [NotMapped] public byte[] ImageData { get; set; }
     }
 }

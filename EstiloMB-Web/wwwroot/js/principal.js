@@ -121,5 +121,19 @@ function popup(element) {
 
 })(window.$multiSelector = window.$multiSelector || {});
 
+function validateSameValue(select) {
+    let tbody = select.closest("tbody");
+    let selects = tbody.querySelectorAll("[name=" + select.name + "]");
+
+    for (let i = 0; i < selects.length; i++) {
+        if (selects[i].value === select.value && selects[i] !== select) {
+            console.log('entrei')
+            return false;
+        }
+    }
+
+    return true;
+};
+
 
 

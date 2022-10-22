@@ -2170,9 +2170,15 @@ textarea ~ validation {
         content: '* ';
     }
 
-textarea ~ validation {
-    bottom: 65%;
+select ~ validation {
+    bottom: unset;
+    margin-left: 1em;
+    font-size: 0.68em;
 }
+
+    textarea ~ validation {
+        bottom: 65%;
+    }
 
 input.error:not(:focus) ~ validation,
 select.error:not(:focus) ~ validation,
@@ -2186,3 +2192,68 @@ textarea.error:not(:focus) ~ validation {
     border-color: red;
     /*padding-left: 0.5em;*/
 }
+
+/*------------------------------------------------------------------*/
+/*------------------------------------------------------[ MESSAGES ]*/
+/*------------------------------------------------------------------*/
+#ui-messages {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 1em;
+    z-index: 10;
+}
+
+    #ui-messages > .ui-message {
+        display: flex;
+        align-items: center;
+        float: right;
+        cursor: pointer;
+        clear: both;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 3px 6px #00000029;
+        padding: 0.5em 1em;
+        margin-bottom: 0.5em;
+        overflow: hidden;
+        max-width: 100%;
+        max-height: 5em;
+        transition: max-height 0.5s ease 0.5s, max-width 0.5s ease, padding-left 0.5s ease, padding-right 0.5s ease, padding-top 0.5s ease 0.5s, padding-bottom 0.5s ease 0.5s;
+    }
+
+        #ui-messages > .ui-message.closing {
+            max-width: 0;
+            max-height: 0;
+            padding: 0;
+            white-space: nowrap;
+        }
+
+        #ui-messages > .ui-message .icon-success {
+            color: green;
+        }
+
+        #ui-messages > .ui-message .icon-error {
+            color: red;
+        }
+
+        #ui-messages > .ui-message .icon-alert {
+            color: orange;
+        }
+
+        #ui-messages > .ui-message .icon-success,
+        #ui-messages > .ui-message .icon-error,
+        #ui-messages > .ui-message .icon-alert {
+            font-size: 1.2em;
+            display: none;
+            margin-right: 0.5em;
+        }
+
+        #ui-messages > .ui-message.success .icon-success,
+        #ui-messages > .ui-message.error .icon-error,
+        #ui-messages > .ui-message.alert .icon-alert {
+            display: inline-block;
+        }
+
+        #ui-messages > .ui-message > .ui-text {
+            display: inline-block;
+        }

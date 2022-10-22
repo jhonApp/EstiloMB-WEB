@@ -136,7 +136,7 @@ table {
 thead th {
     position: sticky;
     top: 0;
-    background-color: #b583ea66;
+    background-color: #c49af1;
     color: white;
     font-size: 15px;
 }
@@ -282,7 +282,8 @@ button.icon:not(:disabled).remover:hover {
     .popup-box-container .title {
         font-size: 20px;
         font-weight: 500;
-        padding: 11px;
+        padding-bottom: 11px;
+        margin-bottom: 15px;
         position: relative;
     }
 
@@ -384,12 +385,12 @@ form input[type="radio"]{
 
 .button-cadastro {
     height: 45px;
-    margin: 15px 0;
+    margin: 30px 0;
     display: flex;
 }
 
     .button-cadastro input {
-        height: 100%;
+        height: 85%;
         width: 100%;
         outline: none;
         color: #fff;
@@ -397,20 +398,22 @@ form input[type="radio"]{
         font-size: 18px;
         font-weight: 500;
         letter-spacing: 1px;
-        background: linear-gradient(135deg, #71b7e6, #9b59b6);
     }
-
-        .button-cadastro input:hover {
-            background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+        .button-cadastro input[value="Cancelar"] {
+            background: linear-gradient(135deg, #f88383, #f88383);
         }
 
-        .close {
-            top: 30px;
-            right: 30px;
-            cursor: pointer;
-            display: flex;
-            justify-content: flex-end;
+        .button-cadastro input[value="Salvar"] {
+            background: linear-gradient(135deg, #71d470, #71d470);
         }
+
+    .close {
+        top: 30px;
+        right: 30px;
+        cursor: pointer;
+        display: flex;
+        justify-content: flex-end;
+    }
 
 .close .icon {
     color: black;
@@ -539,7 +542,7 @@ form input[type="radio"]{
     }
 
 .card-prod-image {
-    max-height: 150px;
+    max-height: 160px;
     height: auto;
     padding: 15px;
     /* box-shadow: 0 0 5px rgb(0 0 0 / 15%); */
@@ -568,12 +571,12 @@ form input[type="radio"]{
         outline: 0;
         border: 0;
         -webkit-appearance: none;
-        background: #5256ad;
+        background: #c49af1;
         color: #fff;
         border-radius: 4px;
         transition: 0.3s;
         cursor: pointer;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+        /*box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);*/
         font-size: 0.8rem;
         padding: 8px 13px;
     }
@@ -650,7 +653,7 @@ form input[type="radio"]{
         flex-wrap: wrap;
         position: relative;
         height: auto;
-        margin-top: 20px;
+        /*margin-top: 20px;*/
         max-height: 300px;
         overflow-y: auto;
     }
@@ -1072,7 +1075,6 @@ list {
 
 .multiselect-container {
    align-items: center;
-   margin-top:20px;
 }
 
 .label {
@@ -1086,3 +1088,130 @@ list {
     display: block;
     line-height: 2em;
 }
+
+/*------------------------------------------------------------------*/
+/*---------------------------------------------------------[ POPUP ]*/
+/*------------------------------------------------------------------*/
+.ui-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50.1%, -50.1%);
+    transform: translate(-50.1%, -50.1%);
+    width: auto;
+    max-width: 400px;
+    overflow: auto;
+    border-radius: 0.2em;
+    background-color: white;
+    box-shadow: 1px 1px 5px black;
+    box-sizing: border-box;
+    will-change: transform;
+    z-index: 1;
+}
+
+    .ui-popup > .left-bar {
+        background-color: #333;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 10px;
+        width: 2.5em;
+        text-align: center;
+        color: white;
+        padding-top: 10px;
+        font-size: 2.5em;
+        z-index: 1;
+    }
+
+    .ui-popup > .title {
+        padding: 0.5em;
+        padding-left: 6.25em;
+        margin: 0;
+        font-size: 120%;
+        font-weight: bold;
+        color: #333;
+        border-bottom: 2px solid #333;
+        background-color: transparent;
+    }
+
+    .ui-popup > .text {
+        padding: 0.5em;
+        padding-left: 7.5em;
+    }
+
+    .ui-popup > .bottom-bar {
+        padding: 0.5em;
+        text-align: right;
+        font-size: 1.2em;
+    }
+
+    .ui-popup .confirm,
+    .ui-popup .cancel {
+        cursor: pointer;
+        display: inline-block;
+        padding: 0.5em;
+        background-color: transparent;
+        border: 0;
+        transition: color 0.2s ease;
+    }
+
+    .ui-popup .confirm {
+        color: green;
+    }
+
+    .ui-popup .cancel {
+        color: red;
+    }
+
+        .ui-popup .confirm > span,
+        .ui-popup .cancel > span {
+            position: relative;
+            /*display: block;*/
+            margin-right: 0.25em;
+            font-size: 150%;
+            vertical-align: middle;
+        }
+
+        .ui-popup .confirm:hover > span,
+        .ui-popup .cancel:hover > span {
+            color: white;
+        }
+
+        .ui-popup .confirm > span:before,
+        .ui-popup .cancel > span:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background-color: silver;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease;
+        }
+
+    .ui-popup .confirm > span:before {
+        background-color: green;
+    }
+
+    .ui-popup .cancel > span:before {
+        background-color: red;
+    }
+
+    .ui-popup .confirm > span > svg,
+    .ui-popup .cancel > span > svg {
+        position: relative;
+    }
+
+    .ui-popup .confirm:hover > span:before,
+    .ui-popup .cancel:hover > span:before {
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    .ui-popup .confirm > .fa-check-circle,
+    .ui-popup .cancel > .fa-times-circle {
+        vertical-align: -0.25em;
+        font-size: 1.5em;
+    }

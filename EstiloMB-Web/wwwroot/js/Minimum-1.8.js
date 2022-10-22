@@ -463,7 +463,7 @@ if (!String.prototype.format) {
 
                                             value = dataURL.substring(dataURL.indexOf(',') + 1);
                                         };
-                                        reader.readAsDataURL(input.files[0]);
+                                        reader.readAsDataURL(element.files[0]);
                                     }
                                     break;
                                 }
@@ -793,8 +793,8 @@ if (!String.prototype.format) {
                     }
             }
 
-            if (element.hasAttribute("onvalidation")) {
-                if (!eval(element.getAttribute("onvalidation").replace("this", "element"))) {
+            if (isValid && element.hasAttribute("onvalidation")) {
+                if (!Function("return " + element.getAttribute("onvalidation")).call(element)) {
                     isValid = false;
                     errorType = "onvalidation";
                 }
@@ -805,11 +805,11 @@ if (!String.prototype.format) {
                 element.classList.add("valid");
 
                 if (element.hasAttribute("onvalid")) {
-                    eval(element.getAttribute("onvalid").replace("this", "element"));
+                    Function(element.getAttribute("onvalid")).call(element);
                 }
 
                 if (element.validation === undefined) {
-                    element.validation = $min.find(element.parentNode, function (e) { return e.nodeName.toUpperCase() === "VALIDATION"; }) || false;
+                    element.validation = $min.find(element.parentNode, function (e) { return e.getAttribute("data-group") == "error"; }) || false;
                 }
 
                 if (element.validation) {
@@ -822,11 +822,11 @@ if (!String.prototype.format) {
                 element.classList.add("error");
 
                 if (element.hasAttribute("onerror")) {
-                    eval(element.getAttribute("onerror").replace("this", "element").replace(/type/g, "'" + errorType + "'"));
+                    Function("type", element.getAttribute("onerror")).call(element, errorType);
                 }
 
                 if (element.validation === undefined) {
-                    element.validation = $min.find(element.parentNode, function (e) { return e.nodeName.toUpperCase() === "VALIDATION"; }) || false;
+                    element.validation = $min.find(element.parentNode, function (e) { return e.getAttribute("data-group") == "error"; }) || false;
                 }
 
                 if (element.validation) {
@@ -1361,54 +1361,36 @@ if (!String.prototype.format) {
     // <span preview="name">The file name.</span>
     // <input type="hidden" preview="data" value="The file data." />
     $min.preview = function (input, callback) {
-        if (!input.display) {
-            input.display = {
+        if (!input.previews) {
+            input.previews = {
                 name: [],
                 data: [],
                 image: []
             };
 
             $min.forEach(input.parentNode, function (e) {
+                console.log(e)
                 if (e.hasAttribute("preview")) {
                     switch (e.getAttribute("preview")) {
+                        
                         case "name":
-                            { e.default = e.value || e.innerHTML; input.display.name.push(e); break; }
+                            { e.default = e.value || e.innerHTML; input.previews.name.push(e); break; }
                         case "data":
-                            { input.display.data.push(e); break; }
+                            { input.previews.data.push(e); break; }
                         case "image":
-                            { e.default = e.value || e.src || e.innerHTML; input.display.image.push(e); break; }
+                            { e.default = e.value || e.src || e.innerHTML; input.previews.image.push(e); break; }
                         default:
                             { break; }
                     }
                 }
             });
+
+            /*console.log(input.previews.data)*/
+
         }
 
         if (!input.value) {
-            for (let i = 0; i < input.display.name.length; i++) {
-                let nodeName = input.display.name[i].nodeName.toUpperCase();
-                if (nodeName === "INPUT" || nodeName === "SELECT" || nodeName === "TEXTAREA") {
-                    input.display.name[i].value = input.display.name[i].default || "";
-                }
-                else {
-                    input.display.name[i].innerHTML = input.display.name[i].default || "";
-                }
-            }
-            for (let i = 0; i < input.display.data.length; i++) {
-                let nodeName = input.display.data[i].nodeName.toUpperCase();
-                if (nodeName === "INPUT" || nodeName === "SELECT" || nodeName === "TEXTAREA") {
-                    input.display.data[i].value = input.display.data[i].default || "";
-                }
-                else {
-                    input.display.data[i].innerHTML = input.display.data[i].default || "";
-                }
-            }
-            for (let i = 0; i < input.display.image.length; i++) {
-                //input.display.image[i].removeAttribute("src");
-                input.display.image[i].src = input.display.image[i].default || "";
-            }
-
-            if (callback) { callback(input); }
+            input.setAttribute("state", "empty");
             return;
         }
 
@@ -1416,33 +1398,109 @@ if (!String.prototype.format) {
         reader.onload = function () {
             let dataURL = reader.result;
             let filename = input.value.indexOf('\\') > -1 ? input.value.substring(input.value.lastIndexOf('\\') + 1) : input.value;
+            
+            for (let i = 0; i < input.previews.name.length; i++) {
+                let nodeName = input.previews.name[i].nodeName.toUpperCase();
+                if (nodeName === "INPUT" || nodeName === "SELECT" || nodeName === "TEXTAREA") {
+                    input.previews.name[i].value = filename;
+                }
+                else {
+                    input.previews.name[i].innerHTML = filename;
+                }
+            }
+            
+            for (let i = 0; i < input.previews.data.length; i++) {
+                let nodeName = input.previews.data[i].nodeName.toUpperCase();
+                if (nodeName === "INPUT" || nodeName === "SELECT" || nodeName === "TEXTAREA") {
+                    input.previews.data[i].value = dataURL.substring(dataURL.indexOf(',') + 1);
+                }
+                else {
+                    input.previews.data[i].innerHTML = dataURL.substring(dataURL.indexOf(',') + 1);
+                }
+            }
 
-            for (let i = 0; i < input.display.name.length; i++) {
-                let nodeName = input.display.name[i].nodeName.toUpperCase();
-                if (nodeName === "INPUT" || nodeName === "SELECT" || nodeName === "TEXTAREA") {
-                    input.display.name[i].value = filename;
-                }
-                else {
-                    input.display.name[i].innerHTML = filename;
-                }
-            }
-            for (let i = 0; i < input.display.data.length; i++) {
-                let nodeName = input.display.data[i].nodeName.toUpperCase();
-                if (nodeName === "INPUT" || nodeName === "SELECT" || nodeName === "TEXTAREA") {
-                    input.display.data[i].value = dataURL.substring(dataURL.indexOf(',') + 1);
-                }
-                else {
-                    input.display.data[i].innerHTML = dataURL.substring(dataURL.indexOf(',') + 1);
-                }
-            }
-            for (let i = 0; i < input.display.image.length; i++) {
-                input.display.image[i].src = dataURL;
+            for (let i = 0; i < input.previews.image.length; i++) {
+                input.previews.image[i].src = dataURL;
             }
 
             if (callback) { callback(input, dataURL); }
         };
         reader.readAsDataURL(input.files[0]);
+
+        input.setAttribute("state", "loaded");
     };
+
+    //$min.preview = function (input, callback) {
+    //    if (!input.previews) {
+    //        input.previews = {
+    //            name: [],
+    //            data: [],
+    //            image: []
+    //        };
+
+    //        let card = input.closest('.card-prod-image').querySelectorAll('.image');
+    //        console.log(card)
+    //        for (let i = 0; i < card.length; i++) {
+    //            $min.forEach(card[i].parentElement, function (e) {
+    //                if (e.hasAttribute("preview")) {
+    //                    switch (e.getAttribute("preview")) {
+
+    //                        case "name":
+    //                            { e.default = e.value || e.innerHTML; input.previews.name.push(e); break; }
+    //                        case "data":
+    //                            { input.previews.data.push(e); break; }
+    //                        case "image":
+    //                            { e.default = e.value || e.src || e.innerHTML; input.previews.image.push(e); break; }
+    //                        default:
+    //                            { break; }
+    //                    }
+    //                }
+    //            });
+
+    //            if (!input.value) {
+    //                input.setAttribute("state", "empty");
+    //                return;
+    //            }
+
+    //            let reader = new FileReader();
+    //            reader.onload = function () {
+    //                let dataURL = reader.result;
+    //                let filename = input.value.indexOf('\\') > -1 ? input.value.substring(input.value.lastIndexOf('\\') + 1) : input.value;
+
+    //                for (let i = 0; i < input.previews.name.length; i++) {
+    //                    let nodeName = input.previews.name[i].nodeName.toUpperCase();
+    //                    if (nodeName === "INPUT" || nodeName === "SELECT" || nodeName === "TEXTAREA") {
+    //                        input.previews.name[i].value = filename;
+    //                    }
+    //                    else {
+    //                        input.previews.name[i].innerHTML = filename;
+    //                    }
+    //                }
+
+    //                for (let i = 0; i < input.previews.data.length; i++) {
+    //                    let nodeName = input.previews.data[i].nodeName.toUpperCase();
+    //                    if (nodeName === "INPUT" || nodeName === "SELECT" || nodeName === "TEXTAREA") {
+    //                        input.previews.data[i].value = dataURL.substring(dataURL.indexOf(',') + 1);
+    //                    }
+    //                    else {
+    //                        input.previews.data[i].innerHTML = dataURL.substring(dataURL.indexOf(',') + 1);
+    //                    }
+    //                }
+
+    //                for (let i = 0; i < input.previews.image.length; i++) {
+    //                    input.previews.image[i].src = dataURL;
+    //                }
+
+    //                if (callback) { callback(input, dataURL); }
+    //            };
+    //            reader.readAsDataURL(input.files[0]);
+
+    //            input.setAttribute("state", "loaded");
+    //        }
+    //    }
+
+        
+    //};
 
     // - Prepares a [element] for a text scrambling effect.
     // Ex:
@@ -2225,12 +2283,14 @@ if (!String.prototype.format) {
     };
 
     $ui.delete = function (button, itemSelector, callback) {
+        
         let url = button.getAttribute("data-url") || false;
+        console.log(itemSelector);
         if (!url) { console.log("No @data-url attribute found on the element calling $ui.delete(this)."); return false; }
-
+        
         let item = typeof itemSelector === "string" ? button.closest(itemSelector) : itemSelector;
         let contents = item.isPopup ? item.contents : item.closest("[ui-content=data]");
-
+        
         if (item.isNew) {
             if (item.isPopup) {
                 item.background.remove();

@@ -74,5 +74,30 @@ namespace EstiloMB.Core
 
             return response;
         }
+
+        public static List<Tamanho> RemoveTamanhosByID(int tamanhoID)
+        {
+            List<Tamanho> reg = null;
+
+            try
+            {
+                using (Database<Tamanho> database = new Database<Tamanho>())
+                {
+                    reg = database.Set<Tamanho>().ToList();
+
+                    if (reg.Count > 0)
+                    {
+                        Tamanho item = database.Set<Tamanho>().FirstOrDefault(e => e.ID == tamanhoID);
+                        reg.Remove(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return reg;
+        }
     }
 }

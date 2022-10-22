@@ -35,9 +35,6 @@ function popup(element) {
 
 })(window.$mask = window.$mask || {});
 
-validade = function (element) {
-    console.log("entrei")
-}
 
 
 
