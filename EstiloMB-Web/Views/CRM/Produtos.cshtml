@@ -50,7 +50,7 @@
                         <th>Ação</th>
                     </tr>
                 </thead>
-                <tbody ui-content="data" ui-load="auto" data-url="Api/Produto/Listar">
+                <tbody ui-content="data" ui-load="auto" data-url="Api/Produto/Listar" onbind="bindar(data)">
                     <template>
                         <tr class="opacity-animation" >
                             <td>
@@ -61,16 +61,38 @@
                                 <span data-bind="Descricao"></span>
                             </td>
                             <td>
-                                <img src="~/images/EmptyPhoto.png"
-                                     preview="image"
-                                     onbind="if (data && data.ProdutoImagens.ImageURL) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ProdutoImagens.ImageURL; } "/>
+                                <div data-array="ProdutoImagens">
+                                    <template>
+                                        <img src="~/images/EmptyPhoto.png"
+                                         preview="image"
+                                         onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
 
-                                <input type="hidden" preview="name" name="ImageURL" data-bind="ProdutoImagens.ImageURL" />
-                                <input type="hidden" preview="data" name="ImageData" data-bind="ProdutoImagens.ImageData" />
+                                        <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                        <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                                    </template>
+                                </div>
                             </td>
-                            <td> <span data-bind="Categoria.Nome" onbind="bindar(data)"></span></td>
-                            <td><span data-bind="Tamanho"></span></td>
-                            <td><span data-bind="Cor"></span></td>
+                            <td> 
+                                <div data-array="ProdutoCategorias">
+                                    <template>
+                                        <span data-bind="Categoria.Nome" ></span>
+                                    </template>
+                                </div>
+                            </td>
+                            <td> 
+                                <div data-array="ProdutoTamanhos">
+                                    <template>
+                                        <span data-bind="Tamanho.Nome" ></span>
+                                    </template>
+                                </div>
+                            </td>
+                            <td>
+                                <div data-array="ProdutoCores">
+                                    <template>
+                                        <span data-bind="Cor.Nome"></span>
+                                    </template>
+                                </div>
+                            </td>
                             <td><span data-bind="Valor"></span></td>
                             <td>
                                 <button class="icon tooltip salvar">
@@ -451,7 +473,6 @@
         return true;
     };
     
-    
     (function($rols) {
 
         $rols.updateList = function(select){
@@ -505,7 +526,6 @@
                 }
             });
         }
-
     })(window.$rols = window.$rols || {});
 
     (function($produto) {
@@ -513,25 +533,30 @@
         let files = [];
         let container = document.querySelector('.img-container');
 
-        let ImgRender = (file, container) => {
+        let ImgRender = (file, htmlObject, container) => {
 
+            let input = htmlObject.querySelector('[preview = data]');
             let reader = new FileReader();
+            var image;
 
-            reader.onload = function(){
+            function loaded() {   
                 dataURL = reader.result;
-                let inputs = container.querySelectorAll('[preview = data]');
-
-                for (let i = 0; i < inputs.length; i++) {
-                    inputs[i].value = dataURL.substring(dataURL.indexOf(',') + 1);
-                }};
+                input.value = dataURL.substring(dataURL.indexOf(',') + 1);
+                
+                image = htmlObject.parentElement.innerHTML.toString();
+                container.innerHTML = image;
+                
+            }
 
             reader.readAsDataURL(file);
+            reader.onload = loaded;
         }
 
         const showImages = (input) => {
             
             let images = '';
             let dataURL;
+            var temp = document.createElement('div');
 
             files.forEach((e, i) => {
 
@@ -545,9 +570,19 @@
                                 <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${dataURL}"/>
                             </div>`
 
-                container.innerHTML = images;
-                ImgRender(e, container);
+                convertObj(e, images);
             });
+
+            let convertObj = function(file, images){
+
+                temp.innerHTML = images;
+
+                temp.childNodes.forEach((item) => {
+                    var htmlObject = temp;
+                    ImgRender(file, htmlObject, container);
+                });
+            }
+            
         }
 
         $produto.addImages = function(button, element) {

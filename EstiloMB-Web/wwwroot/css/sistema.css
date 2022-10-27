@@ -107,7 +107,7 @@ table {
     align-items: center;
     padding: 20px;
     border-radius: 2px;
-    background-color: rgb(240, 240, 240);
+    background-color: rgb(245, 245, 245);
 }
 
 .button-new { 
@@ -129,7 +129,7 @@ table {
 
 .table {
     table-layout: fixed;
-    min-width: 1000px;
+    /*min-width: 1000px;*/
     border-collapse: collapse;
 }
 

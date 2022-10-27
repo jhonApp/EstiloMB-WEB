@@ -49,6 +49,10 @@ namespace EstiloMB.Core
                 {
                     IQueryable<Produto> query = database.Set<Produto>()
                                                        .AsNoTracking()
+                                                       .Include(e => e.ProdutoImagens)
+                                                       .Include(e => e.ProdutoCategorias).ThenInclude(e => e.Categoria)
+                                                       .Include(e => e.ProdutoCores).ThenInclude(e => e.Cor)
+                                                       .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
                                                        .OrderBy(e => e.ID);
 
                     response.Total = query.Count();

@@ -75,6 +75,5 @@ namespace EstiloMB.Core
 
             return response;
         }
-
     }
 }

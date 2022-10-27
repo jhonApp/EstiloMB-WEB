@@ -17,7 +17,7 @@ CREATE TABLE Produto (
 	ID INT IDENTITY PRIMARY KEY,
 	Nome NVARCHAR(50) NOT NULL,
 	Descricao NVARCHAR(255) NOT NULL,
-	Valor INT NOT NULL,
+	Valor DECIMAL(10,2) NOT NULL,
 	Status INT NOT NULL DEFAULT 1
 );
 
@@ -70,7 +70,7 @@ CREATE TABLE Estoque (
 	CONSTRAINT FK_EstoqueProduto FOREIGN KEY(ProdutoID) REFERENCES Produto(ID),
 
 	Quantidade INT NOT NULL,
-	Valor DECIMAL(5,2) NOT NULL,
+	Valor DECIMAL(10,2) NOT NULL,
 );
 
 CREATE TABLE Cliente (
@@ -79,7 +79,7 @@ CREATE TABLE Cliente (
 	Email VARCHAR(255) NOT NULL,
 	DataNasc DATE NOT NULL,
 	Celular VARCHAR(14) NOT NULL,
-	Valor INT NOT NULL,
+	Valor DECIMAL(10,2) NOT NULL,
 )
 
 CREATE TABLE Pedido (
@@ -89,7 +89,7 @@ CREATE TABLE Pedido (
 	CONSTRAINT FK_Cliente FOREIGN KEY(ClienteID) REFERENCES Cliente(ID),
 
 	DataPedido DATE NOT NULL,
-	Valor INT NOT NULL,
+	Valor DECIMAL(10,2) NOT NULL,
 )
 
 
@@ -104,7 +104,7 @@ CREATE TABLE ItemPedido (
 
 	ValorUnitario DECIMAL(5,2) NOT NULL,
 	Quantidade INT NOT NULL,
-	ValorTotal INT NOT NULL,
+	ValorTotal DECIMAL(10,2) NOT NULL,
 );
 
 CREATE TABLE Movimentacao (
@@ -116,7 +116,7 @@ CREATE TABLE Movimentacao (
 	Conta NVARCHAR(50) NOT NULL,
 	Vencimento DATE NOT NULL,
 	DataPagamento DATE NOT NULL,
-	Valor DECIMAL(5,2) NOT NULL,
+	Valor DECIMAL(10,2) NOT NULL,
 	Status INT NOT NULL DEFAULT 0,
 );
 
@@ -263,5 +263,6 @@ INSERT INTO [Usuario.Perfil] (UsuarioID, PerfilID) VALUES (6, 1);
 --drop table [Produto.Tamanho]
 --drop table [Produto.Cor]
 --drop table [Produto.Imagem]
+--drop table [Produto.Categoria]
 --drop table Produto
 --drop table Categoria
