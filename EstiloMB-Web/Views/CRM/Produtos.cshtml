@@ -538,26 +538,40 @@
             let input = htmlObject.querySelector('[preview = data]');
             let reader = new FileReader();
             var image;
-
+            
             function loaded() {   
                 dataURL = reader.result;
                 input.value = dataURL.substring(dataURL.indexOf(',') + 1);
                 
-                image = htmlObject.parentElement.innerHTML.toString();
+                image = htmlObject.innerHTML.toString();
                 container.innerHTML = image;
                 
             }
 
             reader.readAsDataURL(file);
+
+            
             reader.onload = loaded;
         }
 
-        const showImages = (input) => {
+        const showImages = (file) => {
             
             let images = '';
             let dataURL;
             var temp = document.createElement('div');
 
+            let convertObj = function(file, images) {
+
+                temp.innerHTML = images;
+                //console.log(temp)
+                temp.childNodes.forEach((item) => {
+                    var htmlObject = item;
+                    //console.log(htmlObject)
+                    ImgRender(file, htmlObject, container);
+                });
+            }
+
+            //montando o container
             files.forEach((e, i) => {
 
                 images += `<div class="image">
@@ -566,22 +580,15 @@
 
                                 <input type="hidden" name="ID" data-bind="ID" value="0" />
                                 <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="0" />
+                                <input type="hidden" name="${e}" />
                                 <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${e.name}"/>
                                 <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${dataURL}"/>
                             </div>`
-
-                convertObj(e, images);
             });
+            console.log(images)
+            //Fazendo a conversão do container para objeto
+            convertObj(file, images);
 
-            let convertObj = function(file, images){
-
-                temp.innerHTML = images;
-
-                temp.childNodes.forEach((item) => {
-                    var htmlObject = temp;
-                    ImgRender(file, htmlObject, container);
-                });
-            }
             
         }
 
@@ -600,8 +607,10 @@
                     if(files.every(e => e.name != file[i].name)){
                         files.push(file[i]);
                     }
+
+                    showImages(file[i]);
                 }
-                showImages();
+                
             });
         };
 
