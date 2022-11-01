@@ -544,32 +544,33 @@
                 input.value = dataURL.substring(dataURL.indexOf(',') + 1);
                 
                 image = htmlObject.innerHTML.toString();
+                console.log(image)
                 container.innerHTML = image;
-                
+
+                return;
             }
 
             reader.readAsDataURL(file);
-
-            
             reader.onload = loaded;
         }
 
-        const showImages = (file) => {
+        let convertObj = function(files, images) {
+            var temp = document.createElement('div');
+
+            temp.innerHTML = images;
+            
+            for(let i = 0; i < files.length; i++){
+
+                var htmlObject = temp.childNodes[i];
+                ImgRender(files[i], htmlObject, container);
+            }
+        }
+
+        const showImages = () => {
             
             let images = '';
             let dataURL;
-            var temp = document.createElement('div');
-
-            let convertObj = function(file, images) {
-
-                temp.innerHTML = images;
-                //console.log(temp)
-                temp.childNodes.forEach((item) => {
-                    var htmlObject = item;
-                    //console.log(htmlObject)
-                    ImgRender(file, htmlObject, container);
-                });
-            }
+            let charge;
 
             //montando o container
             files.forEach((e, i) => {
@@ -580,15 +581,13 @@
 
                                 <input type="hidden" name="ID" data-bind="ID" value="0" />
                                 <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="0" />
-                                <input type="hidden" name="${e}" />
                                 <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${e.name}"/>
                                 <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${dataURL}"/>
                             </div>`
             });
-            console.log(images)
-            //Fazendo a conversão do container para objeto
-            convertObj(file, images);
 
+            //Fazendo a conversão do container para objeto
+            convertObj(files, images);
             
         }
 
@@ -607,9 +606,9 @@
                     if(files.every(e => e.name != file[i].name)){
                         files.push(file[i]);
                     }
-
-                    showImages(file[i]);
                 }
+
+                showImages();
                 
             });
         };

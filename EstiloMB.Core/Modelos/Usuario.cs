@@ -47,7 +47,7 @@ namespace EstiloMB.Core
         [NotMapped] public byte[] ImageData { get; set; }
 
         public const string PasswordKey = "123abc456def";
-        public const int EstiloMbID = 3;
+        public const int EstiloMbID = 2;
 
         public static Response<Usuario> Carregar(int userID)
         {
