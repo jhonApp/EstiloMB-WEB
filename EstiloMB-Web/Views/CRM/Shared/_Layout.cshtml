@@ -25,100 +25,141 @@
     <script src="~/js/swipe.js"></script>
 </head>
 <body>
-    <div class="nav-main">
-        <nav>
-            <div class="wrapper">
-                <ul class="nav-links">
-                    <li class="nav-space">
-                        <img class="logo" src="~/image/logo-oficial.png" alt=""/>
-                    </li>
-                    <li>
-                        <a href="~/CRM/Index">Dashbord</a>
-                    </li>
-                    <li>
-                        <a href="~/CRM/Produtos">Cadastros</a>
-                    </li>
-                    <li>
-                        <a href="~/Estoque/Produto">Estoque</a>
-                    </li>
-                    <li>
-                        <a>Financeiro</a>
-                    </li>
-                    <li>
-                        <a>Administração</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="itens">
-            <div class="user">
-                <ul>
-                    <li><span> @User.Identity.Name </span></li>
-                    <li>
-                        <button class="usuario icon"
-                                aria-expanded="false"
-                                onclick="expanding(this)">
-                            <i class="far fa-user"></i>
-                        </button>
-                        <div class="login-content hidden">
-                            <span>Que bom ver você por aqui!</span>
-                            <a  href="~/Sistema/Login">Entrar</a>
-                            <a href="~/Sistema/CriarConta" class="button-conta">Quero criar a minha conta</a>
-                        </div>
-                    </li>
-                </ul>
+    <div class="content-grid">
+        <div class="nav-main">
+            <nav>
+                <div class="wrapper">
+                    <ul class="nav-links">
+                        
+                        <li>
+                            <a href="~/CRM/Index">Dashbord</a>
+                        </li>
+                        <li>
+                            <a href="~/CRM/Produtos">Cadastros</a>
+                        </li>
+                        <li>
+                            <a href="~/Estoque/Produto">Estoque</a>
+                        </li>
+                        <li>
+                            <a>Financeiro</a>
+                        </li>
+                        <li>
+                            <a>Administração</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="itens">
+                <div class="user">
+                    <ul>
+                        <li><span> @User.Identity.Name </span></li>
+                        <li>
+                            <button class="usuario icon"
+                                    aria-expanded="false"
+                                    onclick="expanding(this)">
+                                <i class="far fa-user"></i>
+                            </button>
+                            <div class="login-content hidden">
+                                <span>Que bom ver você por aqui!</span>
+                                <a  href="~/Sistema/Login">Entrar</a>
+                                <a href="~/Sistema/CriarConta" class="button-conta">Quero criar a minha conta</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-    <header>
-        
-    </header>
-    <main role="main" class="pb-3">
-            @RenderBody()
-    </main>
-    <div id="ui-messages">
-        <template>
-            <div class="ui-message" onclick="this.className += ' closing'">
-                <i class="fas fa-check-circle icon-success"></i>
-                <i class="fas fa-times-circle icon-error"></i>
-                <i class="fas fa-exclamation-triangle icon-alert"></i>
+        <div class="sidenav">
+            <ul class="nav-link">
+                <li>
+                    <div class="logo">
+                        <img  src="~/image/logo-oficial.png" alt=""/>
+                    </div>
+                </li>
+                <li>
+                    <a href="~/CRM/Index">
+                        <i class="fas fa-th-large"></i>
+                        <span class="link_name">Dashbord</span>
+                    </a>
+                </li>
+                <li>
+                    <div class="iocn-link">
+                        <a href="~/CRM/Produtos">
+                            <i class="fas fa-tags"></i>
+                            <span class="link_name">Cadastros</span>
+                        </a>
+                        <i class="fas fa-chevron-down arrow" onclick="arrow(this)"></i>
+                    </div>
+                    <ul class="sub-menu">
+                        <li>
+                            <a href="~/CRM/Index">Dashbord</a>
+                            <a href="~/CRM/Index">Dashbord</a>
+                            <a href="~/CRM/Index">Dashbord</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="~/Estoque/Produto">
+                        <i class="fas fa-layer-group"></i>
+                        <span class="link_name">Estoque</span>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <i class="fas fa-coins"></i>
+                        <span class="link_name">Financeiro</span>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <i class="fas fa-cog"></i>
+                        <span class="link_name">Administração</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <header>
+        </header>
+        <main role="main" class="pb-3">
+                @RenderBody()
+        </main>
+        <div id="ui-messages">
+            <template>
+                <div class="ui-message" onclick="this.className += ' closing'">
+                    <i class="fas fa-check-circle icon-success"></i>
+                    <i class="fas fa-times-circle icon-error"></i>
+                    <i class="fas fa-exclamation-triangle icon-alert"></i>
 
-                <div class="ui-text" ui-content="text"></div>
+                    <div class="ui-text" ui-content="text"></div>
+                </div>
+            </template>
+        </div>
+        <template id="ui-popup">
+            <div class="ui-popup pulse-center">
+
+                <div class="left-bar">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+
+                <div class="title" ui-content="title">@loc["Confirmação"]</div>
+                <div class="text" ui-content="text"></div>
+
+                <div class="bottom-bar">
+                    <button class="confirm" ui-action="confirm">
+                        <span><i class="far fa-check"></i></span>
+                        @loc["Confirmar"]
+                    </button>
+
+                    <button class="cancel" ui-action="cancel">
+                        <span><i class="far fa-times"></i></span>
+                        @loc["Cancelar"]
+                    </button>
+                </div>
             </div>
         </template>
     </div>
-    <template id="ui-popup">
-        <div class="ui-popup pulse-center">
-
-            <div class="left-bar">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-
-            <div class="title" ui-content="title">@loc["Confirmação"]</div>
-            <div class="text" ui-content="text"></div>
-
-            <div class="bottom-bar">
-                <button class="confirm" ui-action="confirm">
-                    <span><i class="far fa-check"></i></span>
-                    @loc["Confirmar"]
-                </button>
-
-                <button class="cancel" ui-action="cancel">
-                    <span><i class="far fa-times"></i></span>
-                    @loc["Cancelar"]
-                </button>
-            </div>
-        </div>
-    </template>
-    @*<footer class="border-top footer text-muted">
-        &copy; 2022 - EstiloMB_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </footer>*@
 </body>
 </html>
-@*<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script type="text/javascript" src="~/js/bootstrap-multiselect.js"></script>*@
 <script>
     function expanding(element) {
 
@@ -130,5 +171,12 @@
             element.closest('li').querySelector('.login-content').classList.add('hidden');
             element.ariaExpanded = 'false';
         }
+    }
+
+    function arrow(element) {
+        
+        let arrowParent = element.parentElement.parentElement;
+        arrowParent.classList.toggle("showMenu");
+        console.log(arrowParent)
     }
 </script>

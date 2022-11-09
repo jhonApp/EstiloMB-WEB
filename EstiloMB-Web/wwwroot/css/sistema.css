@@ -2,17 +2,180 @@
     box-sizing: inherit;
 }
 
-.logo{
-
+.sidenav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 220px;
+    z-index: 100;
+    transition: all 0.5s ease;
+    background: #B583EA;
 }
 
-span {
+    .sidenav ul {
+        display: block;
+    }
+
+    .sidenav .nav-link {
+        height: 100%;
+        /*padding: 30px 0 150px 0;*/
+        overflow: auto;
+    }
+        .sidenav .nav-link li {
+            list-style: none;
+            /*margin-bottom: 1.5em;*/
+            position: relative;
+            transition: all 0.4s ease;
+        }
+            .sidenav .nav-link li:hover {
+                background: #f5f5f52a;
+            }
+
+        .sidenav .nav-link .sub-menu li:hover {
+            background: #f5f5f500;
+        }
+
+            .sidenav .nav-link::-webkit-scrollbar {
+                display: none;
+            }
+
+        .sidenav .nav-link li .iocn-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .sidenav .nav-link li .iocn-link > svg {
+                height: 13px;
+            }
+
+
+        .sidenav .nav-link li .sub-menu {
+            padding: 0px 0px 0px 57px;
+            background: #f5f5f52a;
+            display: none;
+            /* padding: 6px 6px 14px 80px; */
+            /* margin-top: -10px; */
+            display: none;
+        }
+
+                    .sidenav .nav-link .showMenu .sub-menu {
+                        display: block;
+                    }
+
+                    .sidenav.fechado .nav-link li .sub-menu {
+                        position: absolute;
+                        left: 100%;
+                        top: -10px;
+                        margin-top: 0;
+                        padding: 10px 20px;
+                        background: #b583eac9;
+                        border-radius: 0 6px 6px 0;
+                        transition: all 0.4s ease;
+                        opacity: 0;
+                        pointer-events: none;
+                    }
+
+    .sidenav.fechado .nav-link li:hover .sub-menu {
+        top: 0px;
+        opacity: 1;
+        pointer-events: auto;
+        transition: all 0.4s ease;
+    }
+
+    .sidenav.fechado .nav-links li a .link_name {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+                    .sidenav .nav-link li .sub-menu .link_name {
+                        display: none;
+                    }
+
+                    .sidenav.fechado .nav-link li .sub-menu .link_name {
+                        font-size: 18px;
+                        opacity: 1;
+                        display: block;
+                    }
+
+    .sidenav .nav-link li .sub-menu.blank {
+        opacity: 1;
+        pointer-events: auto;
+        padding: 3px 20px 6px 16px;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+                            .sidenav .nav-link li:hover .sub-menu.blank {
+                                top: 50%;
+                                transform: translateY(-50%);
+                            }
+
+                            .sidenav .nav-link li .sub-menu a {
+                                color: white;
+                                /*font-size: 15px;*/
+                                padding: 5px 0;
+                                white-space: nowrap;
+                                opacity: 0.6;
+                                transition: all 0.3s ease;
+                            }
+
+                    .sidenav .nav-link li .sub-menu a:hover {
+                        opacity: 1;
+                    }
+
+    .sidenav .nav-link li svg {
+        /*height: 20px;*/
+        padding: 20px;
+        text-align: center;
+        line-height: 50px;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+                        .sidenav .nav-link li svg.arrow {
+                            transform: rotate(90deg);
+                        }
+
+                        .sidenav .nav-link li.showMenu svg.arrow {
+                            transform: rotate(0deg);
+                        }
+
+            .sidenav .nav-link li a {
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+
+            }
+
+                .sidenav .nav-link li a .link_name {
+                    /*font-size: 14px;*/
+                    font-weight: 500;
+                    color: #fff;
+                    transition: all 0.4s ease;
+                }
+
+    .logo {
+        width: 100%;
+        height: 100%;
+        background-color: #B583EA;
+    }
+
+    .logo > img {
+        margin-top: -15px;
+        margin-left: 25px;
+        height: 75px;
+        width: 80%;
+    }
+
+/*span {
     display: inline-block;
     width: 100%;
-    white-space: nowrap;
+    white-space: nowrap;*/
     /*overflow: hidden !important;*/
-    text-overflow: ellipsis;
-}
+    /*text-overflow: ellipsis;
+}*/
 
 .title > h1{
     padding: 20px;
@@ -25,15 +188,36 @@ span {
     grid-template-rows: 10% 1fr;
 }
 
+.content-grid {
+    display: grid;
+    grid-template-rows: 4em;
+    height: auto;
+    grid-template-areas:
+        "sidenav nav-main"
+        "sidenav content"
+        "sidenav footer";
+}
+
 .nav-main {
     display: grid;
-    grid-template-columns: 5%;
-    grid-template-rows: 7em;
+    /*grid-template-columns: 5%;*/
+    grid-template-rows: 4em;
     height: auto;
-    background-color: #B583EA;
+    background-color: #ffffff;
     grid-template-areas: "iten-user nav itens";
     box-shadow: 0px 3px 6px #0000000f;
 }
+
+    .nav-main .nav-links li a {
+        color: #333;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 9px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
 .nav-space {
     margin-right: 7.5em;
@@ -56,6 +240,7 @@ span {
 
 /***************************Cadastro***************************/
 .nav-opcoes {
+    display: none;
     height: 100px;
     background-color: transparent;
     box-shadow: 0px 3px 6px #0000000f;

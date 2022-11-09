@@ -543,8 +543,8 @@
                 dataURL = reader.result;
                 input.value = dataURL.substring(dataURL.indexOf(',') + 1);
                 
-                image = htmlObject.innerHTML.toString();
-                console.log(image)
+                image = htmlObject.parentElement.innerHTML.toString();
+                console.log(htmlObject)
                 container.innerHTML = image;
 
                 return;
