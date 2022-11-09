@@ -3,6 +3,7 @@
 }
 
 .sidenav {
+    grid-area: sidenav;
     position: fixed;
     top: 0;
     left: 0;
@@ -190,6 +191,7 @@
 
 .content-grid {
     display: grid;
+    grid-template-columns: 13.7em 1fr;
     grid-template-rows: 4em;
     height: auto;
     grid-template-areas:
@@ -200,6 +202,7 @@
 
 .nav-main {
     display: grid;
+    grid-area: nav-main;
     /*grid-template-columns: 5%;*/
     grid-template-rows: 4em;
     height: auto;
@@ -219,9 +222,45 @@
         transition: all 0.3s ease;
     }
 
-.nav-space {
-    margin-right: 7.5em;
-}
+    .nav-main .itens-sis {
+        display: flex;
+        grid-area: itens;
+        justify-content: flex-end;
+        align-items: center;
+        width: 90%;
+    }
+
+        .itens-sis .user-sis li {
+            list-style: none;
+        }
+
+        .nav-main .iten-user, .nav-main .itens-sis .user-sis {
+            font-size: 16px;
+            /*font-weight: 500;*/
+            color: #333;
+            margin-top: 32px;
+        }
+
+    .nav-main .itens-sis .user-sis button.icon {
+        position: relative;
+        top: -5px;
+        display: inline-block;
+        background: none;
+        border: 0;
+        outline: 0;
+        padding: 0;
+        cursor: pointer;
+        min-width: 0;
+        min-height: 1.3em;
+        font-size: 1.3em;
+        text-align: center;
+        color: #333;
+        fill: currentColor;
+    }
+
+            .nav-space {
+                margin-right: 7.5em;
+            }
 
 .user ul li {
     padding: 5px;
