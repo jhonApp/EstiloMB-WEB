@@ -27,16 +27,42 @@
 <body>
     <div class="content-grid">
         <div class="nav-main">
-            <div class="itens-sis">
+            <div class="teste">
                 <div class="user-sis">
                     <ul>
-                        <li><span> @User.Identity.Name </span></li>
                         <li>
-                            <img src="~/image/man.jpg" preview="image" />
+                            <div class="search-crm">
+                                <span class="las la-search" ></span>
+                                <input type="text" placeholder="Search here"/>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </div>
+            <div class="notification">
+                <div class="user-sis">
+                    <ul>
+                        <li class="nameUser">
+                            <button class="usuario icon"
+                                    aria-expanded="false"
+                                    onclick="expanding(this)">
+                                <i class="fas fa-bell"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="itens-sis">
+                <div class="user-sis">
+                    <ul>
+                        <li class="nameUser"><span> @User.Identity.Name </span></li>
+                        <li>
+                            <img src="~/image/IMG_20210905_174558.jpg" preview="image" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
         </div>
         <div class="sidenav">
             <ul class="nav-link">
