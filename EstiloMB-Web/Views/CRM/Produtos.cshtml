@@ -9,134 +9,123 @@
     IList<Tamanho> tamanhos = Tamanho.Listar(new Request<Tamanho>() { UserID = Usuario.EstiloMbID })?.Data;
 }
 <content>
-    <div class="nav-opcoes">
-        <nav>
-            <div class="wrapper">
-                <ul class="nav-links">
-                    <li>
-                        <a href="~/CRM/Index">Produtos</a>
-                    </li>
-                    <li>
-                        <a href="~/CRM/Cadastro">Categoria</a>
-                    </li>
-                    <li>
-                        <a href="~/Estoque/Produto">Cupons</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
     <section class="page content-sis" ui="container" id="produto">
         <div class="item">
             <div class="table-header">
-                <p>Cadastro de Produtos</p>
                 <div>
-                    <input class="search-crm" placeholder="Buscar..." />
-                    <button class="button-new" onclick="popup(this)">
-                        Adicionar Produto
+                    <button class="button-new" name="active" onclick="popup(this, this.closest('section').querySelector('#produto'))">
+                        Novo Produto
                     </button>
                 </div>
             </div>
-            <table class="table left-edit">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Descrição</th>
-                        <th>Imagem</th>
-                        <th>Categoria</th>
-                        <th>Tamanhos</th>
-                        <th>Cores</th>
-                        <th>Valor</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody ui-content="data" ui-load="auto" data-url="Api/Produto/Listar" onbind="bindar(data)">
-                    <template>
-                        <tr class="opacity-animation" >
-                            <td>
-                                <span data-bind="Nome"></span>
-                                <input type="hidden" name="ID" data-bind="ID" />
-                            </td>
-                            <td>
-                                <span data-bind="Descricao"></span>
-                            </td>
-                            <td>
-                                <div data-array="ProdutoImagens">
-                                    <template>
-                                        <img src="~/images/EmptyPhoto.png"
-                                         preview="image"
-                                         onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
+            <div class="table-content">
+                <table class="table left-edit">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Imagem</th>
+                            <th>Categoria</th>
+                            <th>Tamanhos</th>
+                            <th>Cores</th>
+                            <th>Valor</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody ui-content="data" ui-load="auto" data-url="Api/Produto/Listar" onbind="bindar(data)">
+                        <template>
+                            <tr class="opacity-animation" >
+                                <td>
+                                    <span data-bind="Nome"></span>
+                                    <input type="hidden" name="ID" data-bind="ID" />
+                                </td>
+                                <td>
+                                    <span data-bind="Descricao"></span>
+                                </td>
+                                <td>
+                                    <button class="btn-galery tooltip" name="active" onclick="popup(this, this.closest('section').querySelector('#galeria'))" >
+                                        <i class="far fa-images"></i>
+                                        <span class="tooltip-top">Abrir</span>
+                                        <span>Galeria</span>
+                                    </button>
+                                    @*<div data-array="ProdutoImagens">
+                                        <template>
+                                            <img src="~/images/EmptyPhoto.png"
+                                             preview="image"
+                                             onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
 
-                                        <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
-                                        <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
-                                    </template>
-                                </div>
-                            </td>
-                            <td> 
-                                <div data-array="ProdutoCategorias">
-                                    <template>
-                                        <span data-bind="Categoria.Nome" ></span>
-                                    </template>
-                                </div>
-                            </td>
-                            <td> 
-                                <div data-array="ProdutoTamanhos">
-                                    <template>
-                                        <span data-bind="Tamanho.Nome" ></span>
-                                    </template>
-                                </div>
-                            </td>
-                            <td>
-                                <div data-array="ProdutoCores">
-                                    <template>
-                                        <span data-bind="Cor.Nome"></span>
-                                    </template>
-                                </div>
-                            </td>
-                            <td><span data-bind="Valor"></span></td>
-                            <td>
-                                <button class="icon tooltip salvar">
-                                    <span class="tooltip-top">Salvar</span>
-                                    <i class="fas fa-check-circle"></i>
-                                </button>
-                                <button class="icon tooltip remover"
-                                    onclick="$ui.delete(this, this.closest('tr'))"
-                                    data-url="Api/Produto/Remover"
-                                    ui-confirm-message="Tem certeza que deseja remover o Produto?"
-                                    ui-deleted-message="Produto removido.">
-                                    <span class="tooltip-top">Remover</span>
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                            <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                                        </template>
+                                    </div>*@
+                                </td>
+                                <td> 
+                                    <div data-array="ProdutoCategorias">
+                                        <template>
+                                            <span data-bind="Categoria.Nome" ></span>
+                                        </template>
+                                    </div>
+                                </td>
+                                <td> 
+                                    <div data-array="ProdutoTamanhos">
+                                        <template>
+                                            <span data-bind="Tamanho.Nome" ></span>
+                                        </template>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-array="ProdutoCores">
+                                        <template>
+                                            <span data-bind="Cor.Nome"></span>
+                                        </template>
+                                    </div>
+                                </td>
+                                <td><span data-bind="Valor"></span></td>
+                                <td>
+                                    <button class="icon tooltip salvar">
+                                        <span class="tooltip-top">Salvar</span>
+                                        <i class="fas fa-check-circle"></i>
+                                    </button>
+                                    <button class="icon tooltip remover"
+                                        onclick="$ui.delete(this, this.closest('tr'))"
+                                        data-url="Api/Produto/Remover"
+                                        ui-confirm-message="Tem certeza que deseja remover o Produto?"
+                                        ui-deleted-message="Produto removido.">
+                                        <span class="tooltip-top">Remover</span>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                    @*<tfoot>
+                        <!-- Empty -->
+                        <tr ui-content="empty">
+                            <td class="text-center" colspan="10">
+                                @loc["Nenhum registro encontrado."]
                             </td>
                         </tr>
-                    </template>
-                </tbody>
-                @*<tfoot>
-                    <!-- Empty -->
-                    <tr ui-content="empty">
-                        <td class="text-center" colspan="10">
-                            @loc["Nenhum registro encontrado."]
-                        </td>
-                    </tr>
 
-                    <!-- Loading -->
-                    <tr ui-content="loading">
-                        <td colspan="10">
-                            <div class="loading-bars">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>*@
-            </table>
+                        <!-- Loading -->
+                        <tr ui-content="loading">
+                            <td colspan="10">
+                                <div class="loading-bars">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>*@
+                </table>
+            </div>
+            
 
             @*--PopUp Produtos--*@
-            <div class="popup-overlay">
+            <div class="popup-overlay" id="produto">
                 <div class="popup-box-container">
-                    <a onclick="popup(this)" class="close"><i class="far fa-times icon"></i></a>
+                    <a onclick="popup(this, this.closest('section').querySelector('#produto'))" class="close"><i class="far fa-times icon"></i></a>
                     <div class="title">Produto</div>
                     <aside>
                         <div class="overflow">
@@ -444,6 +433,18 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            @*--PopUp Galeria--*@
+            <div class="popup-overlay" id="galeria">
+                <div class="popup-box-container">
+                    <a onclick="popup(this, this.closest('section').querySelector('#galeria'))" class="close"><i class="far fa-times icon"></i></a>
+                    <aside>
+                        <div class="overflow">
+                            <div class="cols">teste</div>
                         </div>
                     </aside>
                 </div>

@@ -27,13 +27,14 @@
 <body>
     <div class="content-grid">
         <div class="nav-main">
-            <div class="teste">
+            <div class="search-content">
                 <div class="user-sis">
                     <ul>
                         <li>
                             <div class="search-crm">
+                                <i class="far fa-search"></i>
                                 <span class="las la-search" ></span>
-                                <input type="text" placeholder="Search here"/>
+                                <input type="text" placeholder="Digite aqui..."/>
                             </div>
                         </li>
                     </ul>
@@ -44,8 +45,7 @@
                     <ul>
                         <li class="nameUser">
                             <button class="usuario icon"
-                                    aria-expanded="false"
-                                    onclick="expanding(this)">
+                                    aria-expanded="false">
                                 <i class="fas fa-bell"></i>
                             </button>
                         </li>
@@ -62,7 +62,6 @@
                     </ul>
                 </div>
             </div>
-            
         </div>
         <div class="sidenav">
             <ul class="nav-link">
@@ -113,8 +112,6 @@
                 </li>
             </ul>
         </div>
-        <header>
-        </header>
         <main role="main" class="pb-3">
                 @RenderBody()
         </main>
