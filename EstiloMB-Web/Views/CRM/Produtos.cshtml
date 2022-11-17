@@ -29,7 +29,7 @@
                             <th>Tamanhos</th>
                             <th>Cores</th>
                             <th>Valor</th>
-                            <th>Ação</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody ui-content="data" ui-load="auto" data-url="Api/Produto/Listar" onbind="bindar(data)">
@@ -43,21 +43,11 @@
                                     <span data-bind="Descricao"></span>
                                 </td>
                                 <td>
-                                    <button class="btn-galery tooltip" name="active" onclick="popup(this, this.closest('section').querySelector('#galeria'))" >
+                                    <button class="btn-galery tooltip" name="active" onclick="$produto.init(this, this.closest('section').querySelector('#galeria'), data)" >
                                         <i class="far fa-images"></i>
                                         <span class="tooltip-top">Abrir</span>
                                         <span>Galeria</span>
                                     </button>
-                                    @*<div data-array="ProdutoImagens">
-                                        <template>
-                                            <img src="~/images/EmptyPhoto.png"
-                                             preview="image"
-                                             onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
-
-                                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
-                                            <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
-                                        </template>
-                                    </div>*@
                                 </td>
                                 <td> 
                                     <div data-array="ProdutoCategorias">
@@ -441,10 +431,19 @@
             @*--PopUp Galeria--*@
             <div class="popup-overlay" id="galeria">
                 <div class="popup-box-container">
-                    <a onclick="popup(this, this.closest('section').querySelector('#galeria'))" class="close"><i class="far fa-times icon"></i></a>
+                    <a onclick="$produto.init(this, this.closest('section').querySelector('#galeria'))" class="close"><i class="far fa-times icon"></i></a>
                     <aside>
                         <div class="overflow">
-                            <div class="cols">teste</div>
+                            <div data-array="ProdutoImagens">
+                                <template>
+                                    <img src="~/images/EmptyPhoto.png"
+                                        preview="image"
+                                        onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
+
+                                    <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                    <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                                </template>
+                            </div>
                         </div>
                     </aside>
                 </div>
@@ -630,7 +629,7 @@
             }
 
             element.classList.remove("open");
-        }
+        };
 
         $produto.selectItem = function(element) {
 
@@ -662,7 +661,7 @@
                         if(result == ""){ btnText.innerText = "- Selecione -"; } else { $produto.fillArray(element, colorID) }
                 });
             });
-        }
+        };
 
         $produto.fillArray = function(element, id) {
 
@@ -683,7 +682,17 @@
                 console.log(obj)
                 console.log(array)
             }
-        }
+        };
+
+        $produto.bindImages = function(element, data) {
+            console.log(data);
+        };
+
+        $produto.init = function(element, tag, data) {
+            console.log(tag);
+            popup(element, tag);
+            $produto.bindImages(element, data);
+        };
 
     })(window.$produto = window.$produto || {});
 </script>

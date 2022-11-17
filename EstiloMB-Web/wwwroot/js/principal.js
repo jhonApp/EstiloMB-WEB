@@ -9,7 +9,7 @@
 }
 
 function popup(element, tag) {
-    console.log(element)
+
     if (element.name == 'active') {
         tag.classList.add('active');
 
