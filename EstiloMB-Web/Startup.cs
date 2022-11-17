@@ -81,8 +81,8 @@ namespace EstiloMB.Site
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
-            Database.Configure(Configuration.GetConnectionString("Desenvolvimento"));
-            //Database.Configure(Configuration.GetConnectionString("DesenvolvimentoKstack"));
+            //Database.Configure(Configuration.GetConnectionString("Desenvolvimento"));
+            Database.Configure(Configuration.GetConnectionString("DesenvolvimentoKstack"));
 
             Localization.AddDictionary("pt-br", PT_BR.dicionario);
             Localization.AddDictionary("en-us", EN_US.dicionario);

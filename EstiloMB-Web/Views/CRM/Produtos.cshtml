@@ -36,11 +36,11 @@
                         <template>
                             <tr class="opacity-animation" >
                                 <td>
-                                    <span data-bind="Nome"></span>
+                                    <span class="text-line-2" data-bind="Nome"></span>
                                     <input type="hidden" name="ID" data-bind="ID" />
                                 </td>
                                 <td>
-                                    <span data-bind="Descricao"></span>
+                                    <span class="text-line-2" data-bind="Descricao"></span>
                                 </td>
                                 <td>
                                     <button class="btn-galery tooltip" name="active" onclick="$produto.init(this, this.closest('section').querySelector('#galeria'), data)" >
@@ -84,6 +84,20 @@
                                         <span class="tooltip-top">Remover</span>
                                         <i class="fas fa-trash"></i>
                                     </button>
+                                </td>
+                            </tr>
+                            <tr class="absolute">
+                                <td>
+                                    <div data-array="ProdutoImagens">
+                                        <template>
+                                            <img src="~/images/EmptyPhoto.png"
+                                                preview="image"
+                                                onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
+
+                                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                            <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                                        </template>
+                                    </div>
                                 </td>
                             </tr>
                         </template>

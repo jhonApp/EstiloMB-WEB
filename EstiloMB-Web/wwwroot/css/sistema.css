@@ -2,6 +2,36 @@
     box-sizing: inherit;
 }
 
+/***********************************************************/
+/***************************HELP***************************/
+/***********************************************************/
+
+.text-line-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    max-height: 42px;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+
+.absolute {
+    /* position: inherit; */
+    display: flex;
+    flex-direction: row;
+    width: 65em;
+}
+
+    .absolute td {
+        width: 100%;
+    }
+
+    .absolute img {
+        margin: 10px;
+        height: 100px;
+        width: 100px;
+    }
+
 .sidenav {
     grid-area: sidenav;
     position: fixed;
@@ -1554,3 +1584,4 @@ list {
     .btn-galery svg {
         color: black;
     }
+
