@@ -8,14 +8,19 @@
     }
 }
 
-function popup(element, tag) {
+function popup(element, template, callback) {
 
-    if (element.name == 'active') {
-        tag.classList.add('active');
+    let hasActive = template.className.includes('active');
+
+    if (hasActive != true) {
+        template.classList.add('active');
 
     } else {
-        console.log("entrei primeiro")
-        tag.classList.remove('active');
+        return template.classList.remove('active');
+    }
+
+    if (callback) {
+        callback(element, template);
     }
 
 }

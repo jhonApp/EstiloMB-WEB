@@ -32,9 +32,9 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody ui-content="data" ui-load="auto" data-url="Api/Produto/Listar" onbind="bindar(data)">
+                    <tbody ui-content="data" ui-load="auto" data-url="Api/Produto/Listar" >
                         <template>
-                            <tr class="opacity-animation" >
+                            <tr class="opacity-animation" onbind="this.data = data" name="active">
                                 <td>
                                     <span class="text-line-2" data-bind="Nome"></span>
                                     <input type="hidden" name="ID" data-bind="ID" />
@@ -43,7 +43,7 @@
                                     <span class="text-line-2" data-bind="Descricao"></span>
                                 </td>
                                 <td>
-                                    <button class="btn-galery tooltip" name="active" onclick="$produto.init(this, this.closest('section').querySelector('#galeria'), data)" >
+                                    <button class="btn-galery tooltip" onclick="popup(this, this.closest('section').querySelector('#galeria'), (e) => { $produto.bindImages(e); })">
                                         <i class="far fa-images"></i>
                                         <span class="tooltip-top">Abrir</span>
                                         <span>Galeria</span>
@@ -72,9 +72,10 @@
                                 </td>
                                 <td><span data-bind="Valor"></span></td>
                                 <td>
-                                    <button class="icon tooltip salvar">
-                                        <span class="tooltip-top">Salvar</span>
-                                        <i class="fas fa-check-circle"></i>
+                                    <button class="icon tooltip salvar"
+                                            onclick="popup(this, this.closest('section').querySelector('#produto'), (e) => { $produto.bindProduto(e); })">
+                                            <span class="tooltip-top">Salvar</span>
+                                            <i class="fas fa-check-circle"></i>
                                     </button>
                                     <button class="icon tooltip remover"
                                         onclick="$ui.delete(this, this.closest('tr'))"
@@ -84,20 +85,6 @@
                                         <span class="tooltip-top">Remover</span>
                                         <i class="fas fa-trash"></i>
                                     </button>
-                                </td>
-                            </tr>
-                            <tr class="absolute">
-                                <td>
-                                    <div data-array="ProdutoImagens">
-                                        <template>
-                                            <img src="~/images/EmptyPhoto.png"
-                                                preview="image"
-                                                onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
-
-                                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
-                                            <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
-                                        </template>
-                                    </div>
                                 </td>
                             </tr>
                         </template>
@@ -129,7 +116,7 @@
             @*--PopUp Produtos--*@
             <div class="popup-overlay" id="produto">
                 <div class="popup-box-container">
-                    <a onclick="popup(this, this.closest('section').querySelector('#produto'))" class="close"><i class="far fa-times icon"></i></a>
+                    <a onclick="popup(this, this.closest('#produto'))" class="close"><i class="far fa-times icon"></i></a>
                     <div class="title">Produto</div>
                     <aside>
                         <div class="overflow">
@@ -147,7 +134,18 @@
                                                 <input name="file" type="file" class="file" multiple />
                                             </div>
                                             <div data-array="ProdutoImagens">
-                                                <div class="img-container"></div>
+                                                <template>
+                                                    <div class="img-container">
+                                                        <div class="image">
+                                                            <img src="~/images/EmptyPhoto.png"
+                                                                preview="image"
+                                                                onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
+
+                                                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                                            <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                                                        </div>
+                                                    </div>
+                                                </template>
                                             </div>
                                         </div>
                                     </div>
@@ -445,17 +443,20 @@
             @*--PopUp Galeria--*@
             <div class="popup-overlay" id="galeria">
                 <div class="popup-box-container">
-                    <a onclick="$produto.init(this, this.closest('section').querySelector('#galeria'))" class="close"><i class="far fa-times icon"></i></a>
+                    <a onclick="popup(this, this.closest('#galeria'))" class="close"><i class="far fa-times icon"></i></a>
+                    <div class="title">Imagens</div>
                     <aside>
                         <div class="overflow">
-                            <div data-array="ProdutoImagens">
+                            <div class="galery" data-array="ProdutoImagens">
                                 <template>
-                                    <img src="~/images/EmptyPhoto.png"
-                                        preview="image"
-                                        onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
+                                    <div class="g-item">
+                                        <img src="~/images/EmptyPhoto.png"
+                                            preview="image"
+                                            onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
 
-                                    <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
-                                    <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                                        <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                        <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                                    </div>
                                 </template>
                             </div>
                         </div>
@@ -471,6 +472,7 @@
     $ui.update(document.getElementById("produto"));
 
     function bindar(data){
+        console.log('teste')
         console.log(data);
     }
 
@@ -569,7 +571,7 @@
         }
 
         let convertObj = function(files, images) {
-            var temp = document.createElement('div');
+            var temp = document.createElement('div');  
 
             temp.innerHTML = images;
             
@@ -698,15 +700,68 @@
             }
         };
 
-        $produto.bindImages = function(element, data) {
-            console.log(data);
+        $produto.bindImages = function(element) {
+            let template = element.closest('tr');
+            let dados = template.data;
+
+            let obj = {
+                ProdutoImagens: dados.ProdutoImagens
+            };
+
+            let popup = template.closest('section').querySelector('#galeria');
+            let array = popup.querySelector('[data-array="ProdutoImagens"]');
+            $min.bind(array, obj);
         };
 
-        $produto.init = function(element, tag, data) {
-            console.log(tag);
-            popup(element, tag);
-            $produto.bindImages(element, data);
+        $produto.bindProduto = function(element) {
+            let template = element.closest('tr');
+            let dados = template.data;
+            let images = dados.ProdutoImagens;
+            let templateImg = '';
+            console.log(dados)
+
+            let obj = {
+                Nome: dados.Nome,
+                Descricao: dados.Descricao,
+                Valor: dados.Valor,
+                ProdutoImagens: dados.ProdutoImagens,
+                ProdutoCores: dados.ProdutoCores,
+                ProdutoTamanhos: dados.ProdutoTamanhos,
+                ProdutoCategorias: dados.ProdutoCategorias,
+            };
+
+            let popup = template.closest('section').querySelector('#produto');
+
+            //montando o container
+            //images.forEach((e) => {
+
+            //    templateImg += `<div class="image">
+            //                    <img preview="image" src="${URL.createObjectURL(e)}" alt="image" />
+            //                    <span onclick="$produto.removeImage(${i})">&times;</span>
+
+            //                    <input type="hidden" name="ID" data-bind="ID" value="${e.ID}" />
+            //                    <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="${e.ProdutoID}" />
+            //                    <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${e.ImageURL}"/>
+            //                    <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${e.ImageData}"/>
+            //                </div>`
+            //});
+            //console.log(templateImg)
+            $min.bind(popup, obj);
         };
+
+        //$produto.init = function(element, tag) {
+        //    //popup(element, tag);
+
+        //    //if(tag.id = 'galeria'){
+        //    //    $produto.bindImages(element)
+        //    //    return;
+
+        //    //}else{
+        //    //    $produto.bindProduto(element)
+        //    //}
+            
+            
+        //};
 
     })(window.$produto = window.$produto || {});
 </script>
