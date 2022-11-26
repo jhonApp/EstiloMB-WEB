@@ -28,7 +28,9 @@ CREATE TABLE [Produto.Cor] (
 	CONSTRAINT FK_Produto FOREIGN KEY(ProdutoID) REFERENCES Produto(ID),
 
 	CorID INT NOT NULL,
-	CONSTRAINT FK_ProdutoCor FOREIGN KEY(CorID) REFERENCES Cor(ID)
+	CONSTRAINT FK_ProdutoCor FOREIGN KEY(CorID) REFERENCES Cor(ID),
+
+	Status INT NOT NULL
 
 );
 
@@ -39,8 +41,9 @@ CREATE TABLE [Produto.Tamanho] (
 	CONSTRAINT FK_PDProduto FOREIGN KEY(ProdutoID) REFERENCES Produto(ID),
 
 	TamanhoID INT NOT NULL,
-	CONSTRAINT FK_ProdutoTamanho FOREIGN KEY(TamanhoID) REFERENCES Tamanho(ID)
+	CONSTRAINT FK_ProdutoTamanho FOREIGN KEY(TamanhoID) REFERENCES Tamanho(ID),
 
+	Status INT NOT NULL
 );
 
 CREATE TABLE [Produto.Imagem] (
@@ -49,7 +52,9 @@ CREATE TABLE [Produto.Imagem] (
 	ProdutoID INT NOT NULL,
 	CONSTRAINT FK_ImagemProduto FOREIGN KEY(ProdutoID) REFERENCES Produto(ID),
 
-	ImageURL NVARCHAR(255) NOT NULL
+	ImageURL NVARCHAR(255) NOT NULL,
+
+	Status INT NOT NULL
 );
 
 CREATE TABLE [Produto.Categoria] (
@@ -59,8 +64,9 @@ CREATE TABLE [Produto.Categoria] (
 	CONSTRAINT FK_CategoriaProduto FOREIGN KEY(ProdutoID) REFERENCES Produto(ID),
 
 	CategoriaID INT NOT NULL,
-	CONSTRAINT FK_ProdutoCategoria FOREIGN KEY(CategoriaID) REFERENCES Categoria(ID)
+	CONSTRAINT FK_ProdutoCategoria FOREIGN KEY(CategoriaID) REFERENCES Categoria(ID),
 
+	Status INT NOT NULL
 );
 
 CREATE TABLE Estoque (

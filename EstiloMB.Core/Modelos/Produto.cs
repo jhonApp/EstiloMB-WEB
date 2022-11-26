@@ -23,7 +23,7 @@ namespace EstiloMB.Core
         [Required, MaxLength(255), LogProperty]
         public string Descricao { get; set; }
         public decimal Valor { get; set; }
-        public int Status { get; set; }
+        public StatusParametro Status { get; set; }
 
         public List<ProdutoImagem> ProdutoImagens { get; set; }
         public List<ProdutoCategoria> ProdutoCategorias { get; set; }
@@ -145,6 +145,17 @@ namespace EstiloMB.Core
                     }
                     else
                     {
+                        for (int i = 0; i < request.Data.ProdutoImagens?.Count; i++)
+                        {
+                            for (int j = 0; j < original.ProdutoImagens?.Count; j++)
+                            {
+                                if(request.Data.ProdutoImagens[i] == original.ProdutoImagens[j])
+                                {
+
+                                }
+                            }
+                        }
+
                         database.Set<Produto>().Update(request.Data);
                         database.SaveChanges();
 

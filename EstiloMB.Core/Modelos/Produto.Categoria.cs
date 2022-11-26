@@ -13,6 +13,7 @@ namespace EstiloMB.Core
         public int ID { get; set; }
         public int ProdutoID { get; set; }
         public int CategoriaID { get; set; }
+        public StatusParametro Status { get; set; }
         public Categoria Categoria { get; set; }
 
     }

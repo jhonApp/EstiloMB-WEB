@@ -1564,7 +1564,6 @@ if (!String.prototype.format) {
     }
 
     $ui.checkEmpty = function (data) {
-        console.log(data)
         if (!data) { return; }
 
         if (data.children.length === 0 || data.children.length === 1 && data.children[0].nodeName.toUpperCase() === "TEMPLATE") {

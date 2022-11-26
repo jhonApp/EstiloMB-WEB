@@ -1001,17 +1001,17 @@ form input[type="radio"]{
         width: auto;
     }
 
-    .img-container {
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        position: relative;
-        height: auto;
-        /*margin-top: 20px;*/
-        max-height: 300px;
-        overflow-y: auto;
-    }
+.img-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    position: relative;
+    height: auto;
+    /* margin-top: 20px; */
+    max-height: 300px;
+    overflow-y: auto;
+}
 
 .img-container .image {
     height: 85px;
@@ -1427,10 +1427,20 @@ list {
         margin-top: 10px;
     }
 
+        .top-multiselect thead th {
+            position: sticky;
+            top: 0;
+            background-color: #c49af1;
+            padding-bottom: 0.3em;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+        }
 
-.multiselect-container {
-   align-items: center;
-}
+
+        .multiselect-container {
+            align-items: center;
+        }
 
 .label {
     position: relative;

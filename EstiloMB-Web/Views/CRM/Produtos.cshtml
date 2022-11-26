@@ -133,17 +133,17 @@
                                                 <button type="button" onclick="$produto.addImages(this, this.closest('.card-prod-image'))">Selecionar</button>
                                                 <input name="file" type="file" class="file" multiple />
                                             </div>
-                                            <div data-array="ProdutoImagens">
+                                            <div data-array="ProdutoImagens" class="img-container">
                                                 <template>
-                                                    <div class="img-container">
-                                                        <div class="image">
-                                                            <img src="~/images/EmptyPhoto.png"
-                                                                preview="image"
-                                                                onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
-
-                                                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
-                                                            <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
-                                                        </div>
+                                                    <div class="image">
+                                                        <img src="~/images/EmptyPhoto.png"
+                                                            preview="image"
+                                                            onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
+                                                        <span onclick="$produto.removeImage(0, this)" >&times;</span>
+                                                        <input type="hidden" name="ID" data-bind="ID" />
+                                                        <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
+                                                        <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                                        <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
                                                     </div>
                                                 </template>
                                             </div>
@@ -165,6 +165,7 @@
                                             <validation data-bind="Nome" data-group="error" onbind="$ui.bindError(this)"></validation>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="ID" data-bind="ID" />
                                     @*--Descrição--*@
                                     <div class="col-6">
                                         <div class="label">
@@ -208,12 +209,12 @@
                                                                 </button>
 
                                                                 <!--IDs-->
-                                                                <input type="hidden" name="ID" data-property="ID" value="0"/>
-                                                                <input type="hidden" name="ProdutoID" data-property="ProdutoID" value="0"/>
+                                                                <input type="hidden" name="ID" data-bind="ID"/>
+                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID"/>
                                                             </td>
                                                             <td>
                                                                 <label>
-                                                                    <select name="CategoriaID" data-property="CategoriaID"
+                                                                    <select name="CategoriaID" data-bind="CategoriaID"
                                                                             required="required"
                                                                             class="multiselect-container"
                                                                             required-error="@loc["Este campo é obrigatório."]"
@@ -295,11 +296,12 @@
                                                                 </button>
 
                                                                 <!--IDs-->
-                                                                <input type="hidden" name="ID" data-property="ID" />
+                                                                <input type="hidden" name="ID" data-bind="ID" />
+                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
                                                             </td>
                                                             <td>
                                                                 <label>
-                                                                    <select name="CorID" data-property="CorID"
+                                                                    <select name="CorID" data-bind="CorID"
                                                                             required="required"
                                                                             class="multiselect-container"
                                                                             required-error="@loc["Este campo é obrigatório."]"
@@ -367,11 +369,12 @@
                                                                 </button>
 
                                                                 <!--IDs-->
-                                                                <input type="hidden" name="ID" data-property="ID" />
+                                                                <input type="hidden" name="ID" data-bind="ID" />
+                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
                                                             </td>
                                                             <td>
                                                                 <label>
-                                                                    <select name="TamanhoID" data-property="TamanhoID"
+                                                                    <select name="TamanhoID" data-bind="TamanhoID"
                                                                             required="required"
                                                                             class="multiselect-container"
                                                                             required-error="@loc["Este campo é obrigatório."]"
@@ -561,7 +564,7 @@
                 
                 image = htmlObject.parentElement.innerHTML.toString();
                 console.log(htmlObject)
-                container.innerHTML = image;
+                container.innerHTML += image;
 
                 return;
             }
@@ -629,10 +632,17 @@
             });
         };
 
-        $produto.removeImage = function(index) {
+        $produto.removeImage = function(index, span) {
+            
+            if(index != 0){
+                files.splice(index, 1);
+                showImages();
+            }
 
-            files.splice(index, 1);
-            showImages()
+            if(span.parentElement.children.ID?.value != 0){
+                span.parentElement.remove();
+            }
+            
         };
 
         $produto.changeOpen = function(element) {
@@ -721,6 +731,7 @@
             console.log(dados)
 
             let obj = {
+                ID: dados.ID,
                 Nome: dados.Nome,
                 Descricao: dados.Descricao,
                 Valor: dados.Valor,
@@ -748,20 +759,6 @@
             //console.log(templateImg)
             $min.bind(popup, obj);
         };
-
-        //$produto.init = function(element, tag) {
-        //    //popup(element, tag);
-
-        //    //if(tag.id = 'galeria'){
-        //    //    $produto.bindImages(element)
-        //    //    return;
-
-        //    //}else{
-        //    //    $produto.bindProduto(element)
-        //    //}
-            
-            
-        //};
 
     })(window.$produto = window.$produto || {});
 </script>
