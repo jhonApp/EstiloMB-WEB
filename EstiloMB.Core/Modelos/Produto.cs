@@ -145,6 +145,8 @@ namespace EstiloMB.Core
                     }
                     else
                     {
+                        database.Set<ProdutoImagem>().RemoveRange(original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ProdutoID).Contains(e.ProdutoID)));
+
                         for (int i = 0; i < request.Data.ProdutoImagens?.Count; i++)
                         {
                             for (int j = 0; j < original.ProdutoImagens?.Count; j++)
