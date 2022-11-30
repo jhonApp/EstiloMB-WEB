@@ -561,36 +561,34 @@
             function loaded() {   
                 dataURL = reader.result;
                 input.value = dataURL.substring(dataURL.indexOf(',') + 1);
-                
-                image = htmlObject.parentElement.innerHTML.toString();
-                console.log(htmlObject)
-                container.innerHTML += image;
 
-                return;
+                return container.appendChild(htmlObject);
             }
 
+            //console.log(file)
             reader.readAsDataURL(file);
             reader.onload = loaded;
+            files = [];
         }
 
         let convertObj = function(files, images) {
             var temp = document.createElement('div');  
 
             temp.innerHTML = images;
-            
-            for(let i = 0; i < files.length; i++){
+            var htmlObject = '';
 
-                var htmlObject = temp.childNodes[i];
-                ImgRender(files[i], htmlObject, container);
-            }
+            htmlObject = temp.childNodes[0];
+            ImgRender(files, htmlObject, container);
         }
 
         const showImages = () => {
             
             let images = '';
+            let fileItem = [];
             let dataURL;
             let charge;
-
+            //console.log(files)
+            
             //montando o container
             files.forEach((e, i) => {
 
@@ -603,11 +601,10 @@
                                 <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${e.name}"/>
                                 <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${dataURL}"/>
                             </div>`
-            });
 
-            //Fazendo a conversão do container para objeto
-            convertObj(files, images);
-            
+                //Fazendo a conversão do container para objeto
+                convertObj(e, images);
+            });
         }
 
         $produto.addImages = function(button, element) {
@@ -615,20 +612,21 @@
             let input = element.querySelector('.top input');
 
             input.click();
-
+            
             //input change events
             input.addEventListener('change', () => {
                 let file = input.files;
-                
+
+                //Fazendo subistuição da imagem
                 for (let i = 0; i < file.length; i++) {
 
                     if(files.every(e => e.name != file[i].name)){
                         files.push(file[i]);
                     }
                 }
-
-                showImages();
+                console.log('entrei')
                 
+                return showImages();
             });
         };
 
@@ -642,7 +640,6 @@
             if(span.parentElement.children.ID?.value != 0){
                 span.parentElement.remove();
             }
-            
         };
 
         $produto.changeOpen = function(element) {
