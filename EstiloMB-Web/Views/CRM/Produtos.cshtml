@@ -131,7 +131,7 @@
                                                     <p class="text-alert">Você poderá escolher até 4 imagens</p>
                                                 </div>
                                                 <button type="button" onclick="$produto.addImages(this, this.closest('.card-prod-image'))">Selecionar</button>
-                                                <input name="file" type="file" class="file" multiple />
+                                                <input name="file" type="file" class="file" />
                                             </div>
                                             <div data-array="ProdutoImagens" class="img-container">
                                                 <template>
@@ -562,7 +562,7 @@
                 dataURL = reader.result;
                 input.value = dataURL.substring(dataURL.indexOf(',') + 1);
 
-                return container.appendChild(htmlObject);
+                container.appendChild(htmlObject);
             }
 
             //console.log(file)
@@ -584,10 +584,9 @@
         const showImages = () => {
             
             let images = '';
-            let fileItem = [];
             let dataURL;
             let charge;
-            //console.log(files)
+            console.log(files)
             
             //montando o container
             files.forEach((e, i) => {
@@ -622,11 +621,11 @@
 
                     if(files.every(e => e.name != file[i].name)){
                         files.push(file[i]);
+                        showImages();
+                        return;
                     }
                 }
-                console.log('entrei')
                 
-                return showImages();
             });
         };
 
