@@ -31,5 +31,12 @@ namespace EstiloMB.Site.Controllers
             response.Data = Tamanho.RemoveTamanhosByID(ID);
             return Json(response);
         }
+
+        [HttpPost]
+        public IActionResult Remove(int ID, int ProdutoID)
+        {
+            Response<ProdutoImagem> response = ProdutoImagem.Remove(ID, ProdutoID);
+            return Json(response);
+        }
     }
 }

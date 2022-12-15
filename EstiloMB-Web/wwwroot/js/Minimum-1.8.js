@@ -1621,7 +1621,6 @@ if (!String.prototype.format) {
     }
 
     $ui.checkEmpty = function (data) {
-        console.log(data)
         if (!data) { return; }
 
         if (data.children.length === 0 || data.children.length === 1 && data.children[0].nodeName.toUpperCase() === "TEMPLATE") {
@@ -2092,7 +2091,16 @@ if (!String.prototype.format) {
                     $min.bind(item.original, response.Data);
                 }
 
-                $min.bind(item, response.Data);
+                let contents = item.closest('.page').querySelectorAll('tr.opacity-animation');
+                console.log(response.Data)
+
+                for (let i = 0; i < contents.length; i++) {
+                    if (contents[i].data.ID == response.Data.ID) {
+                        console.log(contents[i])
+                        $min.bind(contents[i], response.Data);
+                    }
+                }
+
                 item.data = response.Data;
                 item.isNew = false;
 

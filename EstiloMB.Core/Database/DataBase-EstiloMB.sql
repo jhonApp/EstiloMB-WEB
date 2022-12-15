@@ -266,9 +266,9 @@ INSERT INTO [Usuario.Perfil] (UsuarioID, PerfilID) VALUES (6, 1);
 --DROP
 --drop table Estoque
 --drop table ItemPedido
---drop table [Produto.Tamanho]
---drop table [Produto.Cor]
---drop table [Produto.Imagem]
---drop table [Produto.Categoria]
+drop table [Produto.Tamanho]
+drop table [Produto.Cor]
+drop table [Produto.Imagem]
+drop table [Produto.Categoria]
 --drop table Produto
 --drop table Categoria

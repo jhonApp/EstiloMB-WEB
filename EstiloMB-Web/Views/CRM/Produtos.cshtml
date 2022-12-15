@@ -114,7 +114,7 @@
             
 
             @*--PopUp Produtos--*@
-            <div class="popup-overlay" id="produto">
+            <div class="popup-overlay" id="produto" onbind="this.data = data">
                 <div class="popup-box-container">
                     <a onclick="popup(this, this.closest('#produto'))" class="close"><i class="far fa-times icon"></i></a>
                     <div class="title">Produto</div>
@@ -130,8 +130,8 @@
                                                     <p>Escolha as imagens de sua preferência</p>
                                                     <p class="text-alert">Você poderá escolher até 4 imagens</p>
                                                 </div>
-                                                <button type="button" onclick="$produto.addImages(this, this.closest('.card-prod-image'))">Selecionar</button>
-                                                <input name="file" type="file" class="file" />
+                                                <button type="button" onclick="$produto.inputClick(this)">Selecionar</button>
+                                                <input name="file" type="file" class="file" onchange="$produto.addImages(this)"/>
                                             </div>
                                             <div data-array="ProdutoImagens" class="img-container">
                                                 <template>
@@ -432,7 +432,7 @@
                                     <div class="button-cadastro">
                                         <input type="submit" 
                                             value="Salvar" 
-                                            onclick="$ui.save(this, 'aside')" 
+                                            onclick="$ui.save(this, 'aside', (e, t) => { popup(e, this.closest('#produto')); })" 
                                             data-url="Api/Produto/Salvar"
                                             ui-saved-message="@loc["Registro atualizado."]"/>
                                     </div>
@@ -561,7 +561,6 @@
             function loaded() {   
                 dataURL = reader.result;
                 input.value = dataURL.substring(dataURL.indexOf(',') + 1);
-
                 container.appendChild(htmlObject);
             }
 
@@ -581,13 +580,12 @@
             ImgRender(files, htmlObject, container);
         }
 
-        const showImages = () => {
+        const showImages = (dados) => {
             
             let images = '';
             let dataURL;
             let charge;
-            console.log(files)
-            
+
             //montando o container
             files.forEach((e, i) => {
 
@@ -596,7 +594,7 @@
                                 <span onclick="$produto.removeImage(${i})">&times;</span>
 
                                 <input type="hidden" name="ID" data-bind="ID" value="0" />
-                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="0" />
+                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="${dados.ID}" />
                                 <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${e.name}"/>
                                 <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${dataURL}"/>
                             </div>`
@@ -606,31 +604,67 @@
             });
         }
 
-        $produto.addImages = function(button, element) {
-            let text = element.querySelector('.inner');
-            let input = element.querySelector('.top input');
+        $produto.inputClick = function(button) {
+            button.parentElement.querySelector('input').click();
+        }
 
-            input.click();
-            
-            //input change events
-            input.addEventListener('change', () => {
-                let file = input.files;
+        $produto.addImages = function(element) {
+            let text = document.querySelector('.inner');
+            let input = document.querySelector('.top input');
+            let dados = element.closest('#produto').data;
+            let file = input.files;
 
-                //Fazendo subistuição da imagem
-                for (let i = 0; i < file.length; i++) {
-
-                    if(files.every(e => e.name != file[i].name)){
-                        files.push(file[i]);
-                        showImages();
-                        return;
-                    }
+            //Fazendo subistuição da imagem
+            for (let i = 0; i < file.length; i++) {
+                if(files.every(e => e.name != file[i].name)){
+                    files.push(file[i]);
                 }
-                
-            });
+            }
+
+            showImages(dados);
         };
 
         $produto.removeImage = function(index, span) {
-            
+
+            let produtoID = span.parentElement.querySelector('[name = ProdutoID]').value;
+            let ID = span.parentElement.querySelector('[name = ID]').value;
+
+            if(produtoID != 0){
+                $min.ajax({
+                    url: $min.root() + $ui.relativePath + 'Cliente/ListaMensagemBandeirabyTipoCiclo?tipocicloID=' + tipoCiclo + '&bandeiraID=' + bandeira,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                    },
+                    onsuccess: function(response) {
+
+                        while (select.firstElementChild) {
+                            select.firstElementChild.remove();
+                        }
+
+                        let option = document.createElement('option');
+                        option.value = '';
+                        option.innerHTML = '- Selecione -';
+                        select.appendChild(option);
+
+                        for (let i = 0; i < response.length; i++) {
+                            option = document.createElement('option');
+                            option.value = response[i].ID;
+                            option.innerHTML = response[i].DescricaoMensagemBandeira;
+                            select.appendChild(option);
+                        }
+
+                    },
+                    onfailure: function(httpCode, httpMessage) {
+                        if (httpCode === 401) {
+                            let currentURL = window.location.href.replace($min.root() + $ui.relativePath, "");
+                            window.location.href = $min.root() + $ui.relativePath + $ui.redirectLoginURL + currentURL;
+                        }
+                        $ui.message(httpMessage, "error");
+                    }
+                    });
+            }
+
             if(index != 0){
                 files.splice(index, 1);
                 showImages();
@@ -724,7 +758,6 @@
             let dados = template.data;
             let images = dados.ProdutoImagens;
             let templateImg = '';
-            console.log(dados)
 
             let obj = {
                 ID: dados.ID,
@@ -755,6 +788,5 @@
             //console.log(templateImg)
             $min.bind(popup, obj);
         };
-
     })(window.$produto = window.$produto || {});
 </script>

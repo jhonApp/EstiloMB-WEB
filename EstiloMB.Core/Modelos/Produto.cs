@@ -119,12 +119,27 @@ namespace EstiloMB.Core
                     // - Modelo original.
                     Produto original = response.Data.ID != 0 ? database.Set<Produto>()
                                                                             .AsNoTracking()
-                                                                            .Include(e => e.ProdutoCategorias)
-                                                                            .Include(e => e.ProdutoCores)
+                                                                            .Include(e => e.ProdutoCategorias).ThenInclude(e => e.Categoria)
+                                                                            .Include(e => e.ProdutoCores).ThenInclude(e => e.Cor)
                                                                             .Include(e => e.ProdutoImagens)
-                                                                            .Include(e => e.ProdutoTamanhos)
+                                                                            .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
                                                                             .FirstOrDefault(e => e.ID == request.Data.ID)
                                                                             : null;
+
+                    for (int i = 0; i < request.Data?.ProdutoCategorias.Count; i++)
+                    {
+                        request.Data.ProdutoCategorias[i].Categoria = original.ProdutoCategorias[i].Categoria;
+                    }
+
+                    for (int i = 0; i < request.Data?.ProdutoCores.Count; i++)
+                    {
+                        request.Data.ProdutoCores[i].Cor = original.ProdutoCores[i].Cor;
+                    }
+
+                    for (int i = 0; i < request.Data?.ProdutoTamanhos.Count; i++)
+                    {
+                        request.Data.ProdutoTamanhos[i].Tamanho = original.ProdutoTamanhos[i].Tamanho;
+                    }
 
                     if (request.Data.ID == 0)
                     {
@@ -145,7 +160,9 @@ namespace EstiloMB.Core
                     }
                     else
                     {
-                        database.Set<ProdutoImagem>().RemoveRange(original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ProdutoID).Contains(e.ProdutoID)));
+                        //ProdutoImagem ProdutoImagem = original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ProdutoID).Contains(e.ProdutoID)).FirstOrDefault();
+                        //ProdutoImagem.Status = StatusParametro.Inativo;
+                        //request.Data.ProdutoImagens.Add(ProdutoImagem);
 
                         for (int i = 0; i < request.Data.ProdutoImagens.Count; i++)
                         {
