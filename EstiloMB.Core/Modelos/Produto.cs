@@ -160,9 +160,17 @@ namespace EstiloMB.Core
                     }
                     else
                     {
-                        //ProdutoImagem ProdutoImagem = original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ProdutoID).Contains(e.ProdutoID)).FirstOrDefault();
-                        //ProdutoImagem.Status = StatusParametro.Inativo;
-                        //request.Data.ProdutoImagens.Add(ProdutoImagem);
+                        List<ProdutoImagem> Imagems = original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ID).Contains(e.ID)).ToList();
+                        //database.Set<ProdutoImagem>().RemoveRange(original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ID).Contains(e.ID))
+
+
+                        if (Imagems != null)
+                        {
+                            foreach (var item in Imagems)
+                            {
+                                ProdutoImagem.Remove(item.ID);
+                            }
+                        }
 
                         for (int i = 0; i < request.Data.ProdutoImagens.Count; i++)
                         {

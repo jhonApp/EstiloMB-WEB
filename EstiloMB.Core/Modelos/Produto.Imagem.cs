@@ -18,7 +18,7 @@ namespace EstiloMB.Core
         [Required, MaxLength(255), LogProperty] public string ImageURL { get; set; }
         [NotMapped] public byte[] ImageData { get; set; }
 
-        public static Response<ProdutoImagem> Remove(int ID, int ProdutoID)
+        public static Response<ProdutoImagem> Remove(int ID)
         {
             Response<ProdutoImagem> reg = null;
 
@@ -26,19 +26,14 @@ namespace EstiloMB.Core
             {
                 using (Database<ProdutoImagem> database = new Database<ProdutoImagem>())
                 {
-                    ProdutoImagem produtoImagem = database.Set<ProdutoImagem>().Where(e => e.ID == ID && e.ProdutoID == ProdutoID).FirstOrDefault();
+                    ProdutoImagem produtoImagem = database.Set<ProdutoImagem>().Where(e => e.ID == ID).FirstOrDefault();
                     database.Remove(produtoImagem);
                     database.SaveChanges();
-
-                    reg.Code = ResponseCode.Sucess;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
-
-                reg.Code = ResponseCode.Invalid;
-                reg.Message = "Erro ao realizar a exlusão";
             }
 
             return reg;

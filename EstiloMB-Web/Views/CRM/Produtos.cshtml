@@ -111,7 +111,6 @@
                     </tfoot>*@
                 </table>
             </div>
-            
 
             @*--PopUp Produtos--*@
             <div class="popup-overlay" id="produto" onbind="this.data = data">
@@ -142,6 +141,7 @@
                                                         <span onclick="$produto.removeImage(0, this)" >&times;</span>
                                                         <input type="hidden" name="ID" data-bind="ID" />
                                                         <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
+                                                        <input type="hidden" name="Status" data-bind="Status" />
                                                         <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
                                                         <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
                                                     </div>
@@ -625,45 +625,6 @@
         };
 
         $produto.removeImage = function(index, span) {
-
-            let produtoID = span.parentElement.querySelector('[name = ProdutoID]').value;
-            let ID = span.parentElement.querySelector('[name = ID]').value;
-
-            if(produtoID != 0){
-                $min.ajax({
-                    url: $min.root() + $ui.relativePath + 'Cliente/ListaMensagemBandeirabyTipoCiclo?tipocicloID=' + tipoCiclo + '&bandeiraID=' + bandeira,
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
-                    },
-                    onsuccess: function(response) {
-
-                        while (select.firstElementChild) {
-                            select.firstElementChild.remove();
-                        }
-
-                        let option = document.createElement('option');
-                        option.value = '';
-                        option.innerHTML = '- Selecione -';
-                        select.appendChild(option);
-
-                        for (let i = 0; i < response.length; i++) {
-                            option = document.createElement('option');
-                            option.value = response[i].ID;
-                            option.innerHTML = response[i].DescricaoMensagemBandeira;
-                            select.appendChild(option);
-                        }
-
-                    },
-                    onfailure: function(httpCode, httpMessage) {
-                        if (httpCode === 401) {
-                            let currentURL = window.location.href.replace($min.root() + $ui.relativePath, "");
-                            window.location.href = $min.root() + $ui.relativePath + $ui.redirectLoginURL + currentURL;
-                        }
-                        $ui.message(httpMessage, "error");
-                    }
-                    });
-            }
 
             if(index != 0){
                 files.splice(index, 1);

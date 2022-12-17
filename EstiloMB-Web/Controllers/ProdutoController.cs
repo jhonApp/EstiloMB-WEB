@@ -33,9 +33,9 @@ namespace EstiloMB.Site.Controllers
         }
 
         [HttpPost]
-        public IActionResult Remove(int ID, int ProdutoID)
+        public IActionResult RemoveImagem(int ID)
         {
-            Response<ProdutoImagem> response = ProdutoImagem.Remove(ID, ProdutoID);
+            Response<ProdutoImagem> response = ProdutoImagem.Remove(ID);
             return Json(response);
         }
     }
