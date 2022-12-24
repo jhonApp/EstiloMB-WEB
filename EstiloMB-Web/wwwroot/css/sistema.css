@@ -38,7 +38,7 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: 220px;
+    width: 230px;
     z-index: 100;
     transition: all 0.5s ease;
     background: #B583EA;
@@ -181,7 +181,7 @@
             }
 
                 .sidenav .nav-link li a .link_name {
-                    /*font-size: 14px;*/
+                    font-size: 17px;
                     font-weight: 500;
                     color: #fff;
                     transition: all 0.4s ease;
@@ -193,12 +193,12 @@
         background-color: #B583EA;
     }
 
-    .logo > img {
-        margin-top: -15px;
-        margin-left: 25px;
-        height: 75px;
-        width: 80%;
-    }
+        .logo > img {
+            margin-top: -20px;
+            margin-left: 20px;
+            height: 90px;
+            width: 80%;
+        }
 
 /*span {
     display: inline-block;
@@ -221,7 +221,7 @@
 
 .content-grid {
     display: grid;
-    grid-template-columns: 13.7em 1fr;
+    grid-template-columns: 14.3em 1fr;
     grid-template-rows: 4em;
     height: auto;
     grid-template-areas:
@@ -431,6 +431,7 @@ table {
 .button-new { 
     padding: 10px 20px;
     outline: none;
+    font-size: 14px;
     border-radius: 6px;
 }
 
@@ -498,7 +499,7 @@ th, td {
     border-bottom: 1px solid #efefefc5;
     padding: 5px 10px;
     word-break: break-all;
-    font-size: 14px;
+    font-size: 16px;
     text-align: center;
 }
 
@@ -512,7 +513,7 @@ td img {
 tr:hover td {
     cursor: pointer;
     background-color: #f6f6f6c5;
-    transition: 0.3s;
+    transition: 0.1s;
 }
 
 /*------------------------------------------------------------------*/
@@ -602,11 +603,11 @@ button.icon:not(:disabled).remover:hover {
     overflow-y: auto;
     overflow-x: hidden;
     background-color: rgba(0, 0, 0, 0.5);
-    transition: 0.5s;
-    -webkit-transition: 0.5s;
-    -moz-transition: 0.5s;
-    -ms-trasition: 0.5s;
-    -o-transition: 0.5s;
+    transition: 0.2s;
+    -webkit-transition: 0.2s;
+    -moz-transition: 0.2s;
+    -ms-trasition: 0.2s;
+    -o-transition: 0.2s;
     z-index: -1;
     width: 100vw;
     height: 100vh;
@@ -683,7 +684,7 @@ form .user-details .label {
     padding: 0 0.5em;
     padding-top: 0.2em;
     /* border-bottom-width: 2px; */
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 .user-details .label .details {
     display: block;
@@ -1433,7 +1434,7 @@ list {
             background-color: #c49af1;
             padding-bottom: 0.3em;
             color: #fff;
-            font-size: 15px;
+            font-size: 17px;
             font-weight: 500;
         }
 

@@ -53,7 +53,7 @@ namespace EstiloMB.Core
                                                        .Include(e => e.ProdutoCategorias).ThenInclude(e => e.Categoria)
                                                        .Include(e => e.ProdutoCores).ThenInclude(e => e.Cor)
                                                        .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
-                                                       .OrderBy(e => e.ID);
+                                                       .OrderByDescending(e => e.ID);
 
                     response.Total = query.Count();
                     if (request.Page > 0) { query = query.Skip(request.PerPage * (request.Page - 1)); }
@@ -79,6 +79,21 @@ namespace EstiloMB.Core
             }
 
             return response;
+        }
+
+        public static Response<List<Produto>> Parametro(Request<Produto> request)
+        {
+            Response<Produto> response = new Response<Produto>() { Data = request.Data };
+            Response<List<Produto>> listResponse = new Response<List<Produto>>();
+
+            response = Salvar(request);
+
+            if(response.Code == ResponseCode.Sucess)
+            {
+                listResponse = Listar(request);
+            }
+
+            return listResponse;
         }
 
         public static Response<Produto> Salvar(Request<Produto> request)
@@ -117,29 +132,15 @@ namespace EstiloMB.Core
                     }
 
                     // - Modelo original.
-                    Produto original = response.Data.ID != 0 ? database.Set<Produto>()
-                                                                            .AsNoTracking()
-                                                                            .Include(e => e.ProdutoCategorias).ThenInclude(e => e.Categoria)
-                                                                            .Include(e => e.ProdutoCores).ThenInclude(e => e.Cor)
-                                                                            .Include(e => e.ProdutoImagens)
-                                                                            .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
-                                                                            .FirstOrDefault(e => e.ID == request.Data.ID)
-                                                                            : null;
+                    Produto original = database.Set<Produto>()
+                                                .AsNoTracking()
+                                                .Include(e => e.ProdutoCategorias).ThenInclude(e => e.Categoria)
+                                                .Include(e => e.ProdutoCores).ThenInclude(e => e.Cor)
+                                                .Include(e => e.ProdutoImagens)
+                                                .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
+                                                .FirstOrDefault(e => e.ID == request.Data.ID);
 
-                    for (int i = 0; i < request.Data?.ProdutoCategorias.Count; i++)
-                    {
-                        request.Data.ProdutoCategorias[i].Categoria = original.ProdutoCategorias[i].Categoria;
-                    }
-
-                    for (int i = 0; i < request.Data?.ProdutoCores.Count; i++)
-                    {
-                        request.Data.ProdutoCores[i].Cor = original.ProdutoCores[i].Cor;
-                    }
-
-                    for (int i = 0; i < request.Data?.ProdutoTamanhos.Count; i++)
-                    {
-                        request.Data.ProdutoTamanhos[i].Tamanho = original.ProdutoTamanhos[i].Tamanho;
-                    }
+                    
 
                     if (request.Data.ID == 0)
                     {
@@ -160,9 +161,9 @@ namespace EstiloMB.Core
                     }
                     else
                     {
-                        List<ProdutoImagem> Imagems = original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ID).Contains(e.ID)).ToList();
-                        //database.Set<ProdutoImagem>().RemoveRange(original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ID).Contains(e.ID))
+                        
 
+                        List<ProdutoImagem> Imagems = original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ID).Contains(e.ID)).ToList();
 
                         if (Imagems != null)
                         {
@@ -179,6 +180,10 @@ namespace EstiloMB.Core
 
                         database.Set<Produto>().Update(request.Data);
                         database.SaveChanges();
+
+                        request.Data.ProdutoCategorias = original.ProdutoCategorias;
+                        request.Data.ProdutoCores = original.ProdutoCores;
+                        request.Data.ProdutoTamanhos = original.ProdutoTamanhos;
 
                         new Log()
                         {
@@ -221,7 +226,6 @@ namespace EstiloMB.Core
                             }
                         }
                     }
-
                 }
 
                 response.Code = ResponseCode.Sucess;
@@ -275,7 +279,7 @@ namespace EstiloMB.Core
                         return response;
                     }
 
-                    database.Set<Produto>().Update(request.Data);
+                    database.Set<Produto>().Remove(request.Data);
                     database.SaveChanges();
 
                     new Log()

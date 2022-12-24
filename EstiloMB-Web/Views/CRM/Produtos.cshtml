@@ -75,7 +75,7 @@
                                     <button class="icon tooltip salvar"
                                             onclick="popup(this, this.closest('section').querySelector('#produto'), (e) => { $produto.bindProduto(e); })">
                                             <span class="tooltip-top">Salvar</span>
-                                            <i class="fas fa-check-circle"></i>
+                                            <i class="fas fa-pencil"></i>
                                     </button>
                                     <button class="icon tooltip remover"
                                         onclick="$ui.delete(this, this.closest('tr'))"
@@ -89,7 +89,7 @@
                             </tr>
                         </template>
                     </tbody>
-                    @*<tfoot>
+                    <tfoot>
                         <!-- Empty -->
                         <tr ui-content="empty">
                             <td class="text-center" colspan="10">
@@ -108,7 +108,7 @@
                                 </div>
                             </td>
                         </tr>
-                    </tfoot>*@
+                    </tfoot>
                 </table>
             </div>
 
@@ -433,7 +433,7 @@
                                         <input type="submit" 
                                             value="Salvar" 
                                             onclick="$ui.save(this, 'aside', (e, t) => { popup(e, this.closest('#produto')); })" 
-                                            data-url="Api/Produto/Salvar"
+                                            data-url="Api/Produto/Parametro"
                                             ui-saved-message="@loc["Registro atualizado."]"/>
                                     </div>
                                 </div>
@@ -585,6 +585,13 @@
             let images = '';
             let dataURL;
             let charge;
+            let produtoID = dados;
+
+            if(produtoID == undefined){
+                produtoID = 0;
+            }else{
+                produtoID = dados.ID
+            }
 
             //montando o container
             files.forEach((e, i) => {
@@ -594,7 +601,7 @@
                                 <span onclick="$produto.removeImage(${i})">&times;</span>
 
                                 <input type="hidden" name="ID" data-bind="ID" value="0" />
-                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="${dados.ID}" />
+                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="${produtoID}" />
                                 <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${e.name}"/>
                                 <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${dataURL}"/>
                             </div>`

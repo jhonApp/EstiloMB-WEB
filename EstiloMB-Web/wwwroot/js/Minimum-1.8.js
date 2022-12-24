@@ -1966,7 +1966,7 @@ if (!String.prototype.format) {
         if (contents.template) {
             $min.clear(contents);
         }
-
+        console.log(contents);
         load(contents);
     };
 
@@ -2092,7 +2092,7 @@ if (!String.prototype.format) {
                 }
 
                 let contents = item.closest('.page').querySelectorAll('tr.opacity-animation');
-                console.log(response.Data)
+                
 
                 for (let i = 0; i < contents.length; i++) {
                     if (contents[i].data.ID == response.Data.ID) {
@@ -2101,10 +2101,12 @@ if (!String.prototype.format) {
                     }
                 }
 
+                /*$min.bind(item.closest('.item'), response.Data);*/
                 item.data = response.Data;
                 item.isNew = false;
 
                 $ui.message(getMessage(button.getAttribute("ui-saved-message"), data), "success");
+                $ui.update(item.closest('.item'));
 
                 if (callback) {
                     callback(button, itemSelector, response);
