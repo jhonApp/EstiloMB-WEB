@@ -70,7 +70,7 @@
                                         </template>
                                     </div>
                                 </td>
-                                <td><span data-bind="Valor"></span></td>
+                                <td><span data-bind="Valor" onbind="formatPrice(this)"></span></td>
                                 <td>
                                     <button class="icon tooltip salvar"
                                             onclick="popup(this, this.closest('section').querySelector('#produto'), (e) => { $produto.bindProduto(e); })">
@@ -260,11 +260,16 @@
                                     <div class="col-6">
                                         <div class="label">
                                             <span class="details">Valor</span>
-                                            <input type="text" value="R$ 0,00" onkeyup="$mask.moeda(this)"
+                                            <input type="hidden" name="Valor" data-bind="Valor" onbind="$mask.valor(this)" valorDecimal />
+                                            <input type="text" value="R$ 0,00" 
+                                                    onkeyup="$mask.valor(this)"
+                                                    onbind="formatPrice(this)"
+                                                    data-bind="Valor"
+                                                    name="ValorText"
+                                                    valorTexto
                                                     required="required"
                                                     required-error="@loc["Este campo é obrigatório."]"
                                                     onblur="$min.validate(this)"/>
-                                                    <input type="hidden" name="Valor" data-bind="Valor" />
                                             <validation data-bind="Valor" data-group="error" onbind="$ui.bindError(this)"></validation>
                                         </div>
                                     </div>

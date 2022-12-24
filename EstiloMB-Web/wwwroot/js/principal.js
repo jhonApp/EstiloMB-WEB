@@ -25,14 +25,80 @@ function popup(element, template, callback) {
 
 }
 
-(function ($mask) {
+function formatPrice(element) {
 
+    let currency = element
+    let value = element.innerHTML != "" ? element.innerHTML : element.value;
+
+    if (isNaN(value)) {
+        currency.value = "R$ 0,00";
+        currency.innerHTML = "R$ 0,00";
+        return;
+    }
+
+    let formatter = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        minimumFractionDigits: 2,
+    });
+
+    let valorFormatado = formatter.format(value);
+
+    currency.value = valorFormatado;
+    currency.innerHTML = valorFormatado;
+
+    return formatter.format(value);
+}
+
+(function ($mascara) {
+
+    $mask.stringToDecimal = function (value, input) {
+
+        let inputDecimal = input.closest('.label').querySelector('input[valorDecimal]');
+        let inputText = input.closest('.label').querySelector('input[valorTexto]');
+        let text = "";
+
+        text = value.replace("R$", "");
+        text = text.replace(",", ".");
+        //console.log(text.match(/\./g).length)
+
+        if ((text.match(/\./g) || []).length > 1) {
+            text = text.replace("\.", "");
+        }
+
+        //console.log(inputDecimal)
+        //console.log(inputText)
+        inputDecimal.value = text;
+        inputText.value = "R$ " + value;
+    };
+
+    $mask.valor = function (input) {
+        let value = input.value;
+
+        if (value != NaN) {
+            value = value + '';
+            value = parseInt(value.replace(/[\D]+/g, ''));
+            value = value + '';
+            value = value.replace(/([0-9]{2})$/g, ",$1");
+
+            if (value.length > 6) {
+                value = value.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
+
+        } else {
+            value = '00,00'
+        }
+
+
+        input.value = value;
+        $mask.stringToDecimal(value, input);
+    };
 
     $mask.moeda = function (element) {
 
         let input = element.parentNode.querySelector('[name = Valor]');
         let value = element.value.replace(/\D/g, '');
-        
+
         value = (value / 100).toFixed(2) + '';
 
         //input.value será enviado para o bd
