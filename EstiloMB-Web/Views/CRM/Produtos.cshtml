@@ -120,36 +120,101 @@
                     <aside>
                         <div class="overflow">
                             <div class="user-details">
+                                @*--Imagem--*@
                                 <div class="cols">
-                                    @*--Imagem--*@
                                     <div class="col-12">
-                                        <div class="card-prod-image">
-                                            <div class="top">
-                                                <div>
-                                                    <p>Escolha as imagens de sua preferência</p>
-                                                    <p class="text-alert">Você poderá escolher até 4 imagens</p>
-                                                </div>
-                                                <button type="button" onclick="$produto.inputClick(this)">Selecionar</button>
-                                                <input name="file" type="file" class="file" onchange="$produto.addImages(this)"/>
-                                            </div>
-                                            <div data-array="ProdutoImagens" class="img-container">
-                                                <template>
-                                                    <div class="image">
-                                                        <img src="~/images/EmptyPhoto.png"
-                                                            preview="image"
-                                                            onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
-                                                        <span onclick="$produto.removeImage(0, this)" >&times;</span>
-                                                        <input type="hidden" name="ID" data-bind="ID" />
-                                                        <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
-                                                        <input type="hidden" name="Status" data-bind="Status" />
-                                                        <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
-                                                        <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
-                                                    </div>
-                                                </template>
-                                            </div>
+                                        <div class="label top-multiselect">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-0">
+                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
+                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
+                                                                <i class="far fa-plus"></i>
+                                                            </button>
+                                                        </th>
+                                                        <th>@loc[""]</th>
+                                                        <th>@loc["Imagem"]</th>
+                                                        <th>@loc["Cor"]</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-array="ProdutoImagens" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
+                                                    <template>
+                                                        <tr>
+                                                            <td class="col-0 text-center">
+                                                                <button class="button-icon red"
+                                                                        onclick="$ui.remove(this.closest('tr'))">
+                                                                    <span class="tooltip-top">@loc["Remover"]</span>
+                                                                    <i class="far fa-times"></i>
+                                                                </button>
+
+                                                                <!--IDs-->
+                                                                <input type="hidden" name="ID" data-bind="ID"/>
+                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID"/>
+                                                            </td>
+                                                            <td class="col-0 text-center">
+                                                                <div>
+                                                                    <div class="">
+                                                                        <div class="top">
+                                                                            <button type="button" onclick="$produto.inputClick(this)">Selecionar</button>
+                                                                            <input name="file" type="file" class="file" onchange="$produto.addImages(this)"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="card-prod-image">
+                                                                    <div class="img-container">
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <label>
+                                                                    <select data-bind="CorID"
+                                                                            required="required"
+                                                                            class="multiselect-container"
+                                                                            required-error="@loc["Este campo é obrigatório."]"
+                                                                            onblur="$min.validate(this)"
+                                                                            onchange="$produto.getCorID(this)" corID>
+                                                                        <option value="">@loc["- Selecione -"]</option>
+                                                                        @for (int i = 0; i < cores.Count; i++)
+                                                                        {
+                                                                            <option value="@cores[i].ID">@cores[i].Nome</option>
+                                                                        }
+                                                                    </select>
+                                                                    <validation data-bind="CorID" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                                                   @* <span class="label">@loc["Cor"]</span>*@
+                                                                </label>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                                <tfoot>
+                                                    <!-- Empty -->
+                                                    <tr ui-content="empty">
+                                                        <td class="text-center" colspan="10">
+                                                            @loc["Nenhuma categoria selecionada."]
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Loading -->
+                                                    <tr ui-content="loading">
+                                                        <td colspan="10">
+                                                            <div class="loading-bars">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
+
+                                @*--Nome e Descrição--*@
                                 <div class="cols">
                                     @*--Nome--*@
                                     <div class="col-6">
@@ -182,6 +247,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                @*--Categoria e Valor--*@
                                 <div class="cols">
                                     @*--Categoria--*@
                                     <div class="col-6">
@@ -274,157 +341,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="cols">
-                                    @*--Cor--*@
-                                    <div class="col-6">
-                                        <div class="label top-multiselect">
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th class="col-0">
-                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
-                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
-                                                                <i class="far fa-plus"></i>
-                                                            </button>
-                                                        </th>
-                                                        <th>@loc["Cores"]</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody data-array="ProdutoCores" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
-                                                    <template>
-                                                        <tr>
-                                                            <td class="col-0 text-center">
-                                                                <button class="button-icon red"
-                                                                        onclick="$ui.remove(this.closest('tr'))">
-                                                                    <span class="tooltip-top">@loc["Remover"]</span>
-                                                                    <i class="far fa-times"></i>
-                                                                </button>
-
-                                                                <!--IDs-->
-                                                                <input type="hidden" name="ID" data-bind="ID" />
-                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
-                                                            </td>
-                                                            <td>
-                                                                <label>
-                                                                    <select name="CorID" data-bind="CorID"
-                                                                            required="required"
-                                                                            class="multiselect-container"
-                                                                            required-error="@loc["Este campo é obrigatório."]"
-                                                                            onblur="$min.validate(this)"
-                                                                            onvalidation="validateSameValue(this)"
-                                                                            onvalidation-error="@loc["Esta cor já foi selecionada."]">
-                                                                        @for (int i = 0; i < cores.Count; i++)
-                                                                        {
-                                                                            <option value="@cores[i].ID">@cores[i].Nome</option>
-                                                                        }
-                                                                    </select>
-                                                                    <validation data-bind="CorID" data-group="error" onbind="$ui.bindError(this)"></validation>
-                                                                   @* <span class="label">@loc["Cor"]</span>*@
-                                                                </label>
-                                                            </td>
-                                                        </tr>
-                                                    </template>
-                                                </tbody>
-                                                <tfoot>
-                                                    <!-- Empty -->
-                                                    <tr ui-content="empty">
-                                                        <td class="text-center" colspan="10">
-                                                            @loc["Nenhum registro encontrado."]
-                                                        </td>
-                                                    </tr>
-
-                                                    <!-- Loading -->
-                                                    <tr ui-content="loading">
-                                                        <td colspan="10">
-                                                            <div class="loading-bars">
-                                                                <span></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    @*--Tamanho--*@
-                                    <div class="col-6">
-                                        <div class="label top-multiselect">
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th class="col-0">
-                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
-                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
-                                                                <i class="far fa-plus"></i>
-                                                            </button>
-                                                        </th>
-                                                        <th>@loc["Tamanhos"]</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody data-array="ProdutoTamanhos" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
-                                                    <template>
-                                                        <tr>
-                                                            <td class="col-0 text-center">
-                                                                <button class="button-icon red"
-                                                                        onclick="$ui.remove(this.closest('tr'))">
-                                                                    <span class="tooltip-top">@loc["Remover"]</span>
-                                                                    <i class="far fa-times"></i>
-                                                                </button>
-
-                                                                <!--IDs-->
-                                                                <input type="hidden" name="ID" data-bind="ID" />
-                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
-                                                            </td>
-                                                            <td>
-                                                                <label>
-                                                                    <select name="TamanhoID" data-bind="TamanhoID"
-                                                                            required="required"
-                                                                            class="multiselect-container"
-                                                                            required-error="@loc["Este campo é obrigatório."]"
-                                                                            onblur="$min.validate(this)"
-                                                                            onvalidation="validateSameValue(this)"
-                                                                            onvalidation-error="@loc["Este tamanho já foi selecionado."]"
-                                                                            data-url="Produto/RemoveTamanhosByID">
-                                                                        @for (int i = 0; i < tamanhos.Count; i++)
-                                                                        {
-                                                                            <option value="@tamanhos[i].ID">@tamanhos[i].Nome</option>
-                                                                        }
-                                                                    </select>
-                                                                    <validation data-bind="TamanhoID" data-group="error" onbind="$ui.bindError(this)"></validation>
-                                                                    @*<span class="validation" data-property="TamanhoID" data-group="error" onbind="$ui.error(this)"></span>*@
-                                                                    @*<span class="label">@loc["Tamanho"]</span>*@
-                                                                </label>
-                                                            </td>
-                                                        </tr>
-                                                    </template>
-                                                </tbody>
-                                                <tfoot>
-                                                    <!-- Empty -->
-                                                    <tr ui-content="empty">
-                                                        <td class="text-center" colspan="10">
-                                                            @loc["Nenhum registro encontrado."]
-                                                        </td>
-                                                    </tr>
-
-                                                    <!-- Loading -->
-                                                    <tr ui-content="loading">
-                                                        <td colspan="10">
-                                                            <div class="loading-bars">
-                                                                <span></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
+
+                            @*--Buttons--*@
                             <div class="cols">
                                 <div class="col-6">
                                     <div class="button-cadastro">
@@ -555,7 +474,7 @@
     (function($produto) {
 
         let files = [];
-        let container = document.querySelector('.img-container');
+        //let container = document.querySelector('.img-container');
 
         let ImgRender = (file, htmlObject, container) => {
 
@@ -575,17 +494,17 @@
             files = [];
         }
 
-        let convertObj = function(files, images) {
+        let convertObj = function(files, images, element) {
             var temp = document.createElement('div');  
 
             temp.innerHTML = images;
             var htmlObject = '';
-
+            let container = element.closest('tbody').querySelector('.img-container');
             htmlObject = temp.childNodes[0];
             ImgRender(files, htmlObject, container);
         }
 
-        const showImages = (dados) => {
+        const showImages = (dados, element, corID) => {
             
             let images = '';
             let dataURL;
@@ -600,19 +519,21 @@
 
             //montando o container
             files.forEach((e, i) => {
+                i++;
 
                 images += `<div class="image">
                                 <img preview="image" src="${URL.createObjectURL(e)}" alt="image" />
-                                <span onclick="$produto.removeImage(${i})">&times;</span>
+                                <span onclick="$produto.removeImage(${i}, this)">&times;</span>
 
                                 <input type="hidden" name="ID" data-bind="ID" value="0" />
+                                <input type="hidden" name="CorID" data-bind="CorID" value="${corID}" />
                                 <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="${produtoID}" />
                                 <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${e.name}"/>
                                 <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${dataURL}"/>
                             </div>`
 
                 //Fazendo a conversão do container para objeto
-                convertObj(e, images);
+                convertObj(e, images, element);
             });
         }
 
@@ -624,6 +545,7 @@
             let text = document.querySelector('.inner');
             let input = document.querySelector('.top input');
             let dados = element.closest('#produto').data;
+            let corID = document.querySelector('select[CorID]').value;
             let file = input.files;
 
             //Fazendo subistuição da imagem
@@ -633,19 +555,11 @@
                 }
             }
 
-            showImages(dados);
+            showImages(dados, element, corID);
         };
 
         $produto.removeImage = function(index, span) {
-
-            if(index != 0){
-                files.splice(index, 1);
-                showImages();
-            }
-
-            if(span.parentElement.children.ID?.value != 0){
-                span.parentElement.remove();
-            }
+            span.parentElement.remove();
         };
 
         $produto.changeOpen = function(element) {
@@ -761,5 +675,14 @@
             //console.log(templateImg)
             $min.bind(popup, obj);
         };
+
+        $produto.getCorID = function(element) {
+            let inputs = element.closest('tbody').querySelectorAll('.img-container > .image > input[name = CorID]');
+            console.log(inputs)
+            inputs.forEach(function(input) {
+                input.value = element.value;
+            });
+        };
+
     })(window.$produto = window.$produto || {});
 </script>

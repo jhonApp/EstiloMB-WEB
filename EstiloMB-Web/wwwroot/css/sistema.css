@@ -671,9 +671,8 @@ form .user-details .label {
 .multiselect-container,
 .user-details .label textarea,
 .user-details .label select,
-.user-details .label input,
-.user-details .label div {
-    height: 30px;
+.user-details .label input {
+    height: 33px;
     width: 100%;
     outline: none;
     border-radius: 5px;
@@ -898,7 +897,9 @@ form input[type="radio"]{
     }
 
 .card-prod-image {
+    max-width: 400px;
     max-height: 160px;
+    margin: 0 auto;
     height: auto;
     padding: 15px;
     /* box-shadow: 0 0 5px rgb(0 0 0 / 15%); */
@@ -909,21 +910,21 @@ form input[type="radio"]{
     /* background: #fafbff;*/
 }
 
-.card-prod-image .top {
+.top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-    .card-prod-image .top .text-alert,
-    .card-prod-image .top p {
+    .top .text-alert,
+    .top p {
         font-size: 15px;
         font-weight: 600;
         color: black;
     }
 
-    .card-prod-image .top button {
+    .top button {
         outline: 0;
         border: 0;
         -webkit-appearance: none;
@@ -1014,16 +1015,16 @@ form input[type="radio"]{
     overflow-y: auto;
 }
 
-.img-container .image {
-    height: 85px;
-    width: 85px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 7px;
-    margin-right: 7px;
-}
+    .img-container .image {
+        height: 120px;
+        width: 100%;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgb(0 0 0 / 15%);
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 7px;
+        margin-right: 7px;
+    }
 
     .img-container .image:nth-child(4n) {
         margin-right: 0;
