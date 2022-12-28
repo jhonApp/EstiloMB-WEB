@@ -341,6 +341,84 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="cols">
+                                    @*--Tamanho--*@
+                                    <div class="col-6">
+                                        <div class="label top-multiselect">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-0">
+                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
+                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
+                                                                <i class="far fa-plus"></i>
+                                                            </button>
+                                                        </th>
+                                                        <th>@loc["Tamanhos"]</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-array="ProdutoTamanhos" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
+                                                    <template>
+                                                        <tr>
+                                                            <td class="col-0 text-center">
+                                                                <button class="button-icon red"
+                                                                        onclick="$ui.remove(this.closest('tr'))">
+                                                                    <span class="tooltip-top">@loc["Remover"]</span>
+                                                                    <i class="far fa-times"></i>
+                                                                </button>
+
+                                                                <!--IDs-->
+                                                                <input type="hidden" name="ID" data-bind="ID" />
+                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
+                                                            </td>
+                                                            <td>
+                                                                <label>
+                                                                    <select name="TamanhoID" data-bind="TamanhoID"
+                                                                            required="required"
+                                                                            class="multiselect-container"
+                                                                            required-error="@loc["Este campo é obrigatório."]"
+                                                                            onblur="$min.validate(this)"
+                                                                            onvalidation="validateSameValue(this)"
+                                                                            onvalidation-error="@loc["Este tamanho já foi selecionado."]"
+                                                                            data-url="Produto/RemoveTamanhosByID">
+                                                                        @for (int i = 0; i < tamanhos.Count; i++)
+                                                                        {
+                                                                            <option value="@tamanhos[i].ID">@tamanhos[i].Nome</option>
+                                                                        }
+                                                                    </select>
+                                                                    <validation data-bind="TamanhoID" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                                                    @*<span class="validation" data-property="TamanhoID" data-group="error" onbind="$ui.error(this)"></span>*@
+                                                                    @*<span class="label">@loc["Tamanho"]</span>*@
+                                                                </label>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                                <tfoot>
+                                                    <!-- Empty -->
+                                                    <tr ui-content="empty">
+                                                        <td class="text-center" colspan="10">
+                                                            @loc["Nenhum registro encontrado."]
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Loading -->
+                                                    <tr ui-content="loading">
+                                                        <td colspan="10">
+                                                            <div class="loading-bars">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             @*--Buttons--*@
