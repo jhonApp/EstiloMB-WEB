@@ -1017,7 +1017,7 @@ form input[type="radio"]{
 
     .img-container .image {
         height: 120px;
-        width: 100%;
+        width: 50%;
         border-radius: 5px;
         box-shadow: 0 0 5px rgb(0 0 0 / 15%);
         overflow: hidden;

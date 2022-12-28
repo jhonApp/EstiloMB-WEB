@@ -27,7 +27,6 @@
                             <th>Imagem</th>
                             <th>Categoria</th>
                             <th>Tamanhos</th>
-                            <th>Cores</th>
                             <th>Valor</th>
                             <th></th>
                         </tr>
@@ -60,13 +59,6 @@
                                     <div data-array="ProdutoTamanhos">
                                         <template>
                                             <span data-bind="Tamanho.Nome" ></span>
-                                        </template>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div data-array="ProdutoCores">
-                                        <template>
-                                            <span data-bind="Cor.Nome"></span>
                                         </template>
                                     </div>
                                 </td>
@@ -165,6 +157,18 @@
                                                             <td>
                                                                 <div class="card-prod-image">
                                                                     <div class="img-container">
+                                                                        <div class="image">
+                                                                            <img src="~/image/Empty.jpg"
+                                                                                preview="image"
+                                                                                onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
+                                                                            <span onclick="$produto.removeImage(0, this)" >&times;</span>
+                                                                            <input type="hidden" name="ID" data-bind="ID" />
+                                                                            <input type="hidden" name="CorID" data-bind="CorID" />
+                                                                            <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
+                                                                            <input type="hidden" name="Status" data-bind="Status" />
+                                                                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                                                            <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -214,7 +218,7 @@
                                     </div>
                                 </div>
 
-                                @*--Nome e Descrição--*@
+                                @*--Nome e Valor--*@
                                 <div class="cols">
                                     @*--Nome--*@
                                     <div class="col-6">
@@ -231,8 +235,29 @@
                                         </div>
                                     </div>
                                     <input type="hidden" name="ID" data-bind="ID" />
-                                    @*--Descrição--*@
+                                    @*--Valor--*@
                                     <div class="col-6">
+                                        <div class="label">
+                                            <span class="details">Valor</span>
+                                            <input type="hidden" name="Valor" data-bind="Valor" onbind="$mask.valor(this)" valorDecimal />
+                                            <input type="text" value="R$ 0,00" 
+                                                    onkeyup="$mask.valor(this)"
+                                                    onbind="formatPrice(this)"
+                                                    data-bind="Valor"
+                                                    name="ValorText"
+                                                    valorTexto
+                                                    required="required"
+                                                    required-error="@loc["Este campo é obrigatório."]"
+                                                    onblur="$min.validate(this)"/>
+                                            <validation data-bind="Valor" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*--Descrição--*@
+                                <div class="cols">
+                                    @*--Descrição--*@
+                                    <div class="col-12">
                                         <div class="label">
                                             <span class="details">Descrição</span>
                                             <textarea type="text"
@@ -248,7 +273,7 @@
                                     </div>
                                 </div>
 
-                                @*--Categoria e Valor--*@
+                                @*--Categoria e Tamanho--*@
                                 <div class="cols">
                                     @*--Categoria--*@
                                     <div class="col-6">
@@ -323,26 +348,6 @@
                                             </table>
                                         </div>
                                     </div>
-                                    @*--Valor--*@
-                                    <div class="col-6">
-                                        <div class="label">
-                                            <span class="details">Valor</span>
-                                            <input type="hidden" name="Valor" data-bind="Valor" onbind="$mask.valor(this)" valorDecimal />
-                                            <input type="text" value="R$ 0,00" 
-                                                    onkeyup="$mask.valor(this)"
-                                                    onbind="formatPrice(this)"
-                                                    data-bind="Valor"
-                                                    name="ValorText"
-                                                    valorTexto
-                                                    required="required"
-                                                    required-error="@loc["Este campo é obrigatório."]"
-                                                    onblur="$min.validate(this)"/>
-                                            <validation data-bind="Valor" data-group="error" onbind="$ui.bindError(this)"></validation>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="cols">
                                     @*--Tamanho--*@
                                     <div class="col-6">
                                         <div class="label top-multiselect">
@@ -419,6 +424,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
 
                             @*--Buttons--*@
