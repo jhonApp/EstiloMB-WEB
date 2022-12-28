@@ -14,6 +14,7 @@ namespace EstiloMB.Core
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public int ProdutoID { get; set; }
+        public int CorID { get; set; }
         public StatusParametro Status { get; set; }
         [Required, MaxLength(255), LogProperty] public string ImageURL { get; set; }
         [NotMapped] public byte[] ImageData { get; set; }

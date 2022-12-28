@@ -51,7 +51,6 @@ namespace EstiloMB.Core
                                                        .AsNoTracking()
                                                        .Include(e => e.ProdutoImagens)
                                                        .Include(e => e.ProdutoCategorias).ThenInclude(e => e.Categoria)
-                                                       .Include(e => e.ProdutoCores).ThenInclude(e => e.Cor)
                                                        .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
                                                        .OrderByDescending(e => e.ID);
 
@@ -113,6 +112,7 @@ namespace EstiloMB.Core
 
                 using (Database<Produto> database = new Database<Produto>())
                 {
+
                     // - Validação.
                     response.Validation = Validation.Validate(request.Data);
 
@@ -135,7 +135,6 @@ namespace EstiloMB.Core
                     Produto original = database.Set<Produto>()
                                                 .AsNoTracking()
                                                 .Include(e => e.ProdutoCategorias).ThenInclude(e => e.Categoria)
-                                                .Include(e => e.ProdutoCores).ThenInclude(e => e.Cor)
                                                 .Include(e => e.ProdutoImagens)
                                                 .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
                                                 .FirstOrDefault(e => e.ID == request.Data.ID);
@@ -182,7 +181,6 @@ namespace EstiloMB.Core
                         database.SaveChanges();
 
                         request.Data.ProdutoCategorias = original.ProdutoCategorias;
-                        request.Data.ProdutoCores = original.ProdutoCores;
                         request.Data.ProdutoTamanhos = original.ProdutoTamanhos;
 
                         new Log()

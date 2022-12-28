@@ -6,6 +6,7 @@ CREATE TABLE Categoria (
 CREATE TABLE Cor (
 	ID INT IDENTITY PRIMARY KEY,
 	Nome NVARCHAR(50) NOT NULL,
+	Hexadecimal NVARCHAR(50) NOT NULL
 )
 
 CREATE TABLE Tamanho (
@@ -31,7 +32,6 @@ CREATE TABLE [Produto.Cor] (
 	CONSTRAINT FK_ProdutoCor FOREIGN KEY(CorID) REFERENCES Cor(ID),
 
 	Status INT NOT NULL
-
 );
 
 CREATE TABLE [Produto.Tamanho] (
@@ -48,6 +48,9 @@ CREATE TABLE [Produto.Tamanho] (
 
 CREATE TABLE [Produto.Imagem] (
 	ID INT IDENTITY PRIMARY KEY,
+
+	CorID INT NOT NULL,
+	CONSTRAINT FK_ImagemProdutoCor FOREIGN KEY(CorID) REFERENCES Cor(ID),
 
 	ProdutoID INT NOT NULL,
 	CONSTRAINT FK_ImagemProduto FOREIGN KEY(ProdutoID) REFERENCES Produto(ID),
@@ -266,9 +269,10 @@ INSERT INTO [Usuario.Perfil] (UsuarioID, PerfilID) VALUES (6, 1);
 --DROP
 --drop table Estoque
 --drop table ItemPedido
-drop table [Produto.Tamanho]
-drop table [Produto.Cor]
-drop table [Produto.Imagem]
-drop table [Produto.Categoria]
+--drop table [Produto.Tamanho]
+--drop table [Produto.Cor]
+--drop table [Produto.Imagem]
+--drop table [Produto.Categoria]
 --drop table Produto
+--drop table Cor
 --drop table Categoria
