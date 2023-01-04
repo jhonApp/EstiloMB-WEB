@@ -2094,12 +2094,13 @@ if (!String.prototype.format) {
                 let contents = item.closest('.page').querySelectorAll('tr.opacity-animation');
                 
 
-                for (let i = 0; i < contents.length; i++) {
-                    if (contents[i].data.ID == response.Data.ID) {
-                        console.log(contents[i])
-                        $min.bind(contents[i], response.Data);
-                    }
-                }
+                //for (let i = 0; i < contents.length; i++) {
+                //    console.log(response.Data)
+                //    if (contents[i].data.ID == response.Data.ID) {
+                //        console.log(contents[i])
+                //        $min.bind(contents[i], response.Data);
+                //    }
+                //}
 
                 /*$min.bind(item.closest('.item'), response.Data);*/
                 item.data = response.Data;

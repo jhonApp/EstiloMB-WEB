@@ -115,7 +115,7 @@
                                 @*--Imagem--*@
                                 <div class="cols">
                                     <div class="col-12">
-                                        <div class="label top-multiselect">
+                                        <div class="label top-multiselect product-img">
                                             <table>
                                                 <thead>
                                                     <tr>
@@ -141,8 +141,8 @@
                                                                 </button>
 
                                                                 <!--IDs-->
-                                                                <input type="hidden" name="ID" data-bind="ID"/>
-                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID"/>
+                                                                @*<input type="hidden" name="ID" data-bind="ID"/>
+                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID"/>*@
                                                             </td>
                                                             <td class="col-0 text-center">
                                                                 <div>
@@ -157,18 +157,6 @@
                                                             <td>
                                                                 <div class="card-prod-image">
                                                                     <div class="img-container">
-                                                                        <div class="image">
-                                                                            <img src="~/image/Empty.jpg"
-                                                                                preview="image"
-                                                                                onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } "/>
-                                                                            <span onclick="$produto.removeImage(0, this)" >&times;</span>
-                                                                            <input type="hidden" name="ID" data-bind="ID" />
-                                                                            <input type="hidden" name="CorID" data-bind="CorID" />
-                                                                            <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
-                                                                            <input type="hidden" name="Status" data-bind="Status" />
-                                                                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
-                                                                            <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </td>
@@ -176,7 +164,7 @@
                                                                 <label>
                                                                     <select data-bind="CorID"
                                                                             required="required"
-                                                                            class="multiselect-container"
+                                                                            class="cor multiselect-container"
                                                                             required-error="@loc["Este campo é obrigatório."]"
                                                                             onblur="$min.validate(this)"
                                                                             onchange="$produto.getCorID(this)" corID>
@@ -187,7 +175,6 @@
                                                                         }
                                                                     </select>
                                                                     <validation data-bind="CorID" data-group="error" onbind="$ui.bindError(this)"></validation>
-                                                                   @* <span class="label">@loc["Cor"]</span>*@
                                                                 </label>
                                                             </td>
                                                         </tr>
@@ -440,7 +427,7 @@
                                     <div class="button-cadastro">
                                         <input type="submit" 
                                             value="Salvar" 
-                                            onclick="$ui.save(this, 'aside', (e, t) => { popup(e, this.closest('#produto')); })" 
+                                            onclick="$ui.save(this,'aside', (e, t) => { popup(e, this.closest('#produto')); })" 
                                             data-url="Api/Produto/Parametro"
                                             ui-saved-message="@loc["Registro atualizado."]"/>
                                     </div>
@@ -487,12 +474,77 @@
         console.log(data);
     }
 
+    function imageEmpty(data){
+        
+        let images;
+        let caminho;
+
+        let convertObj = function(images) {
+
+            var htmlObject = '';
+            let container = document.querySelector('.img-container');
+            var temp = document.createElement('div');
+
+            temp.innerHTML = images;
+            htmlObject = temp.childNodes[1];
+            return htmlObject;
+        }
+
+        let corAnterior;
+
+        for(let i = 0; i < data.ProdutoImagens.length; i++){
+
+            ID = data.ProdutoImagens[i].ID;
+            CorID = data.ProdutoImagens[i].CorID;
+            ProdutoID = data.ProdutoImagens[i].ProdutoID;
+            ImageURL = data.ProdutoImagens[i].ImageURL;
+
+            if(corAnterior == undefined){
+                corAnterior = CorID;
+            }
+
+            images += `<div class="image">
+                            <img preview="image" src="${caminho}" alt="image" />
+                            <span onclick="$produto.removeImage(${i}, this)">&times;</span>
+
+                            <input type="hidden" name="ID" data-bind="ID" value="${ID}" />
+                            <input type="hidden" name="CorID" data-bind="CorID" value="${CorID}" />
+                            <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="${ProdutoID}" />
+                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${ImageURL}"/>
+                        </div>`
+
+            images = convertObj(images);
+            caminho = images.querySelector('img').src = '@Url.Content("~/")' + 'Produtos/' + ImageURL;
+            
+            let selects = document.querySelectorAll('select.cor');
+
+            selects.forEach(function(select){
+                if(select.value == CorID){
+                    select.closest('tr').querySelector('.img-container').appendChild(images);
+                }
+            });
+            
+            corAnterior = CorID;
+        }
+
+        let vazios = document.querySelectorAll('.img-container');
+
+        vazios.forEach(function(vazio){
+            
+            if(vazio.firstElementChild == null){
+                vazio.closest('tr').remove();
+            }
+        });
+    }
+
     function validateSameValue(select) {
         let tbody = select.closest("tbody");
         let selects = tbody.querySelectorAll("[name=" + select.name + "]");
 
         for (let i = 0; i < selects.length; i++) {
+            console.log(selects[i].value)
             if (selects[i].value === select.value && selects[i] !== select) {
+                
                 return false;
             }
         }
@@ -585,6 +637,7 @@
             var htmlObject = '';
             let container = element.closest('tbody').querySelector('.img-container');
             htmlObject = temp.childNodes[0];
+
             ImgRender(files, htmlObject, container);
         }
 
@@ -643,7 +696,13 @@
         };
 
         $produto.removeImage = function(index, span) {
-            span.parentElement.remove();
+
+            if(span.parentElement.parentElement.querySelectorAll('.image').length >= 2){
+               span.parentElement.remove();
+
+            }else{
+                span.closest('tr').remove();
+            }
         };
 
         $produto.changeOpen = function(element) {
@@ -736,34 +795,18 @@
                 Descricao: dados.Descricao,
                 Valor: dados.Valor,
                 ProdutoImagens: dados.ProdutoImagens,
-                ProdutoCores: dados.ProdutoCores,
                 ProdutoTamanhos: dados.ProdutoTamanhos,
                 ProdutoCategorias: dados.ProdutoCategorias,
             };
-
+            console.log(obj)
             let popup = template.closest('section').querySelector('#produto');
-
-            //montando o container
-            //images.forEach((e) => {
-
-            //    templateImg += `<div class="image">
-            //                    <img preview="image" src="${URL.createObjectURL(e)}" alt="image" />
-            //                    <span onclick="$produto.removeImage(${i})">&times;</span>
-
-            //                    <input type="hidden" name="ID" data-bind="ID" value="${e.ID}" />
-            //                    <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="${e.ProdutoID}" />
-            //                    <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${e.ImageURL}"/>
-            //                    <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${e.ImageData}"/>
-            //                </div>`
-            //});
-            //console.log(templateImg)
             $min.bind(popup, obj);
+            imageEmpty(obj)
         };
 
         $produto.getCorID = function(element) {
-            let inputs = element.closest('tbody').querySelectorAll('.img-container > .image > input[name = CorID]');
-            console.log(inputs)
-            inputs.forEach(function(input) {
+            let inputs = element.closest('tr').querySelectorAll('.img-container > .image > input[name = CorID]');
+            inputs.forEach(function(input){
                 input.value = element.value;
             });
         };

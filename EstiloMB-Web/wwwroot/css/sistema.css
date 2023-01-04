@@ -143,14 +143,14 @@
                                 transform: translateY(-50%);
                             }
 
-                            .sidenav .nav-link li .sub-menu a {
-                                color: white;
-                                /*font-size: 15px;*/
-                                padding: 5px 0;
-                                white-space: nowrap;
-                                opacity: 0.6;
-                                transition: all 0.3s ease;
-                            }
+    .sidenav .nav-link li .sub-menu a {
+        color: white;
+        font-size: 17px;
+        padding: 5px 0;
+        white-space: nowrap;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+    }
 
                     .sidenav .nav-link li .sub-menu a:hover {
                         opacity: 1;
