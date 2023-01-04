@@ -143,14 +143,14 @@
                                 transform: translateY(-50%);
                             }
 
-                            .sidenav .nav-link li .sub-menu a {
-                                color: white;
-                                /*font-size: 15px;*/
-                                padding: 5px 0;
-                                white-space: nowrap;
-                                opacity: 0.6;
-                                transition: all 0.3s ease;
-                            }
+    .sidenav .nav-link li .sub-menu a {
+        color: white;
+        font-size: 17px;
+        padding: 5px 0;
+        white-space: nowrap;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+    }
 
                     .sidenav .nav-link li .sub-menu a:hover {
                         opacity: 1;
@@ -1017,7 +1017,7 @@ form input[type="radio"]{
 
     .img-container .image {
         height: 120px;
-        width: 100%;
+        width: 50%;
         border-radius: 5px;
         box-shadow: 0 0 5px rgb(0 0 0 / 15%);
         overflow: hidden;

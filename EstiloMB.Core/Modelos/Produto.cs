@@ -24,11 +24,9 @@ namespace EstiloMB.Core
         public string Descricao { get; set; }
         public decimal Valor { get; set; }
         public StatusParametro Status { get; set; }
-
-        public List<ProdutoImagem> ProdutoImagens { get; set; }
         public List<ProdutoCategoria> ProdutoCategorias { get; set; }
         public List<ProdutoTamanho> ProdutoTamanhos { get; set; }
-        public List<ProdutoCor> ProdutoCores { get; set; }
+        public List<ProdutoImagem> ProdutoImagens { get; set; }
 
         public static Response<List<Produto>> Listar(Request<Produto> request)
         {
@@ -87,7 +85,7 @@ namespace EstiloMB.Core
 
             response = Salvar(request);
 
-            if(response.Code == ResponseCode.Sucess)
+            if (response.Code == ResponseCode.Sucess)
             {
                 listResponse = Listar(request);
             }
@@ -139,7 +137,6 @@ namespace EstiloMB.Core
                                                 .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
                                                 .FirstOrDefault(e => e.ID == request.Data.ID);
 
-                    
 
                     if (request.Data.ID == 0)
                     {
@@ -160,7 +157,7 @@ namespace EstiloMB.Core
                     }
                     else
                     {
-                        
+
 
                         List<ProdutoImagem> Imagems = original.ProdutoImagens.Where(e => !request.Data.ProdutoImagens.Select(r => r.ID).Contains(e.ID)).ToList();
 
