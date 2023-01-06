@@ -1,0 +1,206 @@
+﻿@using EstiloMB.Core;
+@using EstiloMB.MVC;
+@inject Localization loc
+@{
+    ViewData["Title"] = "Categoria";
+    Layout = "~/Views/CRM/Shared/_Layout.cshtml";
+}
+<content>
+    <section class="page content-sis" ui="container" id="categoria">
+        <div class="item">
+            <div class="table-header">
+                <div>
+                    <button class="button-new" name="active" onclick="popup(this, this.closest('section').querySelector('#categoria'))">
+                        Nova Categoria
+                    </button>
+                </div>
+            </div>
+            <div class="table-content">
+                <table class="table left-edit">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody ui-content="data" ui-load="auto" data-url="Api/Categoria/Listar" >
+                        <template>
+                            <tr class="opacity-animation" onbind="this.data = data" name="active">
+                                <td>
+                                    <span class="text-line-2" data-bind="Nome"></span>
+                                    <input type="hidden" name="ID" data-bind="ID" />
+                                </td>
+                                <td>
+                                    <button class="icon tooltip salvar"
+                                            onclick="popup(this, this.closest('section').querySelector('#categoria'), (e) => { $categoria.bindCategoria(e); })">
+                                            <span class="tooltip-top">Salvar</span>
+                                            <i class="fas fa-pencil"></i>
+                                    </button>
+                                    <button class="icon tooltip remover"
+                                        onclick="$ui.delete(this, this.closest('tr'))"
+                                        data-url="Api/Categoria/Remover"
+                                        ui-confirm-message="Tem certeza que deseja remover a Categoria?"
+                                        ui-deleted-message="Categoria removida.">
+                                        <span class="tooltip-top">Remover</span>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                    <tfoot>
+                        <!-- Empty -->
+                        <tr ui-content="empty">
+                            <td class="text-center" colspan="10">
+                                @loc["Nenhum registro encontrado."]
+                            </td>
+                        </tr>
+
+                        <!-- Loading -->
+                        <tr ui-content="loading">
+                            <td colspan="10">
+                                <div class="loading-bars">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            @*--PopUp Categoria--*@
+            <div class="popup-overlay" id="categoria" onbind="this.data = data">
+                <div class="popup-box-container">
+                    <a onclick="popup(this, this.closest('#categoria'))" class="close"><i class="far fa-times icon"></i></a>
+                    <div class="title">Categoria</div>
+                    <aside>
+                        <div class="overflow">
+                            <div class="user-details">
+                                @*--Nome e ID--*@
+                                <div class="cols">
+                                    <input type="hidden" name="ID" data-bind="ID" />
+
+                                    @*--Nome--*@
+                                    <div class="col-12">
+                                        <div class="label">
+                                            <span class="details"> Nome</span>
+                                            <input type="text"
+                                                   required="required"
+                                                   name="Nome" data-bind="Nome"
+                                                   required-error="@loc["Este campo é obrigatório."]"
+                                                   maxlength="50"
+                                                   maxlength-error="@loc["Este campo não pode ter mais do que 50 caracteres."]"
+                                                   onblur="$min.validate(this)"/>
+                                            <validation data-bind="Nome" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                            @*--Buttons--*@
+                            <div class="cols">
+                                <div class="col-6">
+                                    <div class="button-cadastro">
+                                        <input type="submit" 
+                                            value="Cancelar" 
+                                            onclick="popup(this, this.closest('#categoria'))"/>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="button-cadastro">
+                                        <input type="submit" 
+                                            value="Salvar" 
+                                            onclick="$ui.save(this,'aside', (e, t) => { popup(e, this.closest('#categoria')); })" 
+                                            data-url="Api/Categoria/Salvar"
+                                            ui-saved-message="@loc["Registro atualizado."]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+</content>
+
+<script type="text/javascript">
+
+    $ui.update(document.getElementById("categoria"));
+    
+    (function($rols) {
+
+        $rols.updateList = function(select){
+            console.log(select)
+            if (select.value == '') {
+                while (select.firstElementChild) {
+                    select.firstElementChild.remove();
+                }
+
+                let option = document.createElement('option');
+                option.value = '';
+                option.innerHTML = '- Selecione -';
+                select.appendChild(option);
+
+                return;
+            }
+
+            //let url = $min.root() + $ui.relativePath + 'Cliente/GetDS2ByDS1?DSSolucao1=' + select.value;
+            let url = $min.root() + $ui.relativePath + select.getAttribute("data-url") + '?ID=' + select.value;
+            console.log(url)
+            $min.ajax({
+                url: url,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                },
+                onsuccess: function(response) {
+                    console.log(response);
+                    while (select.firstElementChild) {
+                        select.firstElementChild.remove();
+                    }
+
+                    let option = document.createElement('option');
+                    option.value = '';
+                    option.innerHTML = '- Selecione -';
+                    select.appendChild(option);
+
+                    for (let i = 0; i < response.length; i++) {
+                        option = document.createElement('option');
+                        option.value = response[i].ID;
+                        option.innerHTML = response[i].DescricaoSolucaoProcesso;
+                        select.appendChild(option);
+                    }
+                },
+                onfailure: function(httpCode, httpMessage) {
+                    if (httpCode === 401) {
+                        let currentURL = window.location.href.replace($min.root() + $ui.relativePath, "");
+                        window.location.href = $min.root() + $ui.relativePath + $ui.redirectLoginURL + currentURL;
+                    }
+                    $ui.message(httpMessage, "error");
+                }
+            });
+        }
+    })(window.$rols = window.$rols || {});
+
+    (function($categoria) {
+
+        $categoria.bindCategoria = function(element) {
+            let template = element.closest('tr');
+            let dados = template.data;
+
+            let obj = {
+                ID: dados.ID,
+                Nome: dados.Nome,
+            };
+            console.log(obj)
+            let popup = template.closest('section').querySelector('#categoria');
+            $min.bind(popup, obj);
+        };
+
+    })(window.$categoria = window.$categoria || {});
+</script>
