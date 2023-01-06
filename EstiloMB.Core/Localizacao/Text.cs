@@ -59,6 +59,10 @@ namespace EstiloMB.Core
 
         #region [Categoria]
         internal const string Categoria = "Categoria";
+        internal const string CategoriaNomeJaRegistrado = "Esta Categoria Ja foi Registrada";
+        internal const string CategoriaCriada = "Categoria criada com sucesso";
+        internal const string CategoriaEmUso = "Esta categoria está sendo utilizada";
+
         #endregion
 
         #region [Cor]
@@ -67,7 +71,7 @@ namespace EstiloMB.Core
 
         #region [Produto]
         internal const string Produto = "Produto";
-        internal const string ProdutoNomeJaRegistrado = "ProdutoNomeJaRegistrado";
+        internal const string ProdutoNomeJaRegistrado = "Este Produto Ja foi Registrado";
         internal const string ProdutoCriado = "ProdutoCriado";
         #endregion
 
