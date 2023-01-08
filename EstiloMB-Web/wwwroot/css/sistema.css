@@ -1630,3 +1630,7 @@ list {
             object-fit: cover;
             cursor: pointer;
         }
+
+input[type = color] {
+    background-color: white;
+}
