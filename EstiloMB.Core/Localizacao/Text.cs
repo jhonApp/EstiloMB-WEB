@@ -67,6 +67,9 @@ namespace EstiloMB.Core
 
         #region [Cor]
         internal const string Cor = "Cor";
+        internal const string CorNomeJaRegistrado = "Esta Cor Ja foi Registrada";
+        internal const string CorCriada = "Cor criada com sucesso";
+        internal const string CorEmUso = "Esta cor está sendo utilizada";
         #endregion
 
         #region [Produto]
