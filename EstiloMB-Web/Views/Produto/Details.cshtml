@@ -1,119 +1,279 @@
-﻿@{
+﻿@using EstiloMB.Core
+@{
     ViewData["Title"] = "Detalhes";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int produtoID = ViewBag.ProdutoID;
 }
 <content>
-    <div class="colsWeb">
+    <div class="colsWeb" id="detalhes">
         <div class="left">
-            <div class="grid-content">
-                <div class=" big-img">
-                     <div class="swiper mySwiper2">
-                      <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src=~/image/vertical-photo1.jpg/></div>
-                        <div class="swiper-slide"><img src=~/image/vertical-photo2.jpg/></div>
-                        <div class="swiper-slide"><img src=~/image/vertical-photo3.jpg/></div>
-                      </div>
-                      <div class="swiper-pagination"></div>
+            <div class="grid-content" ui-content="data" onbind="this.data = data; console.log(data)">
+                <div class="big-img">
+                    <div class="swiper mySwiper2">
+                        <!-- Imagem -->
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <img onbind="if (data.CaminhoProduto) { this.src = '@Url.Content("~/Produtos/")' + data.CaminhoProduto; } else { this.src = '@Url.Content("/images/EmptyPhoto.png")'; }"
+                                     default="@Url.Content("~/images/EmptyPhoto.png")" />
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
                 <div class="info-details">
-                    <h1>Camiseta Manga Curta Estampa Silk Rosa Approve para MB</h1>
+                    <h1><span data-bind="Nome"></span></h1>
                     <div class="line">
-                        <p><span>por </span><strong class="price">R$140,00</strong></p>
+                        <!-- Valor -->
+                        <p><span>por </span><strong class="price">R$ <span data-bind="Valor"></span> </strong></p>
                         <p><span>em até </span><strong>12x</strong><span> de </span><strong>R$15,00</strong></p>
                     </div>
                     <div class="line">
+                        <!-- Cor -->
                         <p><span>escolha a cor : </span></p>
-                        <div class="flex">
-                            <p><input type="radio" name="radio1" class="radio" checked/></p>
-                            <p><input type="radio" name="radio1" class="radio" /></p>
-                            <p><input type="radio" name="radio1" class="radio" /></p>
+                        <div class="flex" data-array="ProdutoCor">
+                            <template>
+                                <p><input type="radio" name="radio1" class="produtoCor radio" onclick="$produto.bindImagebyCor(this, this.closest('.colsWeb'))" data-bind="Hexadecimal" /></p>
+                            </template>
                         </div>
                     </div>
                     <div class="line">
+                        <!-- Tamanho -->
                         <p><span>escolha o tamanho : </span></p>
-                        <div class="flex">
-                            <div>
-                                <input type="radio" class="input-size" name="1"/>
+                        <div class="flex" data-array="ProdutoTamanhos">
+                            <template>
                                 <div class="radio-size">
-                                    <span>M</span>
+                                    <input type="radio" class="input-size" data-bind="Tamanho.Nome" />
+                                    <span data-bind="Tamanho.Nome"></span>
                                 </div>
-                            </div>
+                            </template>
                         </div>
                     </div>
                     <div class="line">
                         <button class="button-pay"><a href="~/Produto/Sacola">COMPRAR</a></button>
                     </div>
                     <div class="line">
-                        <p><span>Especificações : </span></p>
+                        <p><span>Especificações : <span data-bind="Descricao"></span></span></p>
                     </div>
                 </div>
                 <div>
                     <div class="swiper mySwiper">
-                        <div class="images swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="small-img">
-                                    <img src=~/image/vertical-photo1.jpg/>
-                                </div>
-                            </div>
-                            <div class=" swiper-slide">
-                                <div class="small-img">
-                                    <img src=~/image/vertical-photo2.jpg/>
-                                </div>
-                            </div>
-                           <div class=" swiper-slide">
-                                <div class="small-img">
-                                    <img src=~/image/vertical-photo3.jpg/>
-                                </div>
+                        <div class="smallImg images swiper-wrapper">
+                            <div data-array="ProdutoImagens">
+                                <template>
+                                    <div class="swiper-slide">
+                                        <div class="small-img">
+                                            <img data-bind="ImageURL" />
+                                        </div>
+                                    </div>
+                                </template>
                             </div>
                         </div>
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </content>
-
 <script>
 
-    //let bigImg = document.querySelector('.big-img img');
-    //function showImg(pic){
-    //    bigImg.src = pic;
-    //}
+    (function($produto) {
 
-    //var swiper = new Swiper(".mySwiper", {
-    //    pagination: {
-    //      el: ".swiper-pagination",
-    //      type: "fraction",
-    //    },
-    //    navigation: {
-    //      nextEl: ".swiper-button-next",
-    //      prevEl: ".swiper-button-prev",
-    //    },
-    //  });
+        var init = function (container) {
+            let contents = container.querySelector("[ui-content='data']");
+            if (!contents) { return false; }
 
+            contents.isAutoLoad = (contents.getAttribute("ui-load") || "").toLowerCase() === "auto";
+
+            if (!contents.initialized) {
+                contents.container = container;
+                contents.pixelAutoLoadThreshold = 25;
+                contents.maxPageCount = parseInt(contents.getAttribute("maxPageCount"), 10) || 10;
+
+                contents.url = contents.getAttribute("data-url");
+                contents.template = contents.template || contents.querySelector(":scope > template") || false;
+
+                let elements = null;
+
+                elements = container.querySelectorAll("[ui-content='filter']") || false;
+                for (let i = 0; i < elements.length; i++) {
+                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    if (target) { target.filter = elements[i]; continue; }
+
+                    contents.filter = elements[i];
+                }
+
+                //elements = container.querySelectorAll("[ui-content='empty']") || false;
+                //for (let i = 0; i < elements.length; i++) {
+                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                //    if (target) { target.empty = elements[i]; continue; }
+
+                //    contents.empty = elements[i];
+                //}
+
+                //elements = container.querySelectorAll("[ui-content='loading']") || false;
+                //for (let i = 0; i < elements.length; i++) {
+                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                //    if (target) { target.loading = elements[i]; continue; }
+
+                //    contents.loading = elements[i];
+                //}
+
+                elements = container.querySelectorAll("[ui-content='paging']") || false;
+                for (let i = 0; i < elements.length; i++) {
+                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    if (target) {
+                        target.paging = elements[i];
+                    }
+                    else {
+                        target = contents;
+                        target.paging = elements[i];
+                    }
+
+                    target.paging.pages = target.paging.querySelector("[ui-content='pages']") || false;
+                    target.paging.prevPage = target.paging.querySelector("[ui-content='prev-page']") || false;
+                    target.paging.nextPage = target.paging.querySelector("[ui-content='next-page']") || false;
+                }
+
+                contents.initialized = true;
+            }
+
+            return contents;
+        };
+
+        $produto.carregar = function(container, id) {
+            let contents = init(container);
+            if (!contents) { return false; }
+
+            if (contents.filter) {
+                contents.request.Data = $min.read(contents.filter);
+            }
+
+            if (contents.template) {
+                $min.clear(contents);
+            }
+            console.log(contents);
+            $min.ajax({
+                url: $min.root() + $ui.relativePath + 'Produto/GetProdutoByID?ID=' + @produtoID,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                },
+                onsuccess: function (response) {
+                    let corAnterior = [];
+                    let newProdutoImages = [];
+
+                    for(let i = 0; i < response.Data.ProdutoImagens.length; i++){
+                        corAnterior.push(response.Data.ProdutoImagens[i].Cor);
+                    }
+
+                    let newProdutoCor = corAnterior.filter(function (a) {
+                        return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true);
+                    }, Object.create(null));
+
+                    for(let i = 0; i < response.Data.ProdutoImagens.length; i++){
+                        if(newProdutoCor[0].Hexadecimal == response.Data.ProdutoImagens[i].Cor.Hexadecimal){
+                            newProdutoImages.push(response.Data.ProdutoImagens[i]);
+                        }
+                    }
+
+                    let obj = {
+                        ProdutoImagensOriginal: response.Data.ProdutoImagens,
+                        ProdutoImagens: newProdutoImages,
+                        ProdutoCor: newProdutoCor,
+                        ProdutoTamanhos: response.Data.ProdutoTamanhos,
+                        CaminhoProduto: response.Data.ProdutoImagens[0].ImageURL,
+                        Valor: response.Data.Valor,
+                        Descricao: response.Data.Descricao,
+                        Nome: response.Data.Nome
+                    };
+
+                    $min.bind(contents, obj);
+                    $produto.bindImages(contents, obj);
+                    $produto.bindCor(contents, obj);
+
+                },
+                onfailure: function (httpCode, httpMessage) {
+
+                }
+            });
+        };
+
+        $produto.bindImagebyCor = function (input, contents){
+            let dados = input.closest('.grid-content').data;
+            let newProdutoImages = [];
+            let bigIMG = contents.querySelector('.big-img');
+            let smallIMG = contents.querySelector('.smallImg');
+
+            for(var i = 0; i < dados.ProdutoImagensOriginal.length; i++)
+            {
+              if(dados.ProdutoImagensOriginal[i].Cor.Hexadecimal == input.value)
+              {
+                  newProdutoImages.push(dados.ProdutoImagensOriginal[i]);
+              }
+            }
+
+            let obj = {
+                ProdutoImagensOriginal: dados.ProdutoImagens,
+                ProdutoImagens: newProdutoImages,
+                CaminhoProduto: newProdutoImages[0].ImageURL,
+            };
+
+            $min.bind(bigIMG, obj);
+            $min.bind(smallIMG, obj);
+            $produto.bindBigImages(bigIMG, obj);
+            $produto.bindImages(smallIMG, obj);
+        }
+
+        $produto.bindBigImages = function (content, data) {
+            let img = content.querySelector('img');
+            img.src = '@Url.Content("~/Produtos/")' + data.CaminhoProduto;
+        };
+
+        $produto.bindImages = function (content, data) {
+            let imgs = content.querySelectorAll('.small-img > img');
+
+            for(let i = 0; i < imgs.length; i++){
+                imgs[i].src = '@Url.Content("~/Produtos/")' + data.ProdutoImagens[i].ImageURL;
+            }
+        };
+
+        $produto.bindCor = function (content, data) {
+            let inputs = content.querySelectorAll(".produtoCor");
+
+            for(let i = 0; i < inputs.length; i++){
+                if(i == 0){
+                    inputs[i].checked = true;
+                }
+                inputs[i].style.backgroundColor = data.ProdutoCor[i].Hexadecimal;
+                inputs[i].value = data.ProdutoCor[i].Hexadecimal;
+            }
+        };
+
+    })(window.$produto = window.$produto || {});
+
+    $produto.carregar(document.getElementById("detalhes"));
+
+    var swiper = new Swiper(".mySwiper", {
+      loop: false,
+      spaceBetween: 10,
+      slidesPerView: 4,
+      freeMode: true,
+      watchSlidesProgress: true,
+    });
+    var swiper2 = new Swiper(".mySwiper2", {
+        pagination: {
+          el: ".swiper-pagination",
+          type: "fraction",
+      },
+      loop: true,
+      spaceBetween: 10,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      thumbs: {
+        swiper: swiper,
+      },
+    });
 </script>
-<script>
-      var swiper = new Swiper(".mySwiper", {
-        loop: false,
-        spaceBetween: 10,
-        slidesPerView: 4,
-        freeMode: true,
-        watchSlidesProgress: true,
-      });
-      var swiper2 = new Swiper(".mySwiper2", {
-          pagination: {
-            el: ".swiper-pagination",
-            type: "fraction",
-        },
-        loop: true,
-        spaceBetween: 10,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-        thumbs: {
-          swiper: swiper,
-        },
-      });
-    </script>

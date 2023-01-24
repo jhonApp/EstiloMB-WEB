@@ -1,6 +1,12 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using EstiloMB.Core
+@using EstiloMB.MVC;
+@using EstiloMB.Site;
+@addTagHelper *, MyWebApp
+@{
+    ViewData["Title"] = "";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IList<Produto> listProdutos = Produto.Listar(new Request<Produto>() { UserID = Usuario.EstiloMbID })?.Data;
 }
 <section>
     <div class="slider">
@@ -48,121 +54,30 @@
     <div class="colsWeb">
         <h2 class="product-category">Destaques</h2>
         <div class="swiper destaques">
-            <div class=" swiper-wrapper product-container">
-                @*----------------------- Produto 5 -------------------*@
-                <div class=" swiper-slide product-card" style="width: 250px;">
-                    <div class="product-image">
-                        <span class="discount-tag">50% off</span>
-                        <span class="discount-heart">
-                            <input type="checkbox" />
-                            <i class="fas fa-heart icon"></i>
-                        </span>
+            <div class="swiper-wrapper product-container">
+                @foreach (var produto in listProdutos)
+                {
+                    @*------------------------ Produto -------------------------*@
+                    <div class=" swiper-slide product-card" style="width: 250px;">
+                        <div class="product-image">
+                            <span class="discount-tag">50% off</span>
+                            <span class="discount-heart">
+                                <input type="checkbox" />
+                                <i class="fas fa-heart icon"></i>
+                            </span>
 
-                        <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
-                        <button class="card-btn">Mais Detalhes</button>
+                            <img src="~/Produtos/@produto.ProdutoImagens[0].ImageURL" class="product-thumb" />
+                            <input type="hidden" name="ID" value="@produto.ID">
+                            <button class="card-btn" onclick="$produto.detalhes(this)">Mais Detalhes</button>
+                        </div>
+                        <div class="product-info">
+                            <h2 class="product-brand">@produto.Nome</h2>
+                            <p class="product-short-description">@produto.Descricao</p>
+                            <span class="price">R$ @produto.Valor</span>
+                            <span class="actual-price">R$50,00</span>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <h2 class="product-brand">brand</h2>
-                        <p class="product-short-description">a short line about the product</p>
-                        <span class="price">R$120,00</span>
-                        <span class="actual-price">R$50,00</span>
-                    </div>
-                </div>
-                @*----------------------- Produto 5 -------------------*@
-                <div class=" swiper-slide product-card" style="width: 250px;">
-                    <div class="product-image">
-                        <span class="discount-tag">50% off</span>
-                        <span class="discount-heart">
-                            <input type="checkbox" />
-                            <i class="fas fa-heart icon"></i>
-                        </span>
-
-                        <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
-                        <button class="card-btn">Mais Detalhes</button>
-                    </div>
-                    <div class="product-info">
-                        <h2 class="product-brand">brand</h2>
-                        <p class="product-short-description">a short line about the product</p>
-                        <span class="price">R$120,00</span>
-                        <span class="actual-price">R$50,00</span>
-                    </div>
-                </div>
-                @*----------------------- Produto 5 -------------------*@
-                <div class=" swiper-slide product-card" style="width: 250px;">
-                    <div class="product-image">
-                        <span class="discount-tag">50% off</span>
-                        <span class="discount-heart">
-                            <input type="checkbox" />
-                            <i class="fas fa-heart icon"></i>
-                        </span>
-
-                        <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
-                        <button class="card-btn">Mais Detalhes</button>
-                    </div>
-                    <div class="product-info">
-                        <h2 class="product-brand">brand</h2>
-                        <p class="product-short-description">a short line about the product</p>
-                        <span class="price">R$120,00</span>
-                        <span class="actual-price">R$50,00</span>
-                    </div>
-                </div>
-                @*----------------------- Produto 5 -------------------*@
-                <div class=" swiper-slide product-card" style="width: 250px;">
-                    <div class="product-image">
-                        <span class="discount-tag">50% off</span>
-                        <span class="discount-heart">
-                            <input type="checkbox" />
-                            <i class="fas fa-heart icon"></i>
-                        </span>
-
-                        <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
-                        <button class="card-btn">Mais Detalhes</button>
-                    </div>
-                    <div class="product-info">
-                        <h2 class="product-brand">brand</h2>
-                        <p class="product-short-description">a short line about the product</p>
-                        <span class="price">R$120,00</span>
-                        <span class="actual-price">R$50,00</span>
-                    </div>
-                </div>
-                @*----------------------- Produto 5 -------------------*@
-                <div class=" swiper-slide product-card" style="width: 250px;">
-                    <div class="product-image">
-                        <span class="discount-tag">50% off</span>
-                        <span class="discount-heart">
-                            <input type="checkbox" />
-                            <i class="fas fa-heart icon"></i>
-                        </span>
-
-                        <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
-                        <button class="card-btn">Mais Detalhes</button>
-                    </div>
-                    <div class="product-info">
-                        <h2 class="product-brand">brand</h2>
-                        <p class="product-short-description">a short line about the product</p>
-                        <span class="price">R$120,00</span>
-                        <span class="actual-price">R$50,00</span>
-                    </div>
-                </div>
-                @*----------------------- Produto 5 -------------------*@
-                <div class=" swiper-slide product-card" style="width: 250px;">
-                    <div class="product-image">
-                        <span class="discount-tag">50% off</span>
-                        <span class="discount-heart">
-                            <input type="checkbox" />
-                            <i class="fas fa-heart icon"></i>
-                        </span>
-
-                        <img src="~/image/vertical-photo1.jpg" class="product-thumb" />
-                        <button class="card-btn">Mais Detalhes</button>
-                    </div>
-                    <div class="product-info">
-                        <h2 class="product-brand">brand</h2>
-                        <p class="product-short-description">a short line about the product</p>
-                        <span class="price">R$120,00</span>
-                        <span class="actual-price">R$50,00</span>
-                    </div>
-                </div>
+                }
             </div>
         </div>
         <button class="button-prev pre-btn"></button>
@@ -293,7 +208,51 @@
         @*<div class="swiper-pagination"></div>*@
     </div>
 </content>
-<script>
+<script type="text/javascript">
+
+    (function($produto) {
+
+        $produto.detalhes = function(element) {
+
+            let ID = element.closest('.product-image').querySelector("[name=ID]").value;
+            window.location.href = "Produto/Details?produtoID=" + ID;
+            console.log(window.location.href);
+
+            $min.ajax({
+                url: $min.root() + $ui.relativePath + 'Produto/GetbyID?produtoID=' + ID,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                },
+                onsuccess: function(produto) {
+                    let obj = {
+                        ID: produto.ID,
+                        Nome: produto.Nome,
+                        Descricao: produto.Descricao,
+                        Valor: produto.Valor,
+                        ProdutoImagens: produto.ProdutoImagens,
+                        ProdutoTamanhos: produto.ProdutoTamanhos,
+                        ProdutoCategorias: produto.ProdutoCategorias,
+                    };
+
+                    console.log(obj);
+                },
+                onfailure: function(httpCode, httpMessage) {
+                    if (httpCode === 401) {
+                        let currentURL = window.location.href.replace($min.root() + $ui.relativePath, "");
+                        window.location.href = $min.root() + $ui.relativePath + $ui.redirectLoginURL + currentURL;
+                    }
+                    $ui.message(httpMessage, "error");
+                }
+            });
+            
+            //console.log(obj)
+            //let popup = template.closest('section').querySelector('#produto');
+            //$min.bind(popup, obj);
+            //imageEmpty(obj)
+        };
+    })(window.$produto = window.$produto || {});
+
     var swiper = new Swiper(".destaques", {
         slidesPerView: 4,
         spaceBetween: 30,

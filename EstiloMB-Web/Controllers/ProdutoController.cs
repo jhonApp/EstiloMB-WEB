@@ -8,9 +8,19 @@ namespace EstiloMB.Site.Controllers
 {
     public class ProdutoController : Controller
     {
-        public IActionResult Details()
+        public IActionResult Details(int produtoID)
         {
+            ViewBag.ProdutoID = produtoID;
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetProdutoByID(int ID)
+        {
+            Response<Produto> response = new Response<Produto>();
+
+            response.Data = Produto.GetByID(ID);
+            return Json(response);
         }
 
         public IActionResult Sacola()

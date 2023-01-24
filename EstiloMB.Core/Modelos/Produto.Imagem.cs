@@ -18,6 +18,7 @@ namespace EstiloMB.Core
         public StatusParametro Status { get; set; }
         [Required, MaxLength(255), LogProperty] public string ImageURL { get; set; }
         [NotMapped] public byte[] ImageData { get; set; }
+        public Cor Cor { get; set; }
 
         public static Response<ProdutoImagem> Remove(int ID)
         {

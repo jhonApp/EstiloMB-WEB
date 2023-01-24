@@ -569,11 +569,11 @@ content {
 
 .big-img {
     grid-area: big;
-    width: 400px;
+    width: 600px;
 }
 
 .big-img img{
-    width: inherit;
+    /*width: inherit;*/
 }
 
 .images {
@@ -584,7 +584,7 @@ content {
 
 .small-img {
     grid-area: small;
-    width: 90px;
+    width: 116px;
     overflow: hidden;
     /*border: 1.5px solid #000;*/
 }
