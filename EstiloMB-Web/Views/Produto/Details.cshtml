@@ -12,9 +12,13 @@
                     <div class="swiper mySwiper2">
                         <!-- Imagem -->
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <img onbind="if (data.CaminhoProduto) { this.src = '@Url.Content("~/Produtos/")' + data.CaminhoProduto; } else { this.src = '@Url.Content("/images/EmptyPhoto.png")'; }"
-                                     default="@Url.Content("~/images/EmptyPhoto.png")" />
+                            <div data-array="ProdutoImagens">
+                                <template>
+                                    <div class="swiper-slide">
+                                        <img onbind="if (data.ImageURL) { this.src = '@Url.Content("~/Produtos/")' + data.ImageURL; } else { this.src = '@Url.Content("/images/EmptyPhoto.png")'; }"
+                                             default="@Url.Content("~/images/EmptyPhoto.png")" />
+                                    </div>
+                                </template>
                             </div>
                         </div>
                         <div class="swiper-pagination"></div>
@@ -246,9 +250,10 @@
         };
 
         $produto.bindImages = function (content, data) {
-            let imgs = content.querySelectorAll('.small-img > img');
-
+            let imgs = content.querySelectorAll('.swiper-slide * img');
+            console.log(imgs)
             for(let i = 0; i < imgs.length; i++){
+                
                 imgs[i].src = '@Url.Content("~/Produtos/")' + data.ProdutoImagens[i].ImageURL;
             }
         };
