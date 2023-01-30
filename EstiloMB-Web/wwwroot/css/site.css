@@ -569,11 +569,11 @@ content {
 
 .big-img {
     grid-area: big;
-    width: 400px;
+    width: 600px;
 }
 
 .big-img img{
-    width: inherit;
+    /*width: inherit;*/
 }
 
 .images {
@@ -584,7 +584,7 @@ content {
 
 .small-img {
     grid-area: small;
-    width: 90px;
+    width: 116px;
     overflow: hidden;
     /*border: 1.5px solid #000;*/
 }
@@ -598,6 +598,11 @@ content {
     .small-img:hover img{
         transform: scale(1.2);
     }
+
+.selecionado {
+    background-color: black;
+    color: white;
+}
 
 .info-details {
     grid-area: info;
@@ -648,7 +653,22 @@ content {
             opacity: 0;
         }
 
-
+        .info-details div .radio-size[selecionado] {
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            appearance: none;
+            width: 2.5em;
+            height: 2.3em;
+            margin: 10px;
+            outline: none;
+            border: 1px solid black;
+            border-radius: 10%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     .info-details div .radio-size {
         cursor: pointer;
         appearance: none;
@@ -683,11 +703,6 @@ content {
     
 }
 
-    .input-size:checked + .radio-size {
-        background-color: black;
-        color: white;
-        transition: all 600ms ease-in-out;
-    }
 
         .info-details div .radio-size:checked:before,
         .info-details div .radio:checked:before {

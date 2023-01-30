@@ -78,6 +78,25 @@ namespace EstiloMB.Core
             return response;
         }
 
+        public static Produto GetByID(int produtoID)
+        {
+            try
+            {
+                using Database<Produto> db = new Database<Produto>();
+                return db.Set<Produto>()
+                    .Include(e => e.ProdutoCategorias)
+                    .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
+                    .Include(e => e.ProdutoImagens).ThenInclude(e => e.Cor)
+                    .Include(e => e.ProdutoImagens)
+                    .Where(p => p.ID == produtoID)
+                    .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static Response<List<Produto>> Parametro(Request<Produto> request)
         {
             Response<Produto> response = new Response<Produto>() { Data = request.Data };
