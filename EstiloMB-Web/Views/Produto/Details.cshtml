@@ -42,7 +42,7 @@
                         <div class="flex" data-array="ProdutoTamanhos">
                             <template>
                                 <div class="radio-size">
-                                    <input type="radio" class="input-size" data-bind="Tamanho.Nome" />
+                                    <input type="radio" class="input-size" value="a" onclick="$produto.tamanhoChecked(this)" />
                                     <span data-bind="Tamanho.Nome"></span>
                                 </div>
                             </template>
@@ -57,7 +57,7 @@
                 </div>
                 <div>
                     <div class="swiper mySwiper">
-                        <div class="smallImg images swiper-wrapper">
+                        <div class="smallImg images swiper-wrapper product-slider">
                             <div data-array="ProdutoImagens">
                                 <template>
                                     <div class="swiper-slide">
@@ -68,7 +68,6 @@
                                 </template>
                             </div>
                         </div>
-                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
             </div>
@@ -140,6 +139,22 @@
 
             return contents;
         };
+
+        $produto.tamanhoChecked = function(input){
+            let Listamanhos = input.closest('.flex').querySelectorAll('.radio-size');
+
+            for(let i = 0; i < Listamanhos.length; i++){
+                if(Listamanhos[i].querySelector('input').checked == true){
+                    if(Listamanhos[i].hasAttribute('selecionado')){
+
+                        Listamanhos[i].removeAttribute('selecionado');
+                        Listamanhos[i].querySelector('input').checked = false;
+                    }else{
+                        Listamanhos[i].setAttribute('selecionado', true);
+                    }
+                }
+            }
+        }
 
         $produto.carregar = function(container, id) {
             let contents = init(container);
@@ -255,12 +270,13 @@
     $produto.carregar(document.getElementById("detalhes"));
 
     var swiper = new Swiper(".mySwiper", {
-      loop: false,
+      loop: true,
       spaceBetween: 10,
       slidesPerView: 4,
       freeMode: true,
       watchSlidesProgress: true,
     });
+
     var swiper2 = new Swiper(".mySwiper2", {
         pagination: {
           el: ".swiper-pagination",

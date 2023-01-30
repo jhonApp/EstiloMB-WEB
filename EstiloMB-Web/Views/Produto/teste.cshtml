@@ -1,0 +1,68 @@
+﻿<div class="container py-5">
+	<div class="row">
+		<div class="col-lg-6 product-left mb-5 mb-lg-0">
+				<div class="swiper-container product-slider mb-3">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<img src="https://drive.google.com/uc?id=1-qzpXz-6SaqM3IPlQl_d9YXaPaBPw1xi" alt="..."  class="img-fluid">
+						</div>
+						<div class="swiper-slide">
+							<img src="https://drive.google.com/uc?id=1GyPJxF36hlp2JS7SeYrnW0Bmuc9KJyBq" alt="..." class="img-fluid">
+						</div>
+						<div class="swiper-slide">
+							<img src="https://drive.google.com/uc?id=1MIbogRkUdngQXnaXT8Mufup-7CScTNRj" alt="..."  class="img-fluid">
+						</div>
+						<div class="swiper-slide">
+							<img src="https://drive.google.com/uc?id=1a_w8OcDV-IA5UMz7usKtO_lXf0YSee3u" alt="..."  class="img-fluid">
+						</div>
+						<div class="swiper-slide">
+							<img src="https://drive.google.com/uc?id=1gLp3gryMbGYpgAfAtnDGccME1lCzEyUU" alt="..."  class="img-fluid">
+						</div>
+						<div class="swiper-slide">
+							<img src="https://drive.google.com/uc?id=1iOOVa8mOrESI0o5o7au7nAOlPFAwbnLM" alt="..."  class="img-fluid">
+						</div>
+					</div>
+					<div class="swiper-button-next"></div>
+					<div class="swiper-button-prev"></div>
+				</div>
+				
+				<div class="swiper-container product-thumbs">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<img src="https://drive.google.com/uc?id=1-qzpXz-6SaqM3IPlQl_d9YXaPaBPw1xi" alt="..." class="img-fluid">
+						</div>
+						<div class="swiper-slide">
+							<img src="https://drive.google.com/uc?id=1GyPJxF36hlp2JS7SeYrnW0Bmuc9KJyBq" alt="..." class="img-fluid">
+						</div>
+					</div>
+				</div>
+			
+		</div>
+	</div>
+</div>
+
+if($(".product-left").length){
+		var productSlider = new Swiper('.product-slider', {
+			spaceBetween: 0,
+			centeredSlides: false,
+			loop:true,
+			direction: 'horizontal',
+			loopedSlides: 5,
+			navigation: {
+				nextEl: ".swiper-button-next",
+				prevEl: ".swiper-button-prev",
+			},
+			resizeObserver:true,
+		});
+		var productThumbs = new Swiper('.product-thumbs', {
+			spaceBetween: 0,
+			centeredSlides: true,
+			loop: true,
+			slideToClickedSlide: true,
+			direction: 'horizontal',
+			slidesPerView: 5,
+			loopedSlides: 5,
+		});
+		productSlider.controller.control = productThumbs;
+		productThumbs.controller.control = productSlider;
+}
