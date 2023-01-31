@@ -10,8 +10,7 @@
             <div class="grid-content" ui-content="data" onbind="this.data = data; console.log(data)">
                 <div class="big-img">
                     <div class="swiper mySwiper2">
-                        <div class="swiper-wrapper">
-                        </div>
+                        <div class="swiper-wrapper"></div>
                         <div class="swiper-pagination"></div>
                     </div>
                 </div>
@@ -50,16 +49,10 @@
                         <p><span>Especificações : <span data-bind="Descricao"></span></span></p>
                     </div>
                 </div>
-                <div>
+                <div class="smallImg">
                     <div class="swiper mySwiper">
-                        <div class="smallImg images swiper-wrapper" data-array="ProdutoImagens">
-                            <template>
-                                <div class="swiper-slide">
-                                    <div class="small-img">
-                                        <img data-bind="ImageURL" />
-                                    </div>
-                                </div>
-                            </template>
+                        <div class="images swiper-wrapper">
+                            <div class="swiper-slide"></div>
                         </div>
                     </div>
                 </div>
@@ -160,7 +153,7 @@
             if (contents.template) {
                 $min.clear(contents);
             }
-            console.log(contents);
+
             $min.ajax({
                 url: $min.root() + $ui.relativePath + 'Produto/GetProdutoByID?ID=' + @produtoID,
                 headers: {
@@ -230,21 +223,29 @@
 
             $min.bind(bigIMG, obj);
             $min.bind(smallIMG, obj);
-            $produto.bindBigImages(bigIMG, obj);
+            $produto.bindBigImages(contents, obj);
             $produto.bindImages(smallIMG, obj);
         }
 
         $produto.bindBigImages = function (content, data) {
             let slide;
             let caminho;
+            let container = document.querySelector('.swiper-wrapper');
+
+            while (container.hasChildNodes()) {
+                container.removeChild(container.firstChild);
+            }
 
             let convertObj = function(slide) {
 
                 var htmlObject = '';
-                let container = document.querySelector('.big-img .swiper-wrapper');
+
                 var temp = document.createElement('div');
+
                 temp.innerHTML = slide;
                 htmlObject = temp.childNodes[1];
+                container.appendChild(htmlObject);
+
                 return htmlObject;
             }
 
@@ -257,16 +258,42 @@
 
                 slide = convertObj(slide);
                 caminho = slide.querySelector('img').src = '@Url.Content("~/")' + 'Produtos/' + ImageURL;
-                console.log(slide)
             }
         };
 
         $produto.bindImages = function (content, data) {
-            let imgs = content.querySelectorAll('.swiper-slide * img');
-            console.log(imgs)
-            for(let i = 0; i < imgs.length; i++){
+            let slide;
+            let caminho;
+            let container = document.querySelector('.smallImg .swiper-wrapper');
 
-                imgs[i].src = '@Url.Content("~/Produtos/")' + data.ProdutoImagens[i].ImageURL;
+            while (container.hasChildNodes()) {
+                container.removeChild(container.firstChild);
+            }
+
+            let convertObj = function(slide) {
+
+                var htmlObject = '';
+
+                var temp = document.createElement('div');
+
+                temp.innerHTML = slide;
+                htmlObject = temp.childNodes[1];
+                container.appendChild(htmlObject);
+
+                return htmlObject;
+            }
+
+            for(let i = 0; i < data.ProdutoImagens.length; i++){
+                ImageURL = data.ProdutoImagens[i].ImageURL;
+
+                slide += `<div class="swiper-slide">
+                                <div class="small-img">
+                                    <img src="${caminho}"/>
+                                </div>
+                            </div>`
+
+                slide = convertObj(slide);
+                caminho = slide.querySelector('img').src = '@Url.Content("~/")' + 'Produtos/' + ImageURL;
             }
         };
 
