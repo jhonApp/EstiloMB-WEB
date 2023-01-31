@@ -49,7 +49,7 @@
                         <p><span>Especificações : <span data-bind="Descricao"></span></span></p>
                     </div>
                 </div>
-                <div class="smallImg">
+                <div>
                     <div class="swiper mySwiper">
                         <div class="images swiper-wrapper">
                             <div class="swiper-slide"></div>
@@ -264,7 +264,7 @@
         $produto.bindImages = function (content, data) {
             let slide;
             let caminho;
-            let container = document.querySelector('.smallImg .swiper-wrapper');
+            let container = document.querySelector('.mySwiper .swiper-wrapper');
 
             while (container.hasChildNodes()) {
                 container.removeChild(container.firstChild);
@@ -321,28 +321,29 @@
     })(window.$produto = window.$produto || {});
 
     $produto.carregar(document.getElementById("detalhes"));
+</script>
 
-    var swiper = new Swiper(".mySwiper", {
-      loop: false,
-      spaceBetween: 10,
-      slidesPerView: 4,
-      freeMode: true,
-      watchSlidesProgress: true,
-    });
-
-    var swiper2 = new Swiper(".mySwiper2", {
-        pagination: {
-          el: ".swiper-pagination",
-          type: "fraction",
-      },
-      loop: true,
-      spaceBetween: 10,
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      thumbs: {
-        swiper: swiper,
-      },
-    });
+<script>
+      var swiper = new Swiper(".mySwiper", {
+        loop: false,
+        spaceBetween: 10,
+        slidesPerView: 4,
+        freeMode: true,
+        watchSlidesProgress: true,
+      });
+      var swiper2 = new Swiper(".mySwiper2", {
+          pagination: {
+            el: ".swiper-pagination",
+            type: "fraction",
+        },
+        loop: true,
+        spaceBetween: 10,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        thumbs: {
+          swiper: swiper,
+        },
+      });
 </script>
