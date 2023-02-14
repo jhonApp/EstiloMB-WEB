@@ -85,13 +85,13 @@ namespace EstiloMB.Site.Controllers
             return Json(response);
         }
 
-        [Authorize, HttpPost, ValidateAntiForgeryToken, Produces("application/json")]
+        [HttpPost, ValidateAntiForgeryToken, Produces("application/json")]
         public IActionResult Ajax([FromRoute] string type, [FromRoute] string function, [FromBody] JObject request)
         {
             return Json(API.Redirect(type, function, User.GetClaimInt32("UsuarioID"), _loc.GetCulture(), request));
         }
 
-        [Authorize, HttpPost, ValidateAntiForgeryToken, Produces("application/json")]
+        [HttpPost, ValidateAntiForgeryToken, Produces("application/json")]
         public IActionResult Page([FromRoute] string control, [FromRoute] string page, [FromBody] JObject request)
         {
             return RedirectToAction(page, control, new { body = true });

@@ -94,15 +94,20 @@ CREATE TABLE Cliente (
 CREATE TABLE Pedido (
 	ID INT IDENTITY PRIMARY KEY,
 
-	ClienteID INT NOT NULL,
-	CONSTRAINT FK_Cliente FOREIGN KEY(ClienteID) REFERENCES Cliente(ID),
+	UsuarioID INT NOT NULL,
+	CONSTRAINT FK_Usuario FOREIGN KEY(UsuarioID) REFERENCES Usuario(UsuarioID),
 
 	DataPedido DATE NOT NULL,
-	Valor DECIMAL(10,2) NOT NULL,
+	DataPagamento DATE NULL,
+	DataEntrega DATE NULL,
+	QuantidadeTotal INT NULL,
+	ValorTotal DECIMAL(10,2) NULL,
+	Frete DECIMAL(10,2) NULL,
+	StatusPedido INT NOT NULL,
 )
 
 
-CREATE TABLE ItemPedido (
+CREATE TABLE [Pedido.Item] (
 	ID INT IDENTITY PRIMARY KEY,
 
 	PedidoID INT NOT NULL,
@@ -111,7 +116,9 @@ CREATE TABLE ItemPedido (
 	ProdutoID INT NOT NULL,
 	CONSTRAINT FK_Produto_Item FOREIGN KEY(ProdutoID) REFERENCES Produto(ID),
 
-	ValorUnitario DECIMAL(5,2) NOT NULL,
+	Cor NVARCHAR(50) NULL,
+	ImageURL NVARCHAR(255) NULL,
+	Tamanho NVARCHAR(50) NOT NULL,
 	Quantidade INT NOT NULL,
 	ValorTotal DECIMAL(10,2) NOT NULL,
 );
@@ -276,3 +283,5 @@ INSERT INTO [Usuario.Perfil] (UsuarioID, PerfilID) VALUES (6, 1);
 --drop table Produto
 --drop table Cor
 --drop table Categoria
+--drop table Pedido
+--drop table [Pedido.Item]

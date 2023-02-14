@@ -1,8 +1,11 @@
 ﻿@using EstiloMB.Core
+@using EstiloMB.MVC
 @{
     ViewData["Title"] = "Detalhes";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int produtoID = ViewBag.ProdutoID;
+    int userID = User.GetClaimInt32("ID");
+    
 }
 <content>
     <div class="colsWeb" id="detalhes">
@@ -11,7 +14,6 @@
                 <div class="big-img">
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper"></div>
-                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
                 <div class="info-details">
@@ -27,23 +29,27 @@
                         <div class="flex" data-array="ProdutoCor">
                             <template>
                                 <p><input type="radio" name="radio1" class="produtoCor radio" onclick="$produto.bindImagebyCor(this, this.closest('.colsWeb'))" data-bind="Hexadecimal" /></p>
+                                <span class="hidden produtoCor-text" data-bind="ID"/>
                             </template>
                         </div>
                     </div>
                     <div class="line">
                         <!-- Tamanho -->
-                        <p><span>escolha o tamanho : </span></p>
+                        <p><span>escolha o tamanho : <span class="text-validation"></span> </span></p>
                         <div class="flex" data-array="ProdutoTamanhos">
                             <template>
                                 <div class="radio-size">
-                                    <input type="radio" class="input-size" value="a" onclick="$produto.tamanhoChecked(this)" />
-                                    <span data-bind="Tamanho.Nome"></span>
+                                    <input type="radio" class="input-size" value="a" data-bind="Tamanho.Nome" onclick="$produto.tamanhoChecked(this)" />
+                                    <span name="TamanhoName" data-bind="Tamanho.Nome"></span>
                                 </div>
                             </template>
                         </div>
                     </div>
                     <div class="line">
-                        <button class="button-pay"><a href="~/Produto/Sacola">COMPRAR</a></button>
+                        <button class="button-pay"
+                                onclick="$produto.validation(this, this.closest('.grid-content'))">
+                            COMPRAR
+                        </button>
                     </div>
                     <div class="line">
                         <p><span>Especificações : <span data-bind="Descricao"></span></span></p>
@@ -126,11 +132,105 @@
             return contents;
         };
 
+        var getMessage = function (string, data) {
+            let matches = (string || "").match(/\{[A-Za-z0-9\.]+(:.+)?\}/g);
+            if (!matches) { return string; }
+
+            for (let i = 0; i < matches.length; i++) {
+                let object = data;
+                let property = matches[i].replace(/[\{\}]/g, '');
+                while (property.indexOf(".") > -1) {
+                    let member = property.substr(0, property.indexOf("."));
+                    object = object[member];
+                    property = property.substr(property.indexOf(".") + 1);
+                }
+
+                let value = null;
+                if (property.indexOf(":") > 0) {
+                    value = $min.format(object[property.substr(0, property.indexOf(":"))], property.substr(property.indexOf(":") + 1));
+                }
+                else {
+                    value = object[property];
+                }
+
+                string = string.replace(matches[i], value);
+            }
+            return string;
+        };
+
+        var getTamanho = function (content) {
+
+            let tamanho = "";
+            let tamanhos = content.querySelectorAll('.radio-size');
+            let cont = 0;
+
+            for(let i = 0; i < tamanhos.length; i++){ 
+                if(tamanhos[i].querySelector('.input-size').checked == true){ 
+                    cont++; 
+                    tamanho = tamanhos[i].querySelector('[name=TamanhoName]').innerHTML;
+                } 
+            }
+
+            obj = {
+                tamanho: tamanho,
+                contador: cont
+            };
+
+            return obj;
+        }
+
+        var getCor = function (content) {
+            let cores = content.querySelectorAll('.produtoCor');
+            let corID = "";
+
+            for(let i = 0; i < cores.length; i++){ 
+                if(cores[i].checked == true){
+                    corID = cores[i].parentElement.nextElementSibling.innerHTML;
+                } 
+            }
+
+            return corID;
+        }
+
+        $produto.validation = function(button, content){
+            let data = content.data;
+            let usuarioID = @userID;
+            let prodID = data.ProdutoID;
+
+            let corID = getCor(content);
+            let obj = getTamanho(content);
+
+            if(obj.cont != 0){
+                $min.ajax({
+                    url: $min.root() + $ui.relativePath + 'Pedido/GerarPedido?produtoID=' + data.ProdutoID + '&tamanho=' + obj.tamanho + '&usuarioID=' + usuarioID + '&corID=' + corID,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                    },
+                    onsuccess: function(response) {
+                        if(response != null){
+                            window.location.href = 'Sacola?pedidoID=' + response[0].PedidoID;
+                        }
+                    },
+                    onfailure: function(httpCode, httpMessage) {
+                        if (httpCode === 401) {
+                            let currentURL = window.location.href.replace($min.root() + $ui.relativePath, "");
+                            window.location.href = $min.root() + $ui.relativePath + $ui.redirectLoginURL + currentURL;
+                        }
+                        $ui.message(httpMessage, "error");
+                    }
+                });
+            }else{
+                let span = content.querySelector('.text-validation');
+                span.innerHTML = "Por favor, escolha uma opção";
+            }
+        };
+
         $produto.tamanhoChecked = function(input){
             let Listamanhos = input.closest('.flex').querySelectorAll('.radio-size');
 
             for(let i = 0; i < Listamanhos.length; i++){
-                if(Listamanhos[i].querySelector('input').checked == true){
+                if(Listamanhos[i].querySelector('input[type=radio]').checked == true){
                     if(Listamanhos[i].hasAttribute('selecionado')){
 
                         Listamanhos[i].removeAttribute('selecionado');
@@ -179,6 +279,7 @@
                     }
 
                     let obj = {
+                        ProdutoID: response.Data.ID,
                         ProdutoImagensOriginal: response.Data.ProdutoImagens,
                         ProdutoImagens: newProdutoImages,
                         ProdutoCor: newProdutoCor,
@@ -205,7 +306,7 @@
             let dados = input.closest('.grid-content').data;
             let newProdutoImages = [];
             let bigIMG = contents.querySelector('.big-img');
-            let smallIMG = contents.querySelector('.smallImg');
+            let smallIMG = contents.querySelector('.mySwiper');
 
             for(var i = 0; i < dados.ProdutoImagensOriginal.length; i++)
             {
@@ -287,7 +388,7 @@
                 ImageURL = data.ProdutoImagens[i].ImageURL;
 
                 slide += `<div class="swiper-slide">
-                                <div class="small-img">
+                                <div class="small-img" onclick="$produto.alterSrc(this)">
                                     <img src="${caminho}"/>
                                 </div>
                             </div>`
@@ -311,11 +412,9 @@
 
         $produto.alterSrc = function (element) {
             let src = element.querySelector('img').src;
-            let bigSrc = element.closest('.grid-content').querySelector('.big-img img').src;
+            let bigSrc = element.closest('.grid-content').querySelector('.big-img img');
 
-            bigSrc = '123';
-            console.log(src)
-            console.log(bigSrc)
+            bigSrc.src = src;
         }
 
     })(window.$produto = window.$produto || {});
@@ -324,26 +423,26 @@
 </script>
 
 <script>
-      var swiper = new Swiper(".mySwiper", {
-        loop: false,
-        spaceBetween: 10,
-        slidesPerView: 4,
-        freeMode: true,
-        watchSlidesProgress: true,
-      });
-      var swiper2 = new Swiper(".mySwiper2", {
-          pagination: {
-            el: ".swiper-pagination",
-            type: "fraction",
-        },
-        loop: true,
-        spaceBetween: 10,
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-        thumbs: {
-          swiper: swiper,
-        },
-      });
+    var swiper = new Swiper(".mySwiper", {
+      loop: false,
+      spaceBetween: 10,
+      slidesPerView: 4,
+      freeMode: true,
+      watchSlidesProgress: true,
+    });
+    var swiper2 = new Swiper(".mySwiper2", {
+        pagination: {
+          el: ".swiper-pagination",
+          type: "fraction",
+      },
+      loop: true,
+      spaceBetween: 10,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      thumbs: {
+        swiper: swiper,
+      },
+    });
 </script>

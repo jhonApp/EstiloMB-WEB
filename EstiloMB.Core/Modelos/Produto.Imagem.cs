@@ -1,4 +1,5 @@
 ﻿using Chargeback.Core;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,6 +20,22 @@ namespace EstiloMB.Core
         [Required, MaxLength(255), LogProperty] public string ImageURL { get; set; }
         [NotMapped] public byte[] ImageData { get; set; }
         public Cor Cor { get; set; }
+
+        public static ProdutoImagem GetByCorID(int corID)
+        {
+            try
+            {
+                using Database<ProdutoImagem> db = new Database<ProdutoImagem>();
+                return db.Set<ProdutoImagem>()
+                    .Include(e => e.Cor)
+                    .Where(p => p.CorID == corID)
+                    .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public static Response<ProdutoImagem> Remove(int ID)
         {
