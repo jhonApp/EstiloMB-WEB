@@ -438,7 +438,7 @@ if (!String.prototype.format) {
     $min.read = function (element, data) {
         if (!data) { data = {}; }
 
-        if (element.hasAttribute && element.hasAttribute("data-ignore")) { return data; }
+        //if (element.hasAttribute && element.hasAttribute("data-ignore")) { return data; }
 
         let property, members;
 
@@ -2294,7 +2294,6 @@ if (!String.prototype.format) {
     };
 
     $ui.delete = function (button, itemSelector, callback) {
-        
         let url = button.getAttribute("data-url") || false;
         console.log(itemSelector);
         if (!url) { console.log("No @data-url attribute found on the element calling $ui.delete(this)."); return false; }
@@ -2319,9 +2318,8 @@ if (!String.prototype.format) {
         }
 
         if (item.isBusy) { return $ui.message(button.getAttribute("ui-busy-message") || emptyBusyMessage, "alert"); }
-
+       
         let data = item.data;
-
         let popup = $min.popup(document.getElementById("ui-popup"));
         if (!popup) { return false; }
 

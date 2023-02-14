@@ -24,9 +24,42 @@ body {
 
 a {
     text-decoration: none;
+    color: white;
 }
 
-.none{
+.vazia {
+    height: 510px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+    .vazia > img {
+        height: 350px;
+        background-size: 100%;
+        background-repeat: no-repeat;
+    }
+
+    .vazia > h1 {
+        margin-top: -20px;
+    }
+
+    .vazia > p {
+        font-size: 20px;
+        margin-bottom: 50px;
+    }
+
+    .vazia > a {
+        padding: 12px 30px;
+        font-size: 16px;
+        color: #FFFFFF;
+        background: #000000;
+        text-transform: uppercase;
+        line-height: 19px;
+        letter-spacing: 0.12em;
+        border-radius: 8px;
+    }
+
+.none {
     display: none;
 }
 
@@ -572,9 +605,9 @@ content {
     width: 600px;
 }
 
-.big-img img{
-    /*width: inherit;*/
-}
+    .big-img img {
+        min-width: 500px;
+    }
 
 .images {
     display: flex;
@@ -914,7 +947,7 @@ input[type="checkbox"] {
 -------------------------------------------------- */
 .wrapper-sacola {
     background-color: #f3f3f3;
-    height: auto;
+    min-height: 700px;
 }
 .nav-main-sacola {
     display: grid;
@@ -991,6 +1024,10 @@ input[type="checkbox"] {
     /*box-shadow: 0 0 1em rgb(0 0 0 / 10%);*/
 }
 
+.group-info {
+    display:flex;
+}
+
 .title-resume {
     margin: 0 auto;
     width: 90%;
@@ -1003,24 +1040,24 @@ input[type="checkbox"] {
         font-size: 1.8rem;
     }
 
-    .resume-shop {
-        grid-area: resume-shop;
-        background-color: white;
-        max-height:10em;
-        width: 100%;
-    }
+.resume-shop {
+    grid-area: resume-shop;
+    background-color: white;
+    width: 100%;
+    margin-bottom: 50px;
+}
 
-        .resume-shop div:first-child {
+        /*.resume-shop div:first-child {
             border-bottom: 0;
-        }
+        }*/
 
         .resume-shop div {
             display: flex;
             flex: 1;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             border-bottom: solid 1px #d8d8d8;
             margin: 20px;
-            /*height: 35%;*/
+            /* height: 35%; */
         }
 
             .resume-shop div .resume-info {
@@ -1043,9 +1080,10 @@ input[type="checkbox"] {
             .resume-shop div .remove-item {
                 display: flex;
                 border-bottom: solid 0px #d8d8d8;
-                justify-content: center;
+                justify-content: space-between;
                 margin-top: 5px;
                 align-content: space-between;
+                flex-direction: column;
             }
 
 .remove-item .value-size {
@@ -1054,6 +1092,11 @@ input[type="checkbox"] {
     line-height: 1.125rem;
     margin-block-end: 0.3em;
     font-weight: 500;
+}
+
+.remove-item button {
+    width: 20px;
+    left: 20px;
 }
 
 #input-qtd {
@@ -1171,6 +1214,7 @@ button {
 .info-none {
     width: 520px;
     margin-top: 20px;
+    transition: width 2s;
 }
 
 #consulta::-webkit-input-placeholder {
@@ -2272,3 +2316,133 @@ textarea.error:not(:focus) ~ validation {
         #ui-messages > .ui-message > .ui-text {
             display: inline-block;
         }
+/*------------------------------------------------------------------*/
+/*---------------------------------------------------------[ POPUP ]*/
+/*------------------------------------------------------------------*/
+.ui-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50.1%, -50.1%);
+    transform: translate(-50.1%, -50.1%);
+    width: auto;
+    max-width: 400px;
+    overflow: auto;
+    border-radius: 0.2em;
+    background-color: white;
+    box-shadow: 1px 1px 5px black;
+    box-sizing: border-box;
+    will-change: transform;
+    z-index: 1;
+}
+
+    .ui-popup > .left-bar {
+        background-color: #333;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 10px;
+        width: 2.5em;
+        text-align: center;
+        color: white;
+        padding-top: 10px;
+        font-size: 2.5em;
+        z-index: 1;
+    }
+
+    .ui-popup > .title {
+        padding: 0.5em;
+        padding-left: 6.25em;
+        margin: 0;
+        font-size: 120%;
+        font-weight: bold;
+        color: #333;
+        border-bottom: 2px solid #333;
+        background-color: transparent;
+    }
+
+    .ui-popup > .text {
+        padding: 0.5em;
+        padding-left: 7.5em;
+    }
+
+    .ui-popup > .bottom-bar {
+        padding: 0.5em;
+        text-align: right;
+        font-size: 1.2em;
+    }
+
+    .ui-popup .confirm,
+    .ui-popup .cancel {
+        cursor: pointer;
+        display: inline-block;
+        padding: 0.5em;
+        background-color: transparent;
+        border: 0;
+        transition: color 0.2s ease;
+    }
+
+    .ui-popup .confirm {
+        color: green;
+    }
+
+    .ui-popup .cancel {
+        color: red;
+    }
+
+        .ui-popup .confirm > span,
+        .ui-popup .cancel > span {
+            position: relative;
+            /*display: block;*/
+            margin-right: 0.25em;
+            font-size: 150%;
+            vertical-align: middle;
+        }
+
+        .ui-popup .confirm:hover > span,
+        .ui-popup .cancel:hover > span {
+            color: white;
+        }
+
+        .ui-popup .confirm > span:before,
+        .ui-popup .cancel > span:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background-color: silver;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease;
+        }
+
+    .ui-popup .confirm > span:before {
+        background-color: green;
+    }
+
+    .ui-popup .cancel > span:before {
+        background-color: red;
+    }
+
+    .ui-popup .confirm > span > svg,
+    .ui-popup .cancel > span > svg {
+        position: relative;
+    }
+
+    .ui-popup .confirm:hover > span:before,
+    .ui-popup .cancel:hover > span:before {
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    .ui-popup .confirm > .fa-check-circle,
+    .ui-popup .cancel > .fa-times-circle {
+        vertical-align: -0.25em;
+        font-size: 1.5em;
+    }
+
+.text-validation {
+    color: rgb(191, 85, 70);
+}

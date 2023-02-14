@@ -1,5 +1,9 @@
-﻿@{
+﻿@using EstiloMB.MVC
+@using EstiloMB.Core
+@{
     ViewData["Title"] = "Sacola";
+    int userID = User.GetClaimInt32("ID");
+    int pedidoID = ViewBag.PedidoID;
 }
 <head>
     <meta charset="utf-8" />
@@ -10,13 +14,14 @@
     <script type="text/javascript" src="~/js/fa/all.js"></script>
     <script type="text/javascript" src="~/js/ChartJS/Chart.js"></script>
     <script type="text/javascript" src="~/js/site.js"></script>
+    <script type="text/javascript" src="~/js/Minimum-1.8.js"></script>
     <script src="~/js/swipe.js"></script>
 </head>
 <div class="nav-main-sacola">
-    <img class="logo" src="~/image/logo-oficial.png" alt=""/>
+    <img class="logo" src="~/image/logo-oficial.png" alt="" />
     <nav>
         <div class="wrapper">
-            
+
             <ul class="nav-links">
                 <li class="active">
                     <a>Sacola</a>
@@ -35,46 +40,54 @@
     </nav>
 </div>
 <content>
-    <div class="wrapper-sacola">
+    <div class="wrapper-sacola" id="sacola">
         <div class="colsWeb">
             <div class="title-resume"><h1>Sacola</h1></div>
-            <div class="card-sacola">
-                <div class="resume-shop">
-                    <div>
-                        <img src="~/image/jeans.jpg" />
-                        <div class="resume-info">
-                            <p><strong>Calça de Moletom Feminina Jogger Preto AK by Riachuelo</strong></p>
-                            <p><span>Tamanho: </span><strong>P</strong></p>
-                            <p><span>Cor: </span><strong>Preto</strong></p>
-                            <p>
-                                <span class="title-qtd size-1em">Quantidade: </span>
-                                <button id="decrement" onclick="stepper(this)">-</button>
-                                <input type="number" min="0" max="100" value="1" id="input-qtd"/>
-                                <button id="increment" onclick="stepper(this)">+</button>
-                            </p>
+            <div class="card-sacola" ui-content="data">
+                <div class="resume-shop" data-array="pedidos">
+                    <template>
+                        <div class="shop-item" onbind="this.data = data; console.log(data)">
+                            <img src="~/image/jeans.jpg"
+                                 onbind="if (data.ImageURL) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; }
+                                        else { this.src = '@Url.Content("~/image/jeans.jpg")'; }" />
+                            <div class="resume-info">
+                                <input type="hidden" name="ProdutoValor" data-bind="Produto.Valor" />
+                                <input type="hidden" name="ID" data-bind="ID" />
+                                <input type="hidden" name="PedidoID" data-bind="PedidoID" />
+                                <p><strong><span data-bind="Produto.Nome"></span></strong></p>
+                                <p><span>Tamanho: </span><strong><span data-bind="Tamanho"></span></strong></p>
+                                <p><span>Cor: </span><strong><span data-bind="Cor"></span></strong></p>
+                                <p>
+                                    <span class="title-qtd size-1em">Quantidade: </span>
+                                    <button id="decrement" onclick="stepper(this)">-</button>
+                                    <input type="number" min="0" max="100" data-bind="Quantidade" id="input-qtd" />
+                                    <button id="increment" onclick="stepper(this)">+</button>
+                                </p>
+                            </div>
+                            <div class="remove-item">
+                                <button class="icon tooltip select"
+                                        onclick="$pedido.delete(this, this.closest('.shop-item'))">
+                                    <i class="far fa-trash"></i>
+                                </button>
+                                <span class="value-size" name="ValorTotal" data-bind="ValorTotal"></span>
+                            </div>
                         </div>
-                        <div class="remove-item">
-                            <button class="icon tooltip select">
-                                <i class="far fa-trash"></i>
-                            </button>
-                            <span class="value-size">R$120,00</span>
-                        </div>
-                    </div>
+                    </template>
                 </div>
                 <div class="entrega-shop">
                     <div class="title-entrega"><h1>Selecione uma opção para a entrega ou retire no local:</h1></div>
                     <div class="flex">
                         <div class="menu-item-sacola">
-                            <input type="radio" name="radio1" class="radio" id="op-entrega-correio" onclick="hiddenGroup(this)"/>
+                            <input type="radio" name="radio1" class="radio" id="op-entrega-correio" onclick="hiddenGroup(this)" />
                             <div>
                                 <label class="text-entrega-correios w-100" for="op-entrega-correio">
-                                    <i class="fas fa-truck-loading" ></i>
+                                    <i class="fas fa-truck-loading"></i>
                                     Correios
                                 </label>
                             </div>
                         </div>
                         <div class="menu-item-sacola">
-                            <input type="radio" name="radio1" class="radio" id="op-entrega-vendedor" onclick="hiddenGroup(this)"/>
+                            <input type="radio" name="radio1" class="radio" id="op-entrega-vendedor" onclick="hiddenGroup(this)" />
                             <div>
                                 <label class="text-entrega" for="op-entrega-vendedor">
                                     <i class="fas fa-comments"></i>
@@ -83,7 +96,7 @@
                             </div>
                         </div>
                         <div class="menu-item-sacola">
-                            <input type="radio" name="radio1" class="radio" id="op-retire" onclick="hiddenGroup(this)"/>
+                            <input type="radio" name="radio1" class="radio" id="op-retire" onclick="hiddenGroup(this)" />
                             <div>
                                 <label class="text-entrega" for="op-retire">
                                     <i class="fas fa-store-alt"></i>
@@ -95,8 +108,8 @@
                     <div class="info-none none" id="op-entrega-correio">
                         <div class="box">
                             <form>
-                                <input type="text" id="consulta" data-bind="" placeholder="Digite seu CEP aqui"/>
-                                <input type="submit" id="search" data-bind="" value="calcular frete"/>
+                                <input type="text" id="consulta" data-bind="" placeholder="Digite seu CEP aqui" />
+                                <input type="submit" id="search" data-bind="" value="calcular frete" />
                             </form>
                         </div>
                     </div>
@@ -156,22 +169,20 @@
                         <div class="item-resumo">
                             <div>
                                 <span>Produto(s):</span>
-                                <span>R$120,00</span>
+                                <span name="valorProdutos" data-bind="valorProdutos"></span>
                             </div>
                             <div>
                                 <span>Frete:</span>
-                                <span>R$15,00</span>
+                                <span name="frete" data-bind="frete"></span>
                             </div>
                         </div>
                         <div class="total-resumo">
                             <div>
                                 <span>Total:</span>
-                                <span>R$135,00</span>
+                                <span name="subTotal" data-bind="subTotal"></span>
                             </div>
                         </div>
-                        <button class="button-pay pay green">
-                            <span><a href="~/Produto/Pagamento">IR PARA PAGAMENTO</a></span>
-                        </button>
+                        <button class="button-pay"><a href="~/Produto/Sacola">IR PARA PAGAMENTO</a></button>
                     </div>
                 </div>
             </div>
@@ -180,17 +191,17 @@
 </content>
 <script>
     function stepper(btn) {
-       let input = btn.closest('content').querySelector('#input-qtd');
+       let input = btn.closest('.resume-info').querySelector('#input-qtd');
 
        let id = btn.getAttribute("id");
        let min = input.getAttribute("min");
        let max = input.getAttribute("max");
-       let val = input.getAttribute("value");
+       let val = input.value;
        let newValue = (id == "increment") ? (parseInt(val) + 1) : (val - 1);
 
        if(newValue >= min && newValue <= max) {
-           console.log("entrei")
-           input.setAttribute("value", newValue);
+           input.value = newValue;
+           $pedido.calcularValor(btn.closest('.shop-item'), id);
        }
 
     }
@@ -202,10 +213,227 @@
             if(item.id == element.id){
                 item.classList.remove("none");
             }
-            else 
+            else
             {
                 item.classList.add("none");
             }
         });
     }
+
+    (function($pedido){
+
+        var init = function (container) {
+            let contents = container.querySelector("[ui-content='data']");
+            if (!contents) { return false; }
+
+            contents.isAutoLoad = (contents.getAttribute("ui-load") || "").toLowerCase() === "auto";
+
+            if (!contents.initialized) {
+                contents.container = container;
+                contents.pixelAutoLoadThreshold = 25;
+                contents.maxPageCount = parseInt(contents.getAttribute("maxPageCount"), 10) || 10;
+
+                contents.url = contents.getAttribute("data-url");
+                contents.template = contents.template || contents.querySelector(":scope > template") || false;
+
+                let elements = null;
+
+                elements = container.querySelectorAll("[ui-content='filter']") || false;
+                for (let i = 0; i < elements.length; i++) {
+                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    if (target) { target.filter = elements[i]; continue; }
+
+                    contents.filter = elements[i];
+                }
+
+                //elements = container.querySelectorAll("[ui-content='empty']") || false;
+                //for (let i = 0; i < elements.length; i++) {
+                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                //    if (target) { target.empty = elements[i]; continue; }
+
+                //    contents.empty = elements[i];
+                //}
+
+                //elements = container.querySelectorAll("[ui-content='loading']") || false;
+                //for (let i = 0; i < elements.length; i++) {
+                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                //    if (target) { target.loading = elements[i]; continue; }
+
+                //    contents.loading = elements[i];
+                //}
+
+                elements = container.querySelectorAll("[ui-content='paging']") || false;
+                for (let i = 0; i < elements.length; i++) {
+                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    if (target) {
+                        target.paging = elements[i];
+                    }
+                    else {
+                        target = contents;
+                        target.paging = elements[i];
+                    }
+
+                    target.paging.pages = target.paging.querySelector("[ui-content='pages']") || false;
+                    target.paging.prevPage = target.paging.querySelector("[ui-content='prev-page']") || false;
+                    target.paging.nextPage = target.paging.querySelector("[ui-content='next-page']") || false;
+                }
+
+                contents.initialized = true;
+            }
+
+            return contents;
+        };
+
+        $pedido.delete = function(button, itemSeletor){
+            let ID = itemSeletor.querySelector('[name=ID]').value;
+            let pedidoID = itemSeletor.querySelector('[name=PedidoID]').value;
+            let container = itemSeletor.closest('.colsWeb');
+
+            $min.ajax({
+                url: $min.root() + $ui.relativePath + 'Pedido/RemoveItem?ID=' + ID + '&pedidoID=' + pedidoID,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                },
+                onsuccess: function (response) {
+
+                    if(response.length == 0){
+                        console.log('entrei')
+                        return window.location.href = 'SacolaVazia';
+                    }
+
+                    let obj = {
+                        pedidos: response,
+                        valorProdutos: response[0].Pedido.ValorTotal,
+                        frete: response[0].Pedido.Frete
+                    };
+
+                    let subTotal = container.querySelector('[name = subTotal]').innerHTML;
+                    subTotal = obj.valorProdutos + obj.frete;
+                    obj["subTotal"] = subTotal;
+
+                    console.log(response)
+                    $min.bind(container, obj);
+
+                },
+                onfailure: function (httpCode, httpMessage) {
+
+                }
+            });
+        }
+
+        $pedido.valorTotal = function(container, valor, id){
+            let subTotal = container.querySelector('[name = subTotal]');
+            let newTotal = "";
+
+            let frete = container.querySelector('[name = frete]');
+
+            if(id == "decrement"){
+                newTotal = parseFloat(subTotal.innerHTML) - parseFloat(valor) - parseFloat(frete.innerHTML);
+            }else{
+                newTotal = parseFloat(subTotal.innerHTML) + parseFloat(valor) + parseFloat(frete.innerHTML);
+            }
+
+            subTotal.innerHTML = newTotal.toFixed(2);
+
+        };
+
+        $pedido.totalProdutos = function(container, valor, id){
+            let valorProdutos = container.querySelector('[name = valorProdutos]');
+            let newTotal = "";
+
+            if(id == "decrement"){
+                newTotal = parseFloat(valorProdutos.innerHTML) - parseFloat(valor);
+            }else{
+                newTotal = parseFloat(valorProdutos.innerHTML) + parseFloat(valor);
+            }
+            
+            valorProdutos.innerHTML = newTotal.toFixed(2);
+
+        }
+
+        $pedido.calcularValor = function(div, id){
+            let valorUnitario = div.querySelector('[name = ProdutoValor]').value;
+            let ValorTotal = div.querySelector('[name = ValorTotal]').innerHTML;
+            let newValue = "";
+
+            if(id == "decrement"){
+                newValue =  ValorTotal - valorUnitario;
+            }else{
+                newValue =  parseFloat(ValorTotal) + parseFloat(valorUnitario);
+            }
+
+            div.querySelector('[name = ValorTotal]').innerHTML = parseFloat(newValue).toFixed(2);
+            $pedido.valorTotal(div.closest('.card-sacola'), newValue, id);
+            $pedido.totalProdutos(div.closest('.card-sacola'), newValue, id);
+        }
+
+        $pedido.carregar = function(container, id) {
+            let contents = init(container);
+            if (!contents) { return false; }
+
+            if (contents.filter) {
+                contents.request.Data = $min.read(contents.filter);
+            }
+
+            if (contents.template) {
+                $min.clear(contents);
+            }
+
+            $min.ajax({
+                url: $min.root() + $ui.relativePath + 'Pedido/GetPedido?pedidoID=' + @pedidoID,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                },
+                onsuccess: function (response) {
+
+                    let obj = {
+                        pedidos: response,
+                        valorProdutos: response[0].Pedido.ValorTotal,
+                        frete: response[0].Pedido.Frete
+                    };
+
+                    let subTotal = container.querySelector('[name = subTotal]').innerHTML;
+                    subTotal = obj.valorProdutos + obj.frete;
+                    obj["subTotal"] = subTotal;
+
+                    console.log(response)
+                    $min.bind(contents, obj);
+                    //$produto.bindImages(contents, obj);
+                    //$produto.bindCor(contents, obj);
+                    //$produto.bindBigImages(contents, obj);
+
+                },
+                onfailure: function (httpCode, httpMessage) {
+
+                }
+            });
+        };
+    })(window.$pedido = window.$pedido || {});
+
+    $pedido.carregar(document.getElementById("sacola"));
 </script>
+<template id="ui-popup">
+    <div class="ui-popup pulse-center">
+
+        <div class="left-bar">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+
+        <div class="title" ui-content="title">Confirmação</div>
+        <div class="text" ui-content="text"></div>
+
+        <div class="bottom-bar">
+            <button class="confirm" ui-action="confirm">
+                <span><i class="far fa-check"></i></span>
+                Confirmar
+            </button>
+
+            <button class="cancel" ui-action="cancel">
+                <span><i class="far fa-times"></i></span>
+                Cancelar
+            </button>
+        </div>
+    </div>
+</template>

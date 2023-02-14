@@ -1,6 +1,7 @@
 ﻿@using EstiloMB.Core;
 @using EstiloMB.Site;
 @using EstiloMB.MVC;
+@inject Localization loc
 @addTagHelper *, MyWebApp
 
 <!DOCTYPE html>
@@ -15,6 +16,8 @@
 	<script type="text/javascript" src="~/js/fa/all.js"></script>
     <script type="text/javascript" src="~/js/ChartJS/Chart.js"></script>
     <script type="text/javascript" src="~/js/site.js"></script>
+    <script type="text/javascript" src="~/js/principal.js"></script>
+    <script type="text/javascript" src="~/js/jquery.js"></script>
     <script type="text/javascript" src="~/js/Minimum-1.8.js"></script>
     <script src="~/js/swipe.js"></script>
 </head>
@@ -105,6 +108,29 @@
     <footer class="border-top footer text-muted">
         &copy; 2022 - EstiloMB_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </footer>
+    <template id="ui-popup">
+        <div class="ui-popup pulse-center">
+
+            <div class="left-bar">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+
+            <div class="title" ui-content="title">Confirmação</div>
+            <div class="text" ui-content="text"></div>
+
+            <div class="bottom-bar">
+                <button class="confirm" ui-action="confirm">
+                    <span><i class="far fa-check"></i></span>
+                    Confirmar
+                </button>
+
+                <button class="cancel" ui-action="cancel">
+                    <span><i class="far fa-times"></i></span>
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </template>
 </body>
 </html>
 <script>

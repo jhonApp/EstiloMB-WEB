@@ -78,5 +78,17 @@ namespace EstiloMB.Core
         internal const string ProdutoCriado = "ProdutoCriado";
         #endregion
 
+        #region [Pedido]
+        internal const string Pedido = "Pedido";
+        internal const string PedidoNomeJaRegistrado = "Este Pedido Ja foi Registrado.";
+        internal const string PedidoCriado = "Pedido Criado!";
+        #endregion
+
+        #region [ItemPedido]
+        internal const string ItemPedido = "Item Pedido";
+        internal const string ItemNomeJaRegistrado = "Este Pedido Ja foi Registrado.";
+        internal const string ItemCriado = "Item Criado!";
+        #endregion
+
     }
 }

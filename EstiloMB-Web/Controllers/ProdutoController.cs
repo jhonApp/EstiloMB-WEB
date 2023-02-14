@@ -14,6 +14,17 @@ namespace EstiloMB.Site.Controllers
             return View();
         }
 
+        public IActionResult Sacola(int pedidoID)
+        {
+            ViewBag.PedidoID = pedidoID;
+            return View();
+        }
+
+        public IActionResult SacolaVazia()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult GetProdutoByID(int ID)
         {
@@ -21,11 +32,6 @@ namespace EstiloMB.Site.Controllers
 
             response.Data = Produto.GetByID(ID);
             return Json(response);
-        }
-
-        public IActionResult Sacola()
-        {
-            return View();
         }
 
         public IActionResult Pagamento()
