@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using EstiloMB.Core;
 using System.Collections.Generic;
 using EstiloMB.MVC;
+using Newtonsoft.Json;
 
 namespace EstiloMB.Site.Controllers
 {
@@ -14,9 +15,8 @@ namespace EstiloMB.Site.Controllers
             return View();
         }
 
-        public IActionResult Sacola(int pedidoID)
+        public IActionResult Sacola()
         {
-            ViewBag.PedidoID = pedidoID;
             return View();
         }
 

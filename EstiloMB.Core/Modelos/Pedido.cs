@@ -24,6 +24,7 @@ namespace EstiloMB.Core
         public StatusPedido StatusPedido { get; set; }
         public decimal ValorTotal { get; set; }
         public int? UsuarioID { get; set; }
+        [NotMapped] public List<ItemPedido> itemPedidos { get; set; }
 
         [ForeignKey("UsuarioID")]
         public Usuario Usuario { get; set; }
@@ -215,7 +216,7 @@ namespace EstiloMB.Core
             }
         }
 
-        public static Pedido CreatePedido(int usuarioID)
+        public static Pedido CreatePedido()
         {
             Pedido pedido = new Pedido();
 
@@ -224,7 +225,6 @@ namespace EstiloMB.Core
                 using Database<Pedido> database = new Database<Pedido>();
                 
                 pedido.DataPedido = DateTime.Now;
-                pedido.UsuarioID = usuarioID;
                 pedido.StatusPedido = StatusPedido.EmAndamento;
 
                 database.Set<Pedido>().Add(pedido);
