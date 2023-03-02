@@ -946,7 +946,7 @@ input[type="checkbox"] {
 /* Sacola
 -------------------------------------------------- */
 .wrapper-sacola {
-    background-color: #f3f3f3;
+    background-color: #D9D9D9;
     min-height: 700px;
 }
 .nav-main-sacola {
@@ -1087,7 +1087,6 @@ input[type="checkbox"] {
             }
 
 .remove-item .value-size {
-    word-spacing: 12px;
     font-size: 1rem;
     line-height: 1.125rem;
     margin-block-end: 0.3em;
@@ -1199,16 +1198,70 @@ button {
     /*top: -60px;*/
 }
 
-.title-entrega {
-    width: 90%;
-    height: 25%;
+.accordion_entrega {
+    display: flex;
+    width: 95%;
+    margin: 0;
+    padding-bottom: 10px;
+    flex-direction: column;
 }
+
+    .accordion_entrega li {
+        list-style: none;
+        margin: 15px;
+        padding: 10px;
+        border-left: 5px solid #9AA3FF;
+        /*border-radius: 8px;*/
+        background: #eeeeeede;
+    }
+
+        .accordion_entrega li label {
+            display: flex;
+            align-items: center;
+            /* padding: 10px; */
+            /* font-size: 18px; */
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .accordion_entrega label svg {
+            margin-top: 3px;
+            margin-left: 2em;
+        }
+
+    .accordion_entrega input[type="checkbox"] {
+        display: none;
+    }
+
+        .accordion_entrega .content {
+            color: #555;
+            padding: 0 10px;
+            line-height: 26px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s, padding 0.5s;
+        }
+
+    .accordion_entrega input[type="checkbox"]:checked + label + .content {
+        max-height: 400px;
+        padding: 10px 10px 20px 0;
+    }
+
+    .accordion_entrega input[type="checkbox"]:checked + label svg {
+        transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+    }
+
+    .title-entrega {
+        width: 90%;
+        height: 25%;
+    }
 
     .title-entrega h1 {
         font-weight: 500;
         line-height: 1.5625rem;
         /*text-transform: uppercase;*/
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
 .info-none {
@@ -1222,11 +1275,16 @@ button {
     margin-left: 10px;
 }
 
-.box {
-    top: 50%;
-    left: 50%;
-    /*margin-top: 40px;
-    margin-bottom: 40px;*/
+.box a {
+    color: black;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 10px;
+    text-decoration: underline;
+}
+
+.box p{
+    margin-bottom: 40px;
 }
 
     .box input {
@@ -1237,19 +1295,18 @@ button {
 
         .box input[type="text"] {
             background: #fff;
-            width: 250px;
             height: 30px;
             color: #9a9a9a;
             border: 1px solid #B583EA;
             outline: none;
-            padding: 0 25px;
+            padding: 0 10px;
             border-radius: 5px 0 0 5px;
         }
 
         .box input[type="submit"] {
-            position: absolute;
             color: white;
             font-size: 14px;
+            right: 4px;
             border-radius: 0 5px 5px 0;
             border: 1px solid #212529;
             width: 110px;
@@ -1263,6 +1320,18 @@ button {
                 background-color: #9959dd;
                 border: 1px solid #9959dd;
             }
+
+.box .adress {
+    display: flex;
+    align-items: baseline;
+    margin-top: 5px;
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+    .box .adress svg {
+        margin-right: 12px;
+    }
 
 .valor-shop {
     grid-area: valor-shop;
@@ -1339,13 +1408,17 @@ button {
     margin-bottom: 20px;
 }
 
+.box {
+    background-color: #fff;
+    padding:10px;
+}
+
 .box p {
-    margin: 0;
+    margin-bottom: 10px;
 }
 
 .box span {
     word-wrap: break-word;
-    display: list-item;
     
 }
 

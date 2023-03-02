@@ -2,8 +2,6 @@
 @using EstiloMB.Core
 @{
     ViewData["Title"] = "Sacola";
-    int userID = User.GetClaimInt32("ID");
-    int pedidoID = ViewBag.PedidoID;
 }
 <head>
     <meta charset="utf-8" />
@@ -44,9 +42,9 @@
         <div class="colsWeb">
             <div class="title-resume"><h1>Sacola</h1></div>
             <div class="card-sacola" ui-content="data">
-                <div class="resume-shop" data-array="pedidos">
+                <div class="resume-shop" data-array="pedidos" onbind="this.data = data; console.log(data)">
                     <template>
-                        <div class="shop-item" onbind="this.data = data; console.log(data)">
+                        <div class="shop-item">
                             <img src="~/image/jeans.jpg"
                                  onbind="if (data.ImageURL) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; }
                                         else { this.src = '@Url.Content("~/image/jeans.jpg")'; }" />
@@ -76,92 +74,54 @@
                 </div>
                 <div class="entrega-shop">
                     <div class="title-entrega"><h1>Selecione uma opção para a entrega ou retire no local:</h1></div>
-                    <div class="flex">
-                        <div class="menu-item-sacola">
-                            <input type="radio" name="radio1" class="radio" id="op-entrega-correio" onclick="hiddenGroup(this)" />
-                            <div>
-                                <label class="text-entrega-correios w-100" for="op-entrega-correio">
-                                    <i class="fas fa-truck-loading"></i>
-                                    Correios
-                                </label>
+                    <ul class="accordion_entrega">
+                        <li>
+                            <input type="checkbox" name="accordion" id="first" />
+                            <label class="first" for="first">
+                                Correios
+                                <i class="fal fa-chevron-right"></i>
+                            </label>
+                            <div class="content">
+                                <div class="box">
+                                    <p>Calcular frete e prazo</p>
+                                    <input type="text" id="consulta" placeholder="Digite seu CEP aqui" />
+                                    <input type="submit" id="search" value="calcular frete" onclick="$pedido.correios(this, document.querySelector('.resume-shop'))" />
+                                    <a href="https://buscacepinter.correios.com.br/app/endereco/index.php?t" target="_blank">Não sei meu CEP</a>
+                                    <div class="adress">
+                                        <span class="hidden">Frete: R$ 20,00</span>
+                                    </div>
+                                    <div class="adress">
+                                        <span class="hidden">Prazo: 5 dia(s)</span>
+                                    </div>
+                                    <div class="adress">
+                                        <i class="fas fa-map-marker-alt hidden"></i>
+                                        <span class="hidden">Rua Dinamarca, Jardim Primeiro de Maio, Carapicuíba, SP</span>
+                                    </div>
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="menu-item-sacola">
-                            <input type="radio" name="radio1" class="radio" id="op-entrega-vendedor" onclick="hiddenGroup(this)" />
-                            <div>
-                                <label class="text-entrega" for="op-entrega-vendedor">
-                                    <i class="fas fa-comments"></i>
-                                    Combine com o vendedor
-                                </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="accordion" id="second" />
+                            <label class="second" for="second">
+                                Combine com o vendedor
+                                <i class="fal fa-chevron-right"></i>
+                            </label>
+                            <div class="content">
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. </p>
                             </div>
-                        </div>
-                        <div class="menu-item-sacola">
-                            <input type="radio" name="radio1" class="radio" id="op-retire" onclick="hiddenGroup(this)" />
-                            <div>
-                                <label class="text-entrega" for="op-retire">
-                                    <i class="fas fa-store-alt"></i>
-                                    Retire no local
-                                </label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="accordion" id="third" />
+                            <label class="third" for="third">
+                                Retire no local
+                                <i class="fal fa-chevron-right"></i>
+                            </label>
+                            <div class="content">
+                                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. </p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="info-none none" id="op-entrega-correio">
-                        <div class="box">
-                            <form>
-                                <input type="text" id="consulta" data-bind="" placeholder="Digite seu CEP aqui" />
-                                <input type="submit" id="search" data-bind="" value="calcular frete" />
-                            </form>
-                        </div>
-                    </div>
-                    <div class="info-none none" id="op-entrega-vendedor">
-                        <div class="box margin-entrega">
-                            <span><strong>Importante: </strong></span>
-                            <span>Entrega somente em estações da linha 8 diamante da CPTM;</span>
-                            <span>A taxa de entrega pode variar dependendo da estação selecionada;</span>
-                            <span>Fazemos entrega somente aos sábados.</span>
-                        </div>
-                        <div class="margin-entrega">
-                            <label class="custom-seletor">
-                                <span>Selecione a Estação:</span>
-                                <select>
-                                    <option value="1">Carapicuíba</option>
-                                    <option value="1">Osasco</option>
-                                    <option value="1">General Miguel Costa</option>
-                                </select>
-                            </label>
-                            <label class="taxa">
-                                <span>Taxa de Entrega:</span>
-                                <span><strong>R$ 15,00</strong></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="info-none none" id="op-retire">
-                        <div class="box margin-entrega">
-                            <span><strong>Endereço: </strong></span>
-                            <span>Rua: Dinamarca, n° 49, Bairro: Primeiro de Maio - Carapicuíba</span>
-                            <span>CEP: 06365-705</span>
-                        </div>
-                        <div class="margin-entrega">
-                            <label class="custom-seletor">
-                                <span>Dia da semana:</span>
-                                <select>
-                                    <option value="1">Segunda</option>
-                                    <option value="1">Terça</option>
-                                    <option value="1">Quarta</option>
-                                    <option value="1">Quinta</option>
-                                    <option value="1">Sexta</option>
-                                    <option value="1">Sábado</option>
-                                </select>
-                            </label>
-                            <label class="custom-seletor">
-                                <span>Período:</span>
-                                <select>
-                                    <option value="1">Manhã</option>
-                                    <option value="1">Tarde</option>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
                 <div class="valor-shop">
                     <div class="title-resumo"><h1>Resumo do Pedido</h1></div>
@@ -189,7 +149,42 @@
         </div>
     </div>
 </content>
+<template id="ui-popup">
+    <div class="ui-popup pulse-center">
+
+        <div class="left-bar">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+
+        <div class="title" ui-content="title">Confirmação</div>
+        <div class="text" ui-content="text"></div>
+
+        <div class="bottom-bar">
+            <button class="confirm" ui-action="confirm">
+                <span><i class="far fa-check"></i></span>
+                Confirmar
+            </button>
+
+            <button class="cancel" ui-action="cancel">
+                <span><i class="far fa-times"></i></span>
+                Cancelar
+            </button>
+        </div>
+    </div>
+</template>
 <script>
+    function formatarValorMonetario(valorString) {
+        const valorFloat = parseFloat(valorString.replace(",", "."));
+        if (isNaN(valorFloat)) {
+        return "Valor inválido";
+        }
+        const valorFormatado = valorFloat.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        });
+        return valorFormatado;
+    }
+
     function stepper(btn) {
        let input = btn.closest('.resume-info').querySelector('#input-qtd');
 
@@ -197,13 +192,12 @@
        let min = input.getAttribute("min");
        let max = input.getAttribute("max");
        let val = input.value;
-       let newValue = (id == "increment") ? (parseInt(val) + 1) : (val - 1);
+       let quantidade = (id == "increment") ? (parseInt(val) + 1) : (val - 1);
 
-       if(newValue >= min && newValue <= max) {
-           input.value = newValue;
-           $pedido.calcularValor(btn.closest('.shop-item'), id);
+       if(quantidade >= min && quantidade <= max) {
+           input.value = quantidade;
+           $pedido.calcularValorItem(btn.closest('.shop-item'), id);
        }
-
     }
 
     function hiddenGroup(element) {
@@ -284,6 +278,10 @@
             return contents;
         };
 
+        function substituirVirgulaPorPonto(string) {
+          return string.replace(/,/g, ".");
+        }
+
         $pedido.delete = function(button, itemSeletor){
             let ID = itemSeletor.querySelector('[name=ID]').value;
             let pedidoID = itemSeletor.querySelector('[name=PedidoID]').value;
@@ -322,118 +320,211 @@
             });
         }
 
-        $pedido.valorTotal = function(container, valor, id){
-            let subTotal = container.querySelector('[name = subTotal]');
-            let newTotal = "";
+        $pedido.maskCEP = function(cepInput, container){
 
-            let frete = container.querySelector('[name = frete]');
+            // adiciona um ouvinte de eventos para o campo de entrada
+            cepInput.addEventListener('input', formatCep);
 
-            if(id == "decrement"){
-                newTotal = parseFloat(subTotal.innerHTML) - parseFloat(valor) - parseFloat(frete.innerHTML);
-            }else{
-                newTotal = parseFloat(subTotal.innerHTML) + parseFloat(valor) + parseFloat(frete.innerHTML);
+            function formatCep() {
+
+              let cep = cepInput.value;
+              cep = cep.replace(/\D/g, '');
+              cep = cep.replace(/(\d{5})(\d{3})/, '$1-$2');
+              cepInput.value = cep;
+            }
+        }
+
+        $pedido.correios = function(input, container){
+
+            async function obterEndereco(cep) {
+                if (cep) {
+                    try {
+                        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                        const item = await response.json();
+                        return item;
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
             }
 
-            subTotal.innerHTML = newTotal.toFixed(2);
+            function obterDadosEnvio(container, cep) {
+              const { ProdutoTamanhos, Valor } = container.data.pedidos[0].Produto;
+              const { Peso, Altura, Comprimento, Largura } = ProdutoTamanhos[0];
 
+              return {
+                peso: Peso,
+                altura: Altura,
+                comprimento: Comprimento,
+                largura: Largura,
+                valor: Valor,
+                cepOrigem: "09330383",
+                cepDestino: cep.replace(/-/g, ''),
+                pesoQuilo: Peso / 1000,
+              };
+            }
+
+            function enviarRequisicao(dados) {
+              $min.ajax({
+                url: `${$min.root()}${$ui.relativePath}Pedido/ConsultarPrazo?cep=${dados.cepDestino}&peso=${dados.pesoQuilo}&altura=${dados.altura}&comprimento=${dados.comprimento}&largura=${dados.largura}&valor=${dados.valor}`,
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                },
+                onsuccess: function (response) {
+                  console.log(response);
+                  if(response != null) {
+
+                    let valores = {valorFrete: response[0], diasEntrega: response[1]};
+
+                    let freteElement = document.querySelector('[name=frete]');
+                    let valorProdutosElement = document.querySelector('[name=valorProdutos]');
+                    let subTotalElement = document.querySelector('[name=subTotal]');
+
+                    const valorProdutosFloat = parseFloat(valorProdutosElement.innerHTML.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
+                    let novoValorFrete = substituirVirgulaPorPonto(valores.valorFrete);
+
+                    let novoSubTotal = parseFloat(valorProdutosFloat) + parseFloat(novoValorFrete);
+
+                    const addresses = document.querySelectorAll('.box .adress');
+                    addresses.forEach((address) => {
+
+                      let elementos = address.querySelectorAll('.hidden');
+                      elementos.forEach((item) => {
+                          item.classList.remove('hidden');
+                      });
+
+                    });
+
+                    subTotalElement.innerHTML = formatarValorMonetario(novoSubTotal.toString());
+                    freteElement.innerHTML = formatarValorMonetario(novoValorFrete);
+
+                  }
+                },
+                onfailure: function (httpCode, httpMessage) {
+                  console.error(`Erro na requisição: ${httpCode} ${httpMessage}`);
+                }
+              });
+            }
+
+            const cep = input.closest('.box').querySelector('#consulta').value;
+            const dadosEnvio = obterDadosEnvio(container, cep);
+            const enderecoCompleto = obterEndereco(cep);
+            enviarRequisicao(dadosEnvio);
         };
 
-        $pedido.totalProdutos = function(container, valor, id){
-            let valorProdutos = container.querySelector('[name = valorProdutos]');
-            let newTotal = "";
+        // Função que atualiza o valor total do pedido
+        $pedido.atualizarValorTotal = function(container) {
+          const subTotal = container.querySelector('[name=subTotal]');
+          const valorProdutos = container.querySelector('[name=valorProdutos]');
+          const frete = container.querySelector('[name=frete]');
 
-            if(id == "decrement"){
-                newTotal = parseFloat(valorProdutos.innerHTML) - parseFloat(valor);
-            }else{
-                newTotal = parseFloat(valorProdutos.innerHTML) + parseFloat(valor);
-            }
-            
-            valorProdutos.innerHTML = newTotal.toFixed(2);
+          const valorProdutosFloat = parseFloat(valorProdutos.innerHTML.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
+          const freteFloat = parseFloat(frete.innerHTML.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
 
-        }
+          const newTotal = parseFloat(valorProdutosFloat) + parseFloat(freteFloat);
+          subTotal.innerHTML = formatarValorMonetario(newTotal.toFixed(2));
+        };
 
-        $pedido.calcularValor = function(div, id){
-            let valorUnitario = div.querySelector('[name = ProdutoValor]').value;
-            let ValorTotal = div.querySelector('[name = ValorTotal]').innerHTML;
-            let newValue = "";
+        // Função que atualiza o valor total dos produtos
+        $pedido.atualizarValorProdutos = function(container, valor, id) {
+          const valorProdutos = container.querySelector('[name=valorProdutos]');
+          const valorProdutosFloat = parseFloat(valorProdutos.innerHTML.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
 
-            if(id == "decrement"){
-                newValue =  ValorTotal - valorUnitario;
-            }else{
-                newValue =  parseFloat(ValorTotal) + parseFloat(valorUnitario);
-            }
+          let newTotal;
+          if (id == "decrement") {
+            newTotal = parseFloat(valorProdutosFloat) - parseFloat(valor);
+          } else {
+            newTotal = parseFloat(valorProdutosFloat) + parseFloat(valor);
+          }
 
-            div.querySelector('[name = ValorTotal]').innerHTML = parseFloat(newValue).toFixed(2);
-            $pedido.valorTotal(div.closest('.card-sacola'), newValue, id);
-            $pedido.totalProdutos(div.closest('.card-sacola'), newValue, id);
-        }
+          valorProdutos.innerHTML = formatarValorMonetario(newTotal.toFixed(2));
+        };
+
+        // Função que calcula o valor do item e atualiza o valor total do pedido
+        $pedido.calcularValorItem = function(itemDiv, id) {
+          const PEDIDO = {
+            ATRIBUTO_PRODUTO_VALOR: 'ProdutoValor',
+            ATRIBUTO_VALOR_TOTAL: 'ValorTotal'
+          };
+
+          const valorUnitario = itemDiv.querySelector(`[name=${PEDIDO.ATRIBUTO_PRODUTO_VALOR}]`).value;
+          let valorTotal = itemDiv.querySelector(`[name=${PEDIDO.ATRIBUTO_VALOR_TOTAL}]`).innerHTML;
+          const valorFloat = parseFloat(valorTotal.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
+
+          if (id === 'decrement') {
+            valorTotal = parseFloat(valorFloat) - parseFloat(valorUnitario);
+          } else {
+            valorTotal = parseFloat(valorFloat) + parseFloat(valorUnitario);
+          }
+
+          itemDiv.querySelector(`[name=${PEDIDO.ATRIBUTO_VALOR_TOTAL}]`).innerHTML = formatarValorMonetario(valorTotal.toFixed(2));
+
+          $pedido.atualizarValorProdutos(itemDiv.closest('.card-sacola'), valorUnitario, id);
+          $pedido.atualizarValorTotal(itemDiv.closest('.card-sacola'));
+        };
 
         $pedido.carregar = function(container, id) {
-            let contents = init(container);
-            if (!contents) { return false; }
+            const contents = init(container);
+            if (!contents) {
+            return false;
+            }
 
             if (contents.filter) {
-                contents.request.Data = $min.read(contents.filter);
+            contents.request.Data = $min.read(contents.filter);
             }
 
             if (contents.template) {
-                $min.clear(contents);
+            $min.clear(contents);
             }
 
-            $min.ajax({
-                url: $min.root() + $ui.relativePath + 'Pedido/GetPedido?pedidoID=' + @pedidoID,
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
-                },
-                onsuccess: function (response) {
 
-                    let obj = {
-                        pedidos: response,
-                        valorProdutos: response[0].Pedido.ValorTotal,
-                        frete: response[0].Pedido.Frete
-                    };
+            const url = $min.root() + $ui.relativePath + 'Pedido/GetPedido';
+            const headers = {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+            };
 
-                    let subTotal = container.querySelector('[name = subTotal]').innerHTML;
-                    subTotal = obj.valorProdutos + obj.frete;
-                    obj["subTotal"] = subTotal;
+            const onSuccess = function(response) {
+                console.log(response);
 
-                    console.log(response)
-                    $min.bind(contents, obj);
-                    //$produto.bindImages(contents, obj);
-                    //$produto.bindCor(contents, obj);
-                    //$produto.bindBigImages(contents, obj);
+                const pedidos = response;
+                const valorProdutos = response[0].Pedido.ValorTotal;
+                const frete = response[0].Pedido.Frete;
 
-                },
-                onfailure: function (httpCode, httpMessage) {
-
+                for (const item of pedidos) {
+                    item.ValorTotal = formatarValorMonetario(item.ValorTotal.toString());
                 }
+
+                const subTotal = valorProdutos + frete;
+                const pedido = {
+                    pedidos,
+                    valorProdutos: formatarValorMonetario(valorProdutos.toString()),
+                    frete: formatarValorMonetario(frete.toString()),
+                    subTotal: formatarValorMonetario(subTotal.toString())
+                };
+
+                    console.log(pedido);
+                    $min.bind(contents, pedido);
+                };
+
+            const onFailure = function(httpCode, httpMessage) {
+                console.log("erro");
+            };
+
+            $min.ajax({
+                url,
+                headers,
+                onsuccess: onSuccess,
+                onfailure: onFailure
             });
         };
+
     })(window.$pedido = window.$pedido || {});
 
     $pedido.carregar(document.getElementById("sacola"));
+    // seleciona o campo de entrada de CEP
+
+    $pedido.maskCEP(document.getElementById('consulta'));
+
 </script>
-<template id="ui-popup">
-    <div class="ui-popup pulse-center">
-
-        <div class="left-bar">
-            <i class="fas fa-exclamation-triangle"></i>
-        </div>
-
-        <div class="title" ui-content="title">Confirmação</div>
-        <div class="text" ui-content="text"></div>
-
-        <div class="bottom-bar">
-            <button class="confirm" ui-action="confirm">
-                <span><i class="far fa-check"></i></span>
-                Confirmar
-            </button>
-
-            <button class="cancel" ui-action="cancel">
-                <span><i class="far fa-times"></i></span>
-                Cancelar
-            </button>
-        </div>
-    </div>
-</template>

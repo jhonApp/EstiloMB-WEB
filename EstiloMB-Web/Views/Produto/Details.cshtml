@@ -47,7 +47,7 @@
                     </div>
                     <div class="line">
                         <button class="button-pay"
-                                onclick="$produto.validation(this, this.closest('.grid-content'))">
+                                onclick="$produto.validation(this, this.closest('.grid-content'), @userID)">
                             COMPRAR
                         </button>
                     </div>
@@ -175,7 +175,7 @@
                 tamanho: tamanho,
                 contador: cont
             };
-
+            console.log(obj)
             return obj;
         }
 
@@ -192,39 +192,48 @@
             return corID;
         }
 
-        $produto.validation = function(button, content){
-            let data = content.data;
-            let usuarioID = @userID;
-            let prodID = data.ProdutoID;
+        $produto.validation = function(button, content, userID) {
+          const { data } = content;
+          const { ProdutoID } = data;
+          const corID = getCor(content);
+          const objeto = getTamanho(content);
 
-            let corID = getCor(content);
-            let obj = getTamanho(content);
-
-            if(obj.cont != 0){
-                $min.ajax({
-                    url: $min.root() + $ui.relativePath + 'Pedido/GerarPedido?produtoID=' + data.ProdutoID + '&tamanho=' + obj.tamanho + '&usuarioID=' + usuarioID + '&corID=' + corID,
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
-                    },
-                    onsuccess: function(response) {
-                        if(response != null){
-                            window.location.href = 'Sacola?pedidoID=' + response[0].PedidoID;
-                        }
-                    },
-                    onfailure: function(httpCode, httpMessage) {
-                        if (httpCode === 401) {
-                            let currentURL = window.location.href.replace($min.root() + $ui.relativePath, "");
-                            window.location.href = $min.root() + $ui.relativePath + $ui.redirectLoginURL + currentURL;
-                        }
-                        $ui.message(httpMessage, "error");
-                    }
-                });
-            }else{
-                let span = content.querySelector('.text-validation');
-                span.innerHTML = "Por favor, escolha uma opção";
+          function handleErrorResponse(error) {
+            if (error.response.status === 401) {
+            const currentURL = window.location.href.replace(
+                `${$min.root()}${$ui.relativePath}`,
+                ""
+            );
+            window.location.href = `${$min.root()}${$ui.relativePath}${$ui.redirectLoginURL}${currentURL}`;
             }
+            $ui.message(error.message, "error");
+          }
+
+          if (objeto.contador ?? 0 !== 0) {
+            const url = `${$min.root()}${$ui.relativePath}Pedido/AdicionarItemAoCarrinho?produtoID=${ProdutoID}&tamanho=${objeto.tamanho}&corID=${corID}`;
+
+            fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN"),
+              },
+            })
+            .then((response) => response.json())
+            .then((response) => {
+                //const itemPedidoJson = JSON.stringify(response);
+                //const url = `Sacola?itemPedido=${encodeURIComponent(itemPedidoJson)}`;
+                //window.location.href = url;
+                window.location.href = 'Sacola';
+            })
+            .catch(handleErrorResponse);
+          } else {
+            const validationText = content.querySelector(".text-validation");
+            validationText.innerHTML = "Por favor, escolha uma opção";
+          }
         };
+
+
 
         $produto.tamanhoChecked = function(input){
             let Listamanhos = input.closest('.flex').querySelectorAll('.radio-size');

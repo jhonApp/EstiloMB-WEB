@@ -17,6 +17,7 @@ namespace EstiloMB.Core
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public string Cor { get; set; }
+        [NotMapped]public int CorID { get; set; }
         public string Tamanho { get; set; }
         public string ImageURL { get; set; }
         public int Quantidade { get; set; }
@@ -188,26 +189,24 @@ namespace EstiloMB.Core
             return response;
         }
 
-        public static ItemPedido CreateItemPedido(string tamanho, Pedido pedido, int produtoID, int corID)
+        public static ItemPedido Create(ItemPedido itemPedido)
         {
-            ItemPedido itemPedido = new ItemPedido();
-
-            Produto produto = Produto.GetByID(produtoID);
+            Produto produto = Produto.GetByID(itemPedido.ProdutoID);
             try
             {
                 if(produto != null)
                 {
                     using Database<ItemPedido> database = new Database<ItemPedido>();
 
-                    if(pedido != null)
+                    if(itemPedido.Pedido != null)
                     {
-                        ProdutoImagem produtoImagem = produto.ProdutoImagens.Where(e => e.CorID == corID).FirstOrDefault();
+                        ProdutoImagem produtoImagem = produto.ProdutoImagens.Where(e => e.CorID == itemPedido.CorID).FirstOrDefault();
 
-                        itemPedido.PedidoID = pedido.ID;
+                        itemPedido.PedidoID = itemPedido.Pedido.ID;
                         itemPedido.ProdutoID = produto.ID;
                         itemPedido.Cor = produtoImagem.Cor.Nome;
                         itemPedido.ImageURL = produtoImagem.ImageURL;
-                        itemPedido.Tamanho = tamanho;
+                        itemPedido.Tamanho = itemPedido.Tamanho;
                         itemPedido.Quantidade = 1;
                         itemPedido.ValorTotal = produto.Valor;
 
@@ -215,7 +214,7 @@ namespace EstiloMB.Core
                         database.SaveChanges();
 
                         itemPedido.Produto = produto;
-                        itemPedido.Pedido = pedido;
+                        itemPedido.Pedido = itemPedido.Pedido;
                     }
                     
                 }
@@ -239,6 +238,7 @@ namespace EstiloMB.Core
                     .Include(p => p.Pedido)
                     .Include(p => p.Produto)
                     .Include(p => p.Produto).ThenInclude(p => p.ProdutoImagens)
+                    .Include(p => p.Produto).ThenInclude(p => p.ProdutoTamanhos).ThenInclude(p => p.Tamanho)
                     .Where(p => p.PedidoID == pedidoID)
                     .ToList();
 
@@ -308,9 +308,8 @@ namespace EstiloMB.Core
             }
         }
 
-        public static ItemPedido Update(int pedidoID, int produtoID, string tamanho, string nomeCor)
+        public static ItemPedido Update(ItemPedido itemPedido)
         {
-            ItemPedido itemPedido = new ItemPedido();
             Response<ItemPedido> response = new Response<ItemPedido>();
             int quantidade = 0;
             try
@@ -319,7 +318,7 @@ namespace EstiloMB.Core
                 itemPedido = db.Set<ItemPedido>()
                     .Include(p => p.Produto)
                     .Include(p => p.Pedido)
-                    .Where(p => p.PedidoID == pedidoID && p.ProdutoID == produtoID && p.Tamanho == tamanho && p.Cor == nomeCor)
+                    .Where(p => p.PedidoID == itemPedido.PedidoID && p.ProdutoID == itemPedido.ProdutoID && p.Tamanho == itemPedido.Tamanho && p.Cor == itemPedido.Cor)
                     .FirstOrDefault();
                 quantidade = itemPedido.Quantidade+1;
                 itemPedido.Quantidade = quantidade;
@@ -334,32 +333,38 @@ namespace EstiloMB.Core
 
         public static List<ItemPedido> GerarItemPedido(Pedido pedido, int produtoID, string tamanho, int corID)
         {
-            ItemPedido itemPedido = new ItemPedido();
             List<ItemPedido> itemPedidos = GetAll(pedido.ID);
-            List<ItemPedido> listaPedidos = new List<ItemPedido>();
-            bool registroAtualizado = false;
             ProdutoImagem produtoImagem = ProdutoImagem.GetByCorID(corID);
 
-            for (int i = 0; i < itemPedidos.Count(); i++)
+            // Verifica se já existe um item com as mesmas características na lista de pedidos
+            ItemPedido itemExistente = itemPedidos.FirstOrDefault(ip => ip.Tamanho == tamanho && ip.Cor == produtoImagem.Cor.Nome);
+
+            if (itemExistente != null)
             {
-                if (itemPedidos[i].Tamanho == tamanho && itemPedidos[i].Cor == produtoImagem.Cor.Nome && itemPedidos[i].ID != 0)
+                // Atualiza o item existente com a nova quantidade
+                itemExistente.Quantidade++;
+                Update(itemExistente);
+            }
+            else
+            {
+                // Cria um novo item e adiciona na lista de pedidos
+                ItemPedido novoItem = new ItemPedido
                 {
-                    itemPedidos[i] = Update(pedido.ID, produtoID, tamanho, produtoImagem.Cor.Nome);
-                    registroAtualizado = true;
-                }
-
-                itemPedido = itemPedidos[i];
-                listaPedidos.Add(itemPedido);
+                    PedidoID = pedido.ID,
+                    Pedido = pedido,
+                    ProdutoID = produtoID,
+                    Tamanho = tamanho,
+                    Cor = produtoImagem.Cor.Nome,
+                    CorID = corID,
+                    Quantidade = 1
+                };
+                Create(novoItem);
+                itemPedidos.Add(novoItem);
             }
 
-            if(itemPedidos.Count == 0 || !registroAtualizado)
-            {
-                listaPedidos.Add(CreateItemPedido(tamanho, pedido, produtoID, corID));
-            }
-            
-
-            return listaPedidos;
+            return itemPedidos;
         }
+
 
         public static void Remove(int ID)
         {

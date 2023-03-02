@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using StackExchange.Redis;
+using System;
 using System.Threading.Tasks;
 
 namespace EstiloMB.Site
@@ -53,6 +55,24 @@ namespace EstiloMB.Site
             services.AddTransient<CrossSiteAntiForgery>();
             services.AddAntiforgery(o => o.HeaderName = CrossSiteAntiForgery.Header);
 
+            // Configuração da conexão com o Redis
+            var redisConfig = ConfigurationOptions.Parse(Configuration.GetConnectionString("Redis"));
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConfig));
+
+            // Configuração do RedisCache
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetConnectionString("Redis");
+                options.InstanceName = "Redis-Jhon";
+            });
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".MyApp.Session";
+                options.IdleTimeout = TimeSpan.FromDays(6);
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddMvc(o =>
             {
                 o.Filters.AddService(typeof(CrossSiteAntiForgery));
@@ -99,6 +119,8 @@ namespace EstiloMB.Site
                 app.UseExceptionHandler("/Error");
             }
 
+            app.UseSession();
+            app.UseAuthorization();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseMvc(routes =>

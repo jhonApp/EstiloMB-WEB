@@ -11,8 +11,8 @@ CREATE TABLE Cor (
 
 CREATE TABLE Tamanho (
 	ID INT IDENTITY PRIMARY KEY,
-	Nome NVARCHAR(50) NOT NULL,
-)
+	Nome NVARCHAR(50) NOT NULL
+);
 
 CREATE TABLE Produto (
 	ID INT IDENTITY PRIMARY KEY,
@@ -42,6 +42,11 @@ CREATE TABLE [Produto.Tamanho] (
 
 	TamanhoID INT NOT NULL,
 	CONSTRAINT FK_ProdutoTamanho FOREIGN KEY(TamanhoID) REFERENCES Tamanho(ID),
+
+	Peso DECIMAL(10,2) NOT NULL,
+	Comprimento DECIMAL(10,2) NULL,
+	Altura DECIMAL(10,2) NULL,
+	Largura DECIMAL(10,2) NULL,
 
 	Status INT NOT NULL
 );
@@ -281,6 +286,7 @@ INSERT INTO [Usuario.Perfil] (UsuarioID, PerfilID) VALUES (6, 1);
 --drop table [Produto.Imagem]
 --drop table [Produto.Categoria]
 --drop table Produto
+--drop table Tamanho
 --drop table Cor
 --drop table Categoria
 --drop table Pedido
