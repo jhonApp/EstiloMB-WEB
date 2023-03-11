@@ -4,6 +4,12 @@ using EstiloMB.Core;
 using System.Collections.Generic;
 using EstiloMB.MVC;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Linq;
+using StackExchange.Redis;
+using System;
 
 namespace EstiloMB.Site.Controllers
 {
@@ -18,6 +24,53 @@ namespace EstiloMB.Site.Controllers
         public IActionResult Sacola()
         {
             return View();
+        }
+
+        public IActionResult RemoveItem(int ID)
+        {
+            // Conecte-se ao servidor Redis
+            ConnectionMultiplexer redis = RedisConnectionPool.GetConnection();
+            IDatabase db = redis.GetDatabase();
+
+            // Recupera o carrinho de compras atual do banco de dados Redis
+            var carrinhoJson = db.StringGet("carrinho");
+            Pedido carrinho = JsonConvert.DeserializeObject<Pedido>(carrinhoJson);
+
+            // Remove o item com o ID especificado do carrinho
+            carrinho.ItemPedidos.RemoveAll(item => item.ID == ID);
+
+            if (carrinho.ItemPedidos.Count != 0)
+            {
+                Pedido.AtualizaValorCarrinho(carrinho);
+
+                // Salva o carrinho atualizado no Redis
+                db.StringSet("carrinho", JsonConvert.SerializeObject(carrinho), TimeSpan.FromDays(30));
+            }
+            else
+            {
+                // Remove a chave do carrinho do banco de dados Redis
+                db.KeyDelete("carrinho");
+            }
+
+            // Retorna um objeto JSON com a lista de itens do carrinho atualizada
+            return Json(carrinho);
+        }
+
+        public IActionResult GetPedido()
+        {
+            Pedido carrinho = Pedido.ObterCarrinhoDeCompras();
+
+            if (carrinho == null)
+            {
+                return NoContent(); // retorna 204 No Content se o carrinho estiver vazio
+            }
+
+            Response<Pedido> response = new Response<Pedido>
+            {
+                Data = carrinho
+            };
+
+            return Json(response.Data); // retorna 200 OK com o objeto JSON contendo o carrinho de compras
         }
 
         public IActionResult SacolaVazia()
