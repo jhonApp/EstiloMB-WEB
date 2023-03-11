@@ -42,14 +42,14 @@
         <div class="colsWeb">
             <div class="title-resume"><h1>Sacola</h1></div>
             <div class="card-sacola" ui-content="data">
-                <div class="resume-shop" data-array="pedidos" onbind="this.data = data; console.log(data)">
+                <div class="resume-shop" data-array="ItemPedidos" onbind="this.data = data; console.log(data)">
                     <template>
                         <div class="shop-item">
                             <img src="~/image/jeans.jpg"
                                  onbind="if (data.ImageURL) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; }
                                         else { this.src = '@Url.Content("~/image/jeans.jpg")'; }" />
                             <div class="resume-info">
-                                <input type="hidden" name="ProdutoValor" data-bind="Produto.Valor" />
+                                <input type="hidden" name="ItemPedidoValor" data-bind="Produto.Valor" />
                                 <input type="hidden" name="ID" data-bind="ID" />
                                 <input type="hidden" name="PedidoID" data-bind="PedidoID" />
                                 <p><strong><span data-bind="Produto.Nome"></span></strong></p>
@@ -84,20 +84,19 @@
                             <div class="content">
                                 <div class="box">
                                     <p>Calcular frete e prazo</p>
-                                    <input type="text" id="consulta" placeholder="Digite seu CEP aqui" />
+                                    <input type="text" id="consulta" name="consulta" placeholder="Digite seu CEP aqui" />
                                     <input type="submit" id="search" value="calcular frete" onclick="$pedido.correios(this, document.querySelector('.resume-shop'))" />
                                     <a href="https://buscacepinter.correios.com.br/app/endereco/index.php?t" target="_blank">Não sei meu CEP</a>
                                     <div class="adress">
-                                        <span class="hidden">Frete: R$ 20,00</span>
+                                        <span class="hidden box-info" name="frete-info" data-bind="Frete"></span>
                                     </div>
                                     <div class="adress">
-                                        <span class="hidden">Prazo: 5 dia(s)</span>
+                                        <span class="hidden box-info" name="frete-prazo" data-bind=""></span>
                                     </div>
                                     <div class="adress">
                                         <i class="fas fa-map-marker-alt hidden"></i>
-                                        <span class="hidden">Rua Dinamarca, Jardim Primeiro de Maio, Carapicuíba, SP</span>
+                                        <span class="hidden box-info" name="frete-endereco" data-bind=""></span>
                                     </div>
-
                                 </div>
                             </div>
                         </li>
@@ -129,17 +128,17 @@
                         <div class="item-resumo">
                             <div>
                                 <span>Produto(s):</span>
-                                <span name="valorProdutos" data-bind="valorProdutos"></span>
+                                <span name="ValorTotalProdutos" data-bind="ValorTotalProdutos"></span>
                             </div>
                             <div>
                                 <span>Frete:</span>
-                                <span name="frete" data-bind="frete"></span>
+                                <span name="Frete" data-bind="Frete"></span>
                             </div>
                         </div>
                         <div class="total-resumo">
                             <div>
                                 <span>Total:</span>
-                                <span name="subTotal" data-bind="subTotal"></span>
+                                <span name="ValorTotalPedido" data-bind="ValorTotalPedido"></span>
                             </div>
                         </div>
                         <button class="button-pay"><a href="~/Produto/Sacola">IR PARA PAGAMENTO</a></button>
@@ -174,13 +173,13 @@
 </template>
 <script>
     function formatarValorMonetario(valorString) {
-        const valorFloat = parseFloat(valorString.replace(",", "."));
-        if (isNaN(valorFloat)) {
-        return "Valor inválido";
+        const valorFloat = parseFloat(valorString);
+        if (isNaN(valorString)) {
+            return "Valor inválido";
         }
         const valorFormatado = valorFloat.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
+            style: "currency",
+            currency: "BRL",
         });
         return valorFormatado;
     }
@@ -196,7 +195,7 @@
 
        if(quantidade >= min && quantidade <= max) {
            input.value = quantidade;
-           $pedido.calcularValorItem(btn.closest('.shop-item'), id);
+           $pedido.calcularValorItem(btn.closest('.card-sacola'), id);
        }
     }
 
@@ -288,34 +287,18 @@
             let container = itemSeletor.closest('.colsWeb');
 
             $min.ajax({
-                url: $min.root() + $ui.relativePath + 'Pedido/RemoveItem?ID=' + ID + '&pedidoID=' + pedidoID,
+                url: $min.root() + $ui.relativePath + 'Produto/RemoveItem?ID=' + ID,
                 headers: {
                     "Content-Type": "application/json",
                     "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
                 },
                 onsuccess: function (response) {
-
-                    if(response.length == 0){
-                        console.log('entrei')
-                        return window.location.href = 'SacolaVazia';
-                    }
-
-                    let obj = {
-                        pedidos: response,
-                        valorProdutos: response[0].Pedido.ValorTotal,
-                        frete: response[0].Pedido.Frete
-                    };
-
-                    let subTotal = container.querySelector('[name = subTotal]').innerHTML;
-                    subTotal = obj.valorProdutos + obj.frete;
-                    obj["subTotal"] = subTotal;
-
                     console.log(response)
-                    $min.bind(container, obj);
+                    if(response.ItemPedidos.length == 0){ return window.location.href = 'SacolaVazia'; }
 
+                    $min.bind(container, response);
                 },
                 onfailure: function (httpCode, httpMessage) {
-
                 }
             });
         }
@@ -349,7 +332,7 @@
             }
 
             function obterDadosEnvio(container, cep) {
-              const { ProdutoTamanhos, Valor } = container.data.pedidos[0].Produto;
+              const { ProdutoTamanhos, Valor } = container.data.ItemPedidos[0].Produto;
               const { Peso, Altura, Comprimento, Largura } = ProdutoTamanhos[0];
 
               return {
@@ -364,149 +347,176 @@
               };
             }
 
-            function enviarRequisicao(dados) {
-              $min.ajax({
-                url: `${$min.root()}${$ui.relativePath}Pedido/ConsultarPrazo?cep=${dados.cepDestino}&peso=${dados.pesoQuilo}&altura=${dados.altura}&comprimento=${dados.comprimento}&largura=${dados.largura}&valor=${dados.valor}`,
-                headers: {
-                  "Content-Type": "application/json",
-                  "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
-                },
-                onsuccess: function (response) {
-                  console.log(response);
-                  if(response != null) {
+            function enviarRequisicao(dados, resulEndereco) {
+              const url = `${$min.root()}${$ui.relativePath}Pedido/ConsultarPrazo?cep=${dados.cepDestino}&peso=${dados.pesoQuilo}&altura=${dados.altura}&comprimento=${dados.comprimento}&largura=${dados.largura}&valor=${dados.valor}`;
 
-                    let valores = {valorFrete: response[0], diasEntrega: response[1]};
+              const headers = {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+              };
 
-                    let freteElement = document.querySelector('[name=frete]');
-                    let valorProdutosElement = document.querySelector('[name=valorProdutos]');
-                    let subTotalElement = document.querySelector('[name=subTotal]');
+              try {
+                $min.ajax({
+                  url,
+                  headers,
+                  onsuccess(response) {
+                    console.log(response);
+                    if (response) {
+                      const [valorFrete, diasEntrega, endereco] = response;
 
-                    const valorProdutosFloat = parseFloat(valorProdutosElement.innerHTML.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
-                    let novoValorFrete = substituirVirgulaPorPonto(valores.valorFrete);
+                      const valorProdutosElement = document.querySelector('[name=ValorTotalProdutos]');
+                      const freteElement = document.querySelector('[name=Frete]');
+                      const subTotalElement = document.querySelector('[name=ValorTotalPedido]');
 
-                    let novoSubTotal = parseFloat(valorProdutosFloat) + parseFloat(novoValorFrete);
+                      const valorProdutosFloat = parseFloat(valorProdutosElement.innerHTML.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
+                      const novoValorFrete = substituirVirgulaPorPonto(valorFrete);
 
-                    const addresses = document.querySelectorAll('.box .adress');
-                    addresses.forEach((address) => {
+                      const novoSubTotal = valorProdutosFloat + parseFloat(novoValorFrete);
 
-                      let elementos = address.querySelectorAll('.hidden');
-                      elementos.forEach((item) => {
-                          item.classList.remove('hidden');
+                      const enderecoElements = document.querySelectorAll('.box .adress .box-info');
+                      console.log(enderecoElements)
+                      enderecoElements.forEach((item) => {
+                          console.log(item)
+                            if (item.getAttribute('name') === 'frete-info') {
+                                item.innerHTML = "Frete: " + valorFrete;
+                            } else if (item.getAttribute('name') === 'frete-prazo') {
+                                item.innerHTML = "Prazo: " + diasEntrega + " dia(s)";
+                            } else if (item.getAttribute('name') === 'frete-endereco') {
+                                item.innerHTML = endereco;
+                            }
+
+                            item.classList.remove('hidden');
                       });
 
-                    });
-
-                    subTotalElement.innerHTML = formatarValorMonetario(novoSubTotal.toString());
-                    freteElement.innerHTML = formatarValorMonetario(novoValorFrete);
-
+                      subTotalElement.innerHTML = formatarValorMonetario(novoSubTotal.toString());
+                      freteElement.innerHTML = formatarValorMonetario(novoValorFrete);
+                    }
+                  },
+                  onfailure(httpCode, httpMessage) {
+                    console.error(`Erro na requisição: ${httpCode} ${httpMessage}`);
                   }
-                },
-                onfailure: function (httpCode, httpMessage) {
-                  console.error(`Erro na requisição: ${httpCode} ${httpMessage}`);
-                }
-              });
+                });
+              } catch (error) {
+                console.error(error);
+              }
             }
 
             const cep = input.closest('.box').querySelector('#consulta').value;
             const dadosEnvio = obterDadosEnvio(container, cep);
             const enderecoCompleto = obterEndereco(cep);
-            enviarRequisicao(dadosEnvio);
-        };
-
-        // Função que atualiza o valor total do pedido
-        $pedido.atualizarValorTotal = function(container) {
-          const subTotal = container.querySelector('[name=subTotal]');
-          const valorProdutos = container.querySelector('[name=valorProdutos]');
-          const frete = container.querySelector('[name=frete]');
-
-          const valorProdutosFloat = parseFloat(valorProdutos.innerHTML.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
-          const freteFloat = parseFloat(frete.innerHTML.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
-
-          const newTotal = parseFloat(valorProdutosFloat) + parseFloat(freteFloat);
-          subTotal.innerHTML = formatarValorMonetario(newTotal.toFixed(2));
-        };
-
-        // Função que atualiza o valor total dos produtos
-        $pedido.atualizarValorProdutos = function(container, valor, id) {
-          const valorProdutos = container.querySelector('[name=valorProdutos]');
-          const valorProdutosFloat = parseFloat(valorProdutos.innerHTML.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
-
-          let newTotal;
-          if (id == "decrement") {
-            newTotal = parseFloat(valorProdutosFloat) - parseFloat(valor);
-          } else {
-            newTotal = parseFloat(valorProdutosFloat) + parseFloat(valor);
-          }
-
-          valorProdutos.innerHTML = formatarValorMonetario(newTotal.toFixed(2));
+            enviarRequisicao(dadosEnvio, enderecoCompleto);
         };
 
         // Função que calcula o valor do item e atualiza o valor total do pedido
         $pedido.calcularValorItem = function(itemDiv, id) {
           const PEDIDO = {
-            ATRIBUTO_PRODUTO_VALOR: 'ProdutoValor',
-            ATRIBUTO_VALOR_TOTAL: 'ValorTotal'
+            ATRIBUTO_ITEM_PEDIDO_VALOR: 'ItemPedidoValor',
+            ATRIBUTO_VALOR_ITEM_TOTAL: 'ValorTotal'
           };
 
-          const valorUnitario = itemDiv.querySelector(`[name=${PEDIDO.ATRIBUTO_PRODUTO_VALOR}]`).value;
-          let valorTotal = itemDiv.querySelector(`[name=${PEDIDO.ATRIBUTO_VALOR_TOTAL}]`).innerHTML;
-          const valorFloat = parseFloat(valorTotal.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
+          const quantidade = itemDiv.querySelector("#input-qtd").value;
+          const identificadorItem = itemDiv.querySelector(`[name=ID]`).value;
+          const valorUnitario = itemDiv.querySelector(`[name=${PEDIDO.ATRIBUTO_ITEM_PEDIDO_VALOR}]`).value;
+          let valorItemTotal = itemDiv.querySelector(`[name=${PEDIDO.ATRIBUTO_VALOR_ITEM_TOTAL}]`).innerHTML;
+          const valorFloat = parseFloat(valorItemTotal.replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.'));
 
-          if (id === 'decrement') {
-            valorTotal = parseFloat(valorFloat) - parseFloat(valorUnitario);
-          } else {
-            valorTotal = parseFloat(valorFloat) + parseFloat(valorUnitario);
-          }
+          $min.ajax({
+            url: $min.root() + $ui.relativePath + 'Pedido/UpdateByParamentros?ValorTotal=' + valorFloat + '&ValorUnitario=' + valorUnitario + '&Quantidade=' + quantidade + '&IdentificadorItem=' + identificadorItem + '&ID=' + id,
+            headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+            },
+            onsuccess: function(response) {
+                let id = itemDiv.querySelector(`[name=ID]`).value;
 
-          itemDiv.querySelector(`[name=${PEDIDO.ATRIBUTO_VALOR_TOTAL}]`).innerHTML = formatarValorMonetario(valorTotal.toFixed(2));
+                if(response){
+                    let itemPedido = response.ItemPedidos.find(pedido => pedido.ID == id);
+                    let valorTotalProduto = response.ValorTotalProdutos;
+                    let valorTotalPedido = response.ValorTotalPedido;
 
-          $pedido.atualizarValorProdutos(itemDiv.closest('.card-sacola'), valorUnitario, id);
-          $pedido.atualizarValorTotal(itemDiv.closest('.card-sacola'));
+                    if (itemPedido) {
+                      itemDiv.querySelector(`[name=${PEDIDO.ATRIBUTO_VALOR_ITEM_TOTAL}]`).innerHTML = formatarValorMonetario(itemPedido.ValorTotal);
+                    }
+
+                    itemDiv.querySelector(`[name=ValorTotalProdutos]`).innerHTML = formatarValorMonetario(valorTotalProduto);
+                    itemDiv.querySelector(`[name=ValorTotalPedido]`).innerHTML = formatarValorMonetario(valorTotalPedido);
+                }
+            },
+            onfailure: function(httpCode, httpMessage) {
+                console.log("erro")
+            }
+          });
         };
 
         $pedido.carregar = function(container, id) {
             const contents = init(container);
             if (!contents) {
-            return false;
+                return false;
             }
 
             if (contents.filter) {
-            contents.request.Data = $min.read(contents.filter);
+                contents.request.Data = $min.read(contents.filter);
             }
 
             if (contents.template) {
-            $min.clear(contents);
+                $min.clear(contents);
             }
-
-
-            const url = $min.root() + $ui.relativePath + 'Pedido/GetPedido';
+            const url = $min.root() + $ui.relativePath + 'Produto/GetPedido';
             const headers = {
                 "Content-Type": "application/json",
                 "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
             };
 
             const onSuccess = function(response) {
-                console.log(response);
 
-                const pedidos = response;
-                const valorProdutos = response[0].Pedido.ValorTotal;
-                const frete = response[0].Pedido.Frete;
+              const subTotal = response.ValorTotalPedido + response.Frete; // Calculate subTotal by adding valorProdutos and frete
+              const subTotalPedidos = response.ValorTotalPedido; // Calculate subTotal by adding valorProdutos and frete
+              const frete = response.Frete; // Calculate subTotal by adding valorProdutos and frete
 
-                for (const item of pedidos) {
-                    item.ValorTotal = formatarValorMonetario(item.ValorTotal.toString());
-                }
+              response.Frete = formatarValorMonetario(frete);
+              response.ValorTotalPedido = formatarValorMonetario(subTotal);
+              response.ValorTotalProdutos = formatarValorMonetario(subTotalPedidos);
 
-                const subTotal = valorProdutos + frete;
-                const pedido = {
-                    pedidos,
-                    valorProdutos: formatarValorMonetario(valorProdutos.toString()),
-                    frete: formatarValorMonetario(frete.toString()),
-                    subTotal: formatarValorMonetario(subTotal.toString())
-                };
+              for (let i = 0; i < response.ItemPedidos.length; i++) {
+                const order = response.ItemPedidos[i];
+                order.ValorTotal = formatarValorMonetario(order.ValorTotal);
+              }
 
-                    console.log(pedido);
-                    $min.bind(contents, pedido);
-                };
+              $min.bind(contents, response); // Bind the contents with the pedido object
+
+              // Seleciona todos os elementos filhos de ".box .adress" que possuem a classe "hidden"
+              const enderecoElements = document.querySelectorAll('.box .adress .hidden');
+
+              // Seleciona o input com nome "consulta"
+              const inputConsulta = document.querySelector('[name=consulta]');
+
+              // Atualiza o conteúdo e o valor dos elementos
+              if(response.PedidoEndereco != null){
+                 enderecoElements.forEach((item) => {
+                    const name = item.getAttribute('name');
+                    switch (name) {
+                        case 'frete-info':
+                            item.innerHTML = `Frete: ${response.Frete}`;
+                            break;
+                        case 'frete-prazo':
+                            //item.innerHTML = `Prazo: ${diasEntrega} dia(s)`;
+                            break;
+                        case 'frete-endereco':
+                            item.innerHTML = `${response.PedidoEndereco.Bairro}, ${response.PedidoEndereco.Logradouro} - ${response.PedidoEndereco.UF}`;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (inputConsulta) {
+                    
+                        inputConsulta.value = response.PedidoEndereco.CEP;
+                    }
+                    item.classList.remove('hidden');
+                 });       
+              }
+              
+
+            };
 
             const onFailure = function(httpCode, httpMessage) {
                 console.log("erro");
@@ -523,6 +533,7 @@
     })(window.$pedido = window.$pedido || {});
 
     $pedido.carregar(document.getElementById("sacola"));
+
     // seleciona o campo de entrada de CEP
 
     $pedido.maskCEP(document.getElementById('consulta'));

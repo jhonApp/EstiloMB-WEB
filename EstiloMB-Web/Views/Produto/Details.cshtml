@@ -198,17 +198,6 @@
           const corID = getCor(content);
           const objeto = getTamanho(content);
 
-          function handleErrorResponse(error) {
-            if (error.response.status === 401) {
-            const currentURL = window.location.href.replace(
-                `${$min.root()}${$ui.relativePath}`,
-                ""
-            );
-            window.location.href = `${$min.root()}${$ui.relativePath}${$ui.redirectLoginURL}${currentURL}`;
-            }
-            $ui.message(error.message, "error");
-          }
-
           if (objeto.contador ?? 0 !== 0) {
             const url = `${$min.root()}${$ui.relativePath}Pedido/AdicionarItemAoCarrinho?produtoID=${ProdutoID}&tamanho=${objeto.tamanho}&corID=${corID}`;
 
@@ -221,9 +210,6 @@
             })
             .then((response) => response.json())
             .then((response) => {
-                //const itemPedidoJson = JSON.stringify(response);
-                //const url = `Sacola?itemPedido=${encodeURIComponent(itemPedidoJson)}`;
-                //window.location.href = url;
                 window.location.href = 'Sacola';
             })
             .catch(handleErrorResponse);

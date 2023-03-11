@@ -1,13 +1,14 @@
 ﻿using Chargeback.Core;
 using Microsoft.EntityFrameworkCore;
 using Sistema;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace EstiloMB.Core
 {
@@ -17,7 +18,7 @@ namespace EstiloMB.Core
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public string Cor { get; set; }
-        [NotMapped]public int CorID { get; set; }
+        [NotMapped] public int CorID { get; set; }
         public string Tamanho { get; set; }
         public string ImageURL { get; set; }
         public int Quantidade { get; set; }
@@ -188,17 +189,16 @@ namespace EstiloMB.Core
 
             return response;
         }
-
         public static ItemPedido Create(ItemPedido itemPedido)
         {
             Produto produto = Produto.GetByID(itemPedido.ProdutoID);
             try
             {
-                if(produto != null)
+                if (produto != null)
                 {
                     using Database<ItemPedido> database = new Database<ItemPedido>();
 
-                    if(itemPedido.Pedido != null)
+                    if (itemPedido.Pedido != null)
                     {
                         ProdutoImagem produtoImagem = produto.ProdutoImagens.Where(e => e.CorID == itemPedido.CorID).FirstOrDefault();
 
@@ -216,7 +216,7 @@ namespace EstiloMB.Core
                         itemPedido.Produto = produto;
                         itemPedido.Pedido = itemPedido.Pedido;
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -246,7 +246,7 @@ namespace EstiloMB.Core
                 {
                     //arrumar o calculo do itempedido (valorUnitario x quantidade)
                     sum = item.ValorTotal + sum;
-                    item.Pedido.ValorTotal = sum;
+                    item.Pedido.ValorTotalPedido = sum;
                 }
 
                 return itemPedidos;
@@ -256,7 +256,6 @@ namespace EstiloMB.Core
                 throw ex;
             }
         }
-
         public static ItemPedido Get(int produtoID, string tamanho, int pedidoID)
         {
             try
@@ -365,13 +364,12 @@ namespace EstiloMB.Core
             return itemPedidos;
         }
 
-
         public static void Remove(int ID)
         {
             try
             {
                 using Database<ItemPedido> db = new Database<ItemPedido>();
-                ItemPedido itemPedido =  db.Set<ItemPedido>()
+                ItemPedido itemPedido = db.Set<ItemPedido>()
                     .Where(p => p.ID == ID)
                     .FirstOrDefault();
 

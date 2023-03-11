@@ -54,6 +54,7 @@ namespace EstiloMB.Site
             services.AddTransient<Localization>();
             services.AddTransient<CrossSiteAntiForgery>();
             services.AddAntiforgery(o => o.HeaderName = CrossSiteAntiForgery.Header);
+            services.AddHttpContextAccessor();
 
             // Configuração da conexão com o Redis
             var redisConfig = ConfigurationOptions.Parse(Configuration.GetConnectionString("Redis"));
@@ -102,7 +103,6 @@ namespace EstiloMB.Site
         public void Configure(IApplicationBuilder app)
         {
             Database.Configure(Configuration.GetConnectionString("Desenvolvimento"));
-            //Database.Configure(Configuration.GetConnectionString("DesenvolvimentoKstack"));
 
             Localization.AddDictionary("pt-br", PT_BR.dicionario);
             Localization.AddDictionary("en-us", EN_US.dicionario);

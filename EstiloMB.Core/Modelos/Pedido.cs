@@ -1,13 +1,18 @@
 ﻿using Chargeback.Core;
 using Microsoft.EntityFrameworkCore;
 using Sistema;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace EstiloMB.Core
 {
@@ -22,9 +27,11 @@ namespace EstiloMB.Core
         public decimal Frete { get; set; }
         public int QuantidadeTotal { get; set; }
         public StatusPedido StatusPedido { get; set; }
-        public decimal ValorTotal { get; set; }
+        public decimal ValorTotalPedido { get; set; }
+        public decimal ValorTotalProdutos { get; set; }
         public int? UsuarioID { get; set; }
-        [NotMapped] public List<ItemPedido> itemPedidos { get; set; }
+        public virtual List<ItemPedido> ItemPedidos { get; set; }
+        public virtual PedidoEndereco PedidoEndereco { get; set; }
 
         [ForeignKey("UsuarioID")]
         public Usuario Usuario { get; set; }
@@ -76,24 +83,229 @@ namespace EstiloMB.Core
             return response;
         }
 
-        //public static Pedido GetPedidoByUsuario(int usuarioID)
-        //{
-        //    try
-        //    {
-        //        using Database<Pedido> db = new Database<Pedido>();
-        //        return db.Set<Pedido>()
-        //            .Include(e => e.ProdutoCategorias)
-        //            .Include(e => e.ProdutoTamanhos).ThenInclude(e => e.Tamanho)
-        //            .Include(e => e.ProdutoImagens).ThenInclude(e => e.Cor)
-        //            .Include(e => e.ProdutoImagens)
-        //            .Where(p => p.ID == produtoID)
-        //            .FirstOrDefault();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+        public static dynamic ObterEndereco(string cep)
+        {
+            if (!string.IsNullOrEmpty(cep))
+            {
+                try
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        var response = httpClient.GetAsync($"https://viacep.com.br/ws/{cep}/json/").Result;
+                        response.EnsureSuccessStatusCode();
+                        var content = response.Content.ReadAsStringAsync().Result;
+                        dynamic item = Newtonsoft.Json.JsonConvert.DeserializeObject(content);
+                        return item;
+                    }
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Erro ao obter endereço: {e.Message}");
+                }
+            }
+            return null;
+        }
+
+        public static Pedido AdicionarItemAoPedido(int produtoID, string tamanho, int corID)
+        {
+            // Recupera o carrinho de compras do cookie
+            Pedido carrinho = ObterCarrinhoDeCompras();
+            
+
+            // Recupera o produto e a imagem da cor do produto
+            var produto = Produto.GetByID(produtoID);
+            var produtoImagem = ProdutoImagem.GetByCorID(corID);
+
+            // Verifica se o produto já está no carrinho
+            var itemPedidoExistente = carrinho.ItemPedidos.FirstOrDefault(item => item.ProdutoID == produtoID && item.Tamanho == tamanho && item.CorID == corID);
+            if (itemPedidoExistente != null)
+            {
+                // Se o produto já está no carrinho, aumenta a quantidade em 1 e atualiza o valor total do item
+                itemPedidoExistente.Quantidade += 1;
+                itemPedidoExistente.ValorTotal = produto.Valor * itemPedidoExistente.Quantidade;
+            }
+            else
+            {
+                // Se o produto ainda não está no carrinho, adiciona um novo item
+                var itemPedido = new ItemPedido
+                {
+                    ID = GerarIDUnicoAleatorio(),
+                    ProdutoID = produtoID,
+                    Produto = produto,
+                    ImageURL = produtoImagem.ImageURL,
+                    Tamanho = tamanho,
+                    Cor = produtoImagem.Cor.Nome,
+                    CorID = corID,
+                    Quantidade = 1,
+                    ValorTotal = produto.Valor
+                };
+                carrinho.ItemPedidos.Add(itemPedido);
+            }
+
+            // Atualiza os valores totais do carrinho
+            carrinho.ValorTotalPedido = carrinho.ItemPedidos.Sum(item => item.ValorTotal);
+            carrinho.QuantidadeTotal = carrinho.ItemPedidos.Sum(item => item.Quantidade);
+
+            // Retorna um objeto JSON com a lista de itens do carrinho
+            return carrinho;
+        }
+
+        public static Pedido AdicionarEnderecoAoPedidoAsync(string cep)
+        {
+            // Recupera o carrinho de compras do cookie
+            Pedido carrinho = ObterCarrinhoDeCompras();
+
+            var endereco = ObterEndereco(cep);
+
+            // Verifica se o pedido já está no carrinho
+            if (carrinho.PedidoEndereco != null)
+            {
+                carrinho.PedidoEndereco.CEP = endereco.cep;
+                carrinho.PedidoEndereco.Bairro = endereco.bairro;
+                carrinho.PedidoEndereco.Logradouro = endereco.localidade;
+                carrinho.PedidoEndereco.UF = endereco.uf;
+            }
+            else
+            {
+                // Se o produto ainda não está no carrinho, adiciona um novo item
+                var pedidoEndereco = new PedidoEndereco
+                {
+                    ID = GerarIDUnicoAleatorio(),
+                    CEP = endereco.cep,
+                    Bairro = endereco.bairro,
+                    Logradouro = endereco.localidade,
+                    UF = endereco.uf,
+                };
+                carrinho.PedidoEndereco = pedidoEndereco;
+            }
+
+            ConnectionMultiplexer redis = RedisConnectionPool.GetConnection();
+            IDatabase db = redis.GetDatabase();
+
+            // Salva o carrinho de compras no Redis
+            db.StringSet("carrinho", JsonSerializer.Serialize(carrinho), TimeSpan.FromDays(30));
+
+            // Retorna um objeto JSON com a lista de itens do carrinho
+            return carrinho;
+        }
+
+        public static Pedido AtualizaItemPedido(Pedido pedido, decimal valorTotalAtual, int id, int quantidade)
+        {
+            foreach (var itemPedido in pedido.ItemPedidos)
+            {
+                if (itemPedido.ID == id)
+                {
+                    itemPedido.Quantidade = quantidade;
+                    itemPedido.ValorTotal = valorTotalAtual;
+                }
+            }
+
+            return pedido;
+        }
+
+        public static Pedido AtualizaValorCarrinho(Pedido pedido)
+        {
+            // Atualiza os valores totais do carrinho
+            pedido.ValorTotalPedido = pedido.ItemPedidos.Sum(e => e.ValorTotal) + pedido.Frete;
+            pedido.ValorTotalProdutos = pedido.ItemPedidos.Sum(e => e.ValorTotal);
+
+            return pedido;
+        }
+
+        public static Pedido AtualizaValorFrete(decimal frete)
+        {
+            // Recupera o carrinho de compras do cookie
+            Pedido carrinho = ObterCarrinhoDeCompras();
+
+            // Atualiza os valores totais do carrinho
+            carrinho.Frete = frete;
+
+            ConnectionMultiplexer redis = RedisConnectionPool.GetConnection();
+            IDatabase db = redis.GetDatabase();
+
+            // Salva o carrinho de compras no Redis
+            db.StringSet("carrinho", JsonSerializer.Serialize(carrinho), TimeSpan.FromDays(30));
+
+            return carrinho;
+        }
+
+        public static int GerarIDUnicoAleatorio()
+        {
+            Random random = new Random();
+            Guid id = Guid.NewGuid();
+
+            string uniqueId = id.ToString().Substring(0, 8) +
+                              random.Next(100000, 999999).ToString() +
+                              random.Next(1000, 9999).ToString() +
+                              random.Next(1000, 9999).ToString() +
+                              random.Next(100000000, 999999999).ToString();
+
+            int uniqueIntId = uniqueId.GetHashCode();
+
+            return uniqueIntId;
+        }
+
+        public static Pedido ObterCarrinhoDeCompras()
+        {
+            Pedido pedido = new();
+
+            ConnectionMultiplexer redis = RedisConnectionPool.GetConnection();
+            IDatabase db = redis.GetDatabase();
+
+            // Obtém o carrinho de compras do Redis
+            var carrinhoRedis = db.StringGet("carrinho");
+
+            if (!carrinhoRedis.IsNullOrEmpty)
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    Converters = { new JsonStringEnumConverter() },
+                    PropertyNameCaseInsensitive = true,
+                    AllowTrailingCommas = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
+                };
+
+                try
+                {
+                    pedido = JsonSerializer.Deserialize<Pedido>(carrinhoRedis, options);
+                }
+                catch (JsonException)
+                {
+                    // Handle deserialization error here
+                }
+            }
+
+            if(carrinhoRedis.IsNull == true)
+            {
+                pedido.ItemPedidos = new List<ItemPedido>();
+            }
+            
+
+            return pedido;
+        }
+
+        public static decimal CalcularValorItem(decimal valorTotalPedido, decimal valorUnitarioItem, string decrementarValor)
+        {
+            if (valorTotalPedido <= 0 || valorUnitarioItem <= 0)
+            {
+                throw new ArgumentException("Valor total do pedido e valor unitário do item devem ser maiores que zero.");
+            }
+
+            decimal valorItem;
+
+            if (decrementarValor == "decrement")
+            {
+                valorItem = valorTotalPedido - valorUnitarioItem;
+            }
+            else
+            {
+                valorItem = valorTotalPedido + valorUnitarioItem;
+            }
+
+            return valorItem;
+        }
 
         public static Response<Pedido> Salvar(Request<Pedido> request)
         {

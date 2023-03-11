@@ -106,11 +106,11 @@ CREATE TABLE Pedido (
 	DataPagamento DATE NULL,
 	DataEntrega DATE NULL,
 	QuantidadeTotal INT NULL,
-	ValorTotal DECIMAL(10,2) NULL,
+	ValorTotalPedido DECIMAL(10,2) NULL,
+	ValorTotalProdutos DECIMAL(10,2) NULL,
 	Frete DECIMAL(10,2) NULL,
 	StatusPedido INT NOT NULL,
 )
-
 
 CREATE TABLE [Pedido.Item] (
 	ID INT IDENTITY PRIMARY KEY,
@@ -126,6 +126,28 @@ CREATE TABLE [Pedido.Item] (
 	Tamanho NVARCHAR(50) NOT NULL,
 	Quantidade INT NOT NULL,
 	ValorTotal DECIMAL(10,2) NOT NULL,
+);
+
+CREATE TABLE [Pedido.Endereco] (
+	ID INT IDENTITY PRIMARY KEY,
+
+	PedidoID INT NOT NULL,
+	CONSTRAINT FK_Pedido_Endereco FOREIGN KEY(PedidoID) REFERENCES Pedido(ID),
+
+	PaisID INT NOT NULL,
+	CONSTRAINT FK_PedidoEndereco_Pais FOREIGN KEY (PaisID) REFERENCES Pais(PaisID),
+
+	EstadoID INT NOT NULL,
+	CONSTRAINT FK_PedidoEndereco_Estado FOREIGN KEY (EstadoID) REFERENCES [Pais.Estado](EstadoID),
+
+	CidadeID INT NOT NULL,
+	CONSTRAINT FK_PedidoEndereco_Cidade FOREIGN KEY (CidadeID) REFERENCES [Pais.Estado.Cidade](CidadeID),
+
+	Logradouro NVARCHAR(50) NULL,
+	Numero NVARCHAR(6) NULL,
+	Complemento NVARCHAR(50) NULL,
+	Bairro NVARCHAR(30) NULL,
+	CEP NVARCHAR(9) NULL
 );
 
 CREATE TABLE Movimentacao (

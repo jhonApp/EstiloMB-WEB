@@ -204,5 +204,16 @@ function validateSameValue(select) {
     return true;
 };
 
+function handleErrorResponse(error) {
+    if (error.response.status === 401) {
+        const currentURL = window.location.href.replace(
+            `${$min.root()}${$ui.relativePath}`,
+            ""
+        );
+        window.location.href = `${$min.root()}${$ui.relativePath}${$ui.redirectLoginURL}${currentURL}`;
+    }
+    $ui.message(error.message, "error");
+}
+
 
 

@@ -14,6 +14,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Antiforgery;
+using StackExchange.Redis;
 
 namespace EstiloMB.Site.Controllers
 {
@@ -26,6 +27,7 @@ namespace EstiloMB.Site.Controllers
             _cache = cache;
         }
 
+        
         public async Task<IActionResult> GerarPedido(int produtoID, string tamanho, int usuarioID, int corID)
         {
             Response<List<ItemPedido>> response = new Response<List<ItemPedido>>();
@@ -58,8 +60,8 @@ namespace EstiloMB.Site.Controllers
                     // Se estiver em cache, retorna o resultado armazenado
                     Pedido pedido = System.Text.Json.JsonSerializer.Deserialize<Pedido>(cachedResult);
 
-                    response.Total = pedido.itemPedidos.Count();
-                    response.Data = pedido.itemPedidos;
+                    response.Total = pedido.ItemPedidos.Count();
+                    response.Data = pedido.ItemPedidos;
                 }
                 else
                 {
@@ -76,7 +78,7 @@ namespace EstiloMB.Site.Controllers
                         Quantidade = 1
                     };
 
-                    pedido.itemPedidos.Add(itemPedido);
+                    pedido.ItemPedidos.Add(itemPedido);
 
                     response.Total = 1;
                     response.Data = new List<ItemPedido> { itemPedido };
@@ -91,96 +93,35 @@ namespace EstiloMB.Site.Controllers
 
         public IActionResult AdicionarItemAoCarrinho(int produtoID, string tamanho, int corID)
         {
-            try
-            {
-                // Recupera o carrinho de compras do cookie
-                List<ItemPedido> carrinho = ObterCarrinhoDeCompras();
+            Pedido pedido = Pedido.AdicionarItemAoPedido(produtoID, tamanho, corID);
 
-                // Recupera o produto e a imagem da cor do produto
-                var produto = Produto.GetByID(produtoID);
-                var produtoImagem = ProdutoImagem.GetByCorID(corID);
+            ConnectionMultiplexer redis = RedisConnectionPool.GetConnection();
+            IDatabase db = redis.GetDatabase();
 
-                // Verifica se o produto já está no carrinho
-                var itemPedidoExistente = carrinho.FirstOrDefault(item => item.ProdutoID == produtoID && item.Tamanho == tamanho && item.CorID == corID);
-                if (itemPedidoExistente != null)
-                {
-                    // Se o produto já está no carrinho, aumenta a quantidade em 1
-                    itemPedidoExistente.Quantidade += 1;
-                }
-                else
-                {
-                    // Se o produto ainda não está no carrinho, adiciona um novo item
-                    var itemPedido = new ItemPedido
-                    {
-                        ProdutoID = produtoID,
-                        Produto = produto,
-                        Tamanho = tamanho,
-                        Cor = produtoImagem.Cor.Nome,
-                        CorID = corID,
-                        Quantidade = 1
-                    };
-                    carrinho.Add(itemPedido);
-                }
+            // Salva o carrinho de compras no Redis
+            db.StringSet("carrinho", System.Text.Json.JsonSerializer.Serialize(pedido), TimeSpan.FromDays(30));
 
-                // Salva o carrinho de compras no cookie
-                JsonSerializerOptions options = new JsonSerializerOptions
-                {
-                    IgnoreReadOnlyProperties = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    Converters = { new JsonStringEnumConverter() }
-                };
-                string itemPedidosJson = System.Text.Json.JsonSerializer.Serialize(carrinho, options);
-
-                CookieOptions cookieOptions = new CookieOptions
-                {
-                    Expires = DateTime.Now.AddDays(30),
-                    HttpOnly = false,
-                    SameSite = SameSiteMode.Strict,
-                    IsEssential = true,
-                    Secure = true
-                };
-
-                HttpContext.Session.SetString("carrinho", itemPedidosJson);
-
-                // Retorna um objeto JSON com a lista de itens do carrinho
-                return Json(carrinho);
-            }
-            catch (Exception ex)
-            {
-                // Tratamento de erro genérico
-                return BadRequest(new { message = "Ocorreu um erro ao adicionar o item ao carrinho de compras." });
-            }
+            //Retorna um objeto JSON com a lista de itens do carrinho
+            return Json(pedido);
         }
 
-        private List<ItemPedido> ObterCarrinhoDeCompras()
+        public IActionResult UpdateByParamentros(decimal valorTotal, decimal valorUnitario, int quantidade, int identificadorItem, string id)
         {
-            List<ItemPedido> itemPedidos = new List<ItemPedido>();
-            var carrinhoJson = HttpContext.Session.GetString("carrinho");
+            // Recupera o carrinho de compras do cookie
+            Pedido carrinho = Pedido.ObterCarrinhoDeCompras();
 
+            decimal valorAtual = Pedido.CalcularValorItem(valorTotal, valorUnitario, id);
+            Pedido pedido = Pedido.AtualizaItemPedido(carrinho, valorAtual, identificadorItem, quantidade);
+            Pedido atualizado = Pedido.AtualizaValorCarrinho(pedido);
 
-            if (carrinhoJson != null)
-            {
-                JsonSerializerOptions options = new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    Converters = { new JsonStringEnumConverter() },
-                    PropertyNameCaseInsensitive = true,
-                    AllowTrailingCommas = true,
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                    DictionaryKeyPolicy = JsonNamingPolicy.CamelCase
-                };
+            ConnectionMultiplexer redis = RedisConnectionPool.GetConnection();
+            IDatabase db = redis.GetDatabase();
 
-                try
-                {
-                    itemPedidos = System.Text.Json.JsonSerializer.Deserialize<List<ItemPedido>>(carrinhoJson, options);
-                }
-                catch (System.Text.Json.JsonException)
-                {
-                    // Handle deserialization error here
-                }
-            }
+            // Salva o carrinho de compras no Redis
+            db.StringSet("carrinho", System.Text.Json.JsonSerializer.Serialize(atualizado), TimeSpan.FromDays(30));
 
-            return itemPedidos;
+            //Retorna um objeto JSON com a lista de itens do carrinho
+            return Json(pedido);
         }
 
         [HttpPost]
@@ -211,40 +152,6 @@ namespace EstiloMB.Site.Controllers
                 await _cache.SetStringAsync(cacheKey, resultJson, cacheOptions);
             }
 
-            return Json(response.Data);
-        }
-
-        public IActionResult GetPedido()
-        {
-            List<ItemPedido> carrinho = ObterCarrinhoDeCompras();
-
-            if (carrinho == null)
-            {
-                return NoContent(); // retorna 204 No Content se o carrinho estiver vazio
-            }
-
-            Response<List<ItemPedido>> response = new Response<List<ItemPedido>>
-            {
-                Data = carrinho
-            };
-
-            return Json(response.Data); // retorna 200 OK com o objeto JSON contendo o carrinho de compras
-        }
-
-
-        public IActionResult RemoveItem(int ID, int pedidoID)
-        {
-            Response<List<ItemPedido>> response = new Response<List<ItemPedido>>();
-            ItemPedido.Remove(ID);
-
-            List<ItemPedido> itemPedidos = ItemPedido.GetByPedido(pedidoID);
-
-            if(itemPedidos.Count == 0)
-            {
-                Pedido.Remove(pedidoID);
-            }
-            
-            response.Data = itemPedidos;
             return Json(response.Data);
         }
 
@@ -284,8 +191,12 @@ namespace EstiloMB.Site.Controllers
 
                 var prazoEntrega = resultado.Servicos[0].PrazoEntrega;
                 var valor = resultado.Servicos[0].Valor;
+                Pedido.AtualizaValorFrete(Convert.ToDecimal(valor));
+                Pedido pedido = Pedido.AdicionarEnderecoAoPedidoAsync(cep);
 
-                var result = new[] { valor, prazoEntrega };
+                var enderecoCompleto = pedido.PedidoEndereco.Bairro + " " + pedido.PedidoEndereco.Logradouro + " - " + pedido.PedidoEndereco.UF;
+
+                var result = new[] { valor, prazoEntrega, enderecoCompleto };
                 return Json(result);
             }
             catch (Exception ex)
