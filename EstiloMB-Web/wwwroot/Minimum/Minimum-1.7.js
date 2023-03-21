@@ -3836,7 +3836,6 @@ if (!String.prototype.format) {
     $user.onForgot = false;
 
     $user.login = function (element, selector) {
-        
         let form = selector ? element.closest(selector) : element;
         if (form.isBusy) { return false; }
 

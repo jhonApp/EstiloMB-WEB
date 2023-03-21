@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Antiforgery;
 using StackExchange.Redis;
+using EstiloMB.MVC;
 
 namespace EstiloMB.Site.Controllers
 {
@@ -27,7 +28,6 @@ namespace EstiloMB.Site.Controllers
             _cache = cache;
         }
 
-        
         public async Task<IActionResult> GerarPedido(int produtoID, string tamanho, int usuarioID, int corID)
         {
             Response<List<ItemPedido>> response = new Response<List<ItemPedido>>();
@@ -73,7 +73,7 @@ namespace EstiloMB.Site.Controllers
                         ProdutoID = produtoID,
                         Pedido = pedido,
                         Tamanho = tamanho,
-                        Cor = produtoImagem.Cor.Nome,
+                        NomeCor = produtoImagem.Cor.Nome,
                         CorID = corID,
                         Quantidade = 1
                     };
@@ -89,6 +89,37 @@ namespace EstiloMB.Site.Controllers
             }
 
             return Json(response.Data);
+        }
+
+        public IActionResult Save(int userID)
+        {
+            Request<Pedido> request = new();
+            Pedido carrinho = Pedido.ObterCarrinhoDeCompras();
+
+            if (Pedido.UsuarioPossuiPedidosEmAndamento(userID))
+            {
+               Pedido pedido = Pedido.GetByStatus(userID);
+               request.Data = pedido;
+            }
+            else
+            {
+                request.Data = carrinho;
+                foreach (var itemPedido in carrinho.ItemPedidos)
+                {
+                    itemPedido.CorID = 0;
+                    itemPedido.NomeCor = null;
+                    itemPedido.Pedido = null;
+                    itemPedido.Produto = null;
+                    itemPedido.ID = 0;
+                }
+            }
+
+            request.UserID = userID;
+
+            Response<Pedido> response = Pedido.Salvar(request);
+
+            //Retorna um objeto JSON com a lista de itens do carrinho
+            return Json(response);
         }
 
         public IActionResult AdicionarItemAoCarrinho(int produtoID, string tamanho, int corID)
@@ -153,6 +184,24 @@ namespace EstiloMB.Site.Controllers
             }
 
             return Json(response.Data);
+        }
+
+        public IActionResult GetPedido()
+        {
+            Pedido carrinho = Pedido.ObterCarrinhoDeCompras();
+
+            if (carrinho == null)
+            {
+                int userID = User.GetClaimInt32("UsuarioID");
+                carrinho = Pedido.GetByStatus(userID);
+            }
+
+            Response<Pedido> response = new Response<Pedido>
+            {
+                Data = carrinho
+            };
+
+            return Json(response.Data); // retorna 200 OK com o objeto JSON contendo o carrinho de compras
         }
 
         public async Task<JsonResult> ConsultarPrazo(string cep, string peso, decimal altura, decimal comprimento, decimal largura, decimal valorDeclarado)

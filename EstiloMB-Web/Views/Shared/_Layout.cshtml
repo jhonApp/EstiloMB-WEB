@@ -3,7 +3,7 @@
 @using EstiloMB.MVC;
 @inject Localization loc
 @addTagHelper *, MyWebApp
-
+@model EstiloMB_Web.Models.IndexViewModel
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -82,7 +82,7 @@
                     <li>
                         <button class="usuario icon"
                                 aria-expanded="false"
-                                onclick="expanding(this)">
+                                onclick="$user.expanding(this)">
                             <i class="far fa-user"></i>
                         </button>
                         <div class="login-content hidden">
@@ -93,7 +93,12 @@
                     </li>
                     <li><i class="far fa-heart icon"></i></li>
                     <li>
-                        <a href=""><i class="far fa-shopping-cart icon"></i></a>
+                        <button class="cart-icon icon"
+                                aria-expanded="false"
+                                onclick="$sacola.open()">
+                            <span class="cart-count"></span>
+                            <i class="far fa-shopping-cart icon"></i>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -137,22 +142,189 @@
 </html>
 <script>
 
-function expanding(element) {
+    (function($user){
+        var init = function (container) {
+            let contents = container.querySelector("[ui-content='data']");
+            if (!contents) { return false; }
 
-    if(element.ariaExpanded == 'false'){
-        element.closest('li').querySelector('.login-content').classList.remove('hidden');
-        element.ariaExpanded = 'true';
+            contents.isAutoLoad = (contents.getAttribute("ui-load") || "").toLowerCase() === "auto";
 
-    }else {
-        element.closest('li').querySelector('.login-content').classList.add('hidden');
-        element.ariaExpanded = 'false';
-    }
-}
+            if (!contents.initialized) {
+                contents.container = container;
+                contents.pixelAutoLoadThreshold = 25;
+                contents.maxPageCount = parseInt(contents.getAttribute("maxPageCount"), 10) || 10;
 
-//document.querySelector('.user > ul > li > .usuario').onclick = (element) =>{
-//    console.log(element)
-//    if(element.getAttribute('aria-expanded') == 'false'){
-//        //document.querySelector('.login-content').style.transform = 'perspective(1000px) rotateY(-180deg)';
-//    }
-//}
+                contents.url = contents.getAttribute("data-url");
+                contents.template = contents.template || contents.querySelector(":scope > template") || false;
+
+                let elements = null;
+
+                elements = container.querySelectorAll("[ui-content='filter']") || false;
+                for (let i = 0; i < elements.length; i++) {
+                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    if (target) { target.filter = elements[i]; continue; }
+
+                    contents.filter = elements[i];
+                }
+
+                //elements = container.querySelectorAll("[ui-content='empty']") || false;
+                //for (let i = 0; i < elements.length; i++) {
+                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                //    if (target) { target.empty = elements[i]; continue; }
+
+                //    contents.empty = elements[i];
+                //}
+
+                //elements = container.querySelectorAll("[ui-content='loading']") || false;
+                //for (let i = 0; i < elements.length; i++) {
+                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                //    if (target) { target.loading = elements[i]; continue; }
+
+                //    contents.loading = elements[i];
+                //}
+
+                elements = container.querySelectorAll("[ui-content='paging']") || false;
+                for (let i = 0; i < elements.length; i++) {
+                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    if (target) {
+                        target.paging = elements[i];
+                    }
+                    else {
+                        target = contents;
+                        target.paging = elements[i];
+                    }
+
+                    target.paging.pages = target.paging.querySelector("[ui-content='pages']") || false;
+                    target.paging.prevPage = target.paging.querySelector("[ui-content='prev-page']") || false;
+                    target.paging.nextPage = target.paging.querySelector("[ui-content='next-page']") || false;
+                }
+
+                contents.initialized = true;
+            }
+
+            return contents;
+        };
+
+        $user.expanding = function(element) {
+            if(element.ariaExpanded == 'false'){
+                element.closest('li').querySelector('.login-content').classList.remove('hidden');
+                element.ariaExpanded = 'true';
+
+            }else {
+                element.closest('li').querySelector('.login-content').classList.add('hidden');
+                element.ariaExpanded = 'false';
+            }
+        };
+    })(window.$user = window.$user || {});
+
+    (function($sacola){
+        var init = function (container) {
+            let contents = container.querySelector("[ui-content='data']");
+            if (!contents) { return false; }
+
+            contents.isAutoLoad = (contents.getAttribute("ui-load") || "").toLowerCase() === "auto";
+
+            if (!contents.initialized) {
+                contents.container = container;
+                contents.pixelAutoLoadThreshold = 25;
+                contents.maxPageCount = parseInt(contents.getAttribute("maxPageCount"), 10) || 10;
+
+                contents.url = contents.getAttribute("data-url");
+                contents.template = contents.template || contents.querySelector(":scope > template") || false;
+
+                let elements = null;
+
+                elements = container.querySelectorAll("[ui-content='filter']") || false;
+                for (let i = 0; i < elements.length; i++) {
+                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    if (target) { target.filter = elements[i]; continue; }
+
+                    contents.filter = elements[i];
+                }
+
+                //elements = container.querySelectorAll("[ui-content='empty']") || false;
+                //for (let i = 0; i < elements.length; i++) {
+                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                //    if (target) { target.empty = elements[i]; continue; }
+
+                //    contents.empty = elements[i];
+                //}
+
+                //elements = container.querySelectorAll("[ui-content='loading']") || false;
+                //for (let i = 0; i < elements.length; i++) {
+                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                //    if (target) { target.loading = elements[i]; continue; }
+
+                //    contents.loading = elements[i];
+                //}
+
+                elements = container.querySelectorAll("[ui-content='paging']") || false;
+                for (let i = 0; i < elements.length; i++) {
+                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    if (target) {
+                        target.paging = elements[i];
+                    }
+                    else {
+                        target = contents;
+                        target.paging = elements[i];
+                    }
+
+                    target.paging.pages = target.paging.querySelector("[ui-content='pages']") || false;
+                    target.paging.prevPage = target.paging.querySelector("[ui-content='prev-page']") || false;
+                    target.paging.nextPage = target.paging.querySelector("[ui-content='next-page']") || false;
+                }
+
+                contents.initialized = true;
+            }
+
+            return contents;
+        };
+
+        $sacola.updateCartCount = function(count) {
+            const cartCount = document.querySelector('.cart-count');
+            cartCount.textContent = count;
+        }
+
+        $sacola.countItens = function() {
+            const url = $min.root() + $ui.relativePath + 'Pedido/GetPedido';
+            const headers = {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+            };
+
+            const onSuccess = function(response) {
+                console.log(response);
+            };
+
+            const onFailure = function(httpCode, httpMessage) {
+                console.log("erro");
+            };
+
+            $min.ajax({
+                url,
+                headers,
+                onsuccess: onSuccess,
+                onfailure: onFailure
+            });
+        }
+
+        $sacola.open = function() {
+            window.location = 'Produto/Sacola';
+        }
+
+        $sacola.expanding = function(element) {
+            if(element.ariaExpanded == 'false'){
+                element.closest('li').querySelector('.sacola-content').classList.remove('hidden');
+                element.ariaExpanded = 'true';
+
+            }else {
+                element.closest('li').querySelector('.sacola-content').classList.add('hidden');
+                element.ariaExpanded = 'false';
+            }
+        };
+    })(window.$sacola = window.$sacola || {});
+
+    $sacola.updateCartCount(@Model.CartItemCount);
+    
+
 </script>

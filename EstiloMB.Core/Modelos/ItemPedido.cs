@@ -17,8 +17,8 @@ namespace EstiloMB.Core
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        public string Cor { get; set; }
-        [NotMapped] public int CorID { get; set; }
+        public string NomeCor { get; set; }
+        [NotMapped] public virtual int CorID { get; set; }
         public string Tamanho { get; set; }
         public string ImageURL { get; set; }
         public int Quantidade { get; set; }
@@ -204,7 +204,7 @@ namespace EstiloMB.Core
 
                         itemPedido.PedidoID = itemPedido.Pedido.ID;
                         itemPedido.ProdutoID = produto.ID;
-                        itemPedido.Cor = produtoImagem.Cor.Nome;
+                        itemPedido.NomeCor = produtoImagem.Cor.Nome;
                         itemPedido.ImageURL = produtoImagem.ImageURL;
                         itemPedido.Tamanho = itemPedido.Tamanho;
                         itemPedido.Quantidade = 1;
@@ -272,6 +272,20 @@ namespace EstiloMB.Core
             }
         }
 
+        public static int GetItemCount(int userID)
+        {
+            Pedido carrinhoDeCompras = Pedido.ObterCarrinhoDeCompras();
+
+            if (carrinhoDeCompras == null && userID != 0)
+            {
+                carrinhoDeCompras = Pedido.GetByUsuarioID(userID);
+            }
+
+            int totalItens = carrinhoDeCompras?.ItemPedidos?.Count ?? 0;
+
+            return totalItens;
+        }
+
         public static List<ItemPedido> GetAll(int pedidoID)
         {
             try
@@ -317,7 +331,7 @@ namespace EstiloMB.Core
                 itemPedido = db.Set<ItemPedido>()
                     .Include(p => p.Produto)
                     .Include(p => p.Pedido)
-                    .Where(p => p.PedidoID == itemPedido.PedidoID && p.ProdutoID == itemPedido.ProdutoID && p.Tamanho == itemPedido.Tamanho && p.Cor == itemPedido.Cor)
+                    .Where(p => p.PedidoID == itemPedido.PedidoID && p.ProdutoID == itemPedido.ProdutoID && p.Tamanho == itemPedido.Tamanho && p.NomeCor == itemPedido.NomeCor)
                     .FirstOrDefault();
                 quantidade = itemPedido.Quantidade+1;
                 itemPedido.Quantidade = quantidade;
@@ -336,7 +350,7 @@ namespace EstiloMB.Core
             ProdutoImagem produtoImagem = ProdutoImagem.GetByCorID(corID);
 
             // Verifica se já existe um item com as mesmas características na lista de pedidos
-            ItemPedido itemExistente = itemPedidos.FirstOrDefault(ip => ip.Tamanho == tamanho && ip.Cor == produtoImagem.Cor.Nome);
+            ItemPedido itemExistente = itemPedidos.FirstOrDefault(ip => ip.Tamanho == tamanho && ip.NomeCor == produtoImagem.Cor.Nome);
 
             if (itemExistente != null)
             {
@@ -353,7 +367,7 @@ namespace EstiloMB.Core
                     Pedido = pedido,
                     ProdutoID = produtoID,
                     Tamanho = tamanho,
-                    Cor = produtoImagem.Cor.Nome,
+                    NomeCor = produtoImagem.Cor.Nome,
                     CorID = corID,
                     Quantidade = 1
                 };

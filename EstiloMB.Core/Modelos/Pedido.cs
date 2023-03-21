@@ -31,7 +31,7 @@ namespace EstiloMB.Core
         public decimal ValorTotalProdutos { get; set; }
         public int? UsuarioID { get; set; }
         public virtual List<ItemPedido> ItemPedidos { get; set; }
-        public virtual PedidoEndereco PedidoEndereco { get; set; }
+        [NotMapped]public virtual PedidoEndereco PedidoEndereco { get; set; }
 
         [ForeignKey("UsuarioID")]
         public Usuario Usuario { get; set; }
@@ -134,7 +134,7 @@ namespace EstiloMB.Core
                     Produto = produto,
                     ImageURL = produtoImagem.ImageURL,
                     Tamanho = tamanho,
-                    Cor = produtoImagem.Cor.Nome,
+                    NomeCor = produtoImagem.Cor.Nome,
                     CorID = corID,
                     Quantidade = 1,
                     ValorTotal = produto.Valor
@@ -343,35 +343,11 @@ namespace EstiloMB.Core
                     {
                         database.Set<Pedido>().Add(request.Data);
                         database.SaveChanges();
-
-                        new Log()
-                        {
-                            Entity = Text.Pedido,
-                            EntityID = request.Data.ID,
-                            LogType = LogTipo.Historico,
-                            UserID = request.UserID,
-                            Message = Text.PedidoCriado
-                        }
-                       .Parameters(usuario.Data.Nome)
-                       .Data(null, request.Data)
-                       .Save();
                     }
                     else
                     {
                         database.Set<Pedido>().Update(request.Data);
                         database.SaveChanges();
-
-                        new Log()
-                        {
-                            Entity = Text.Pedido,
-                            EntityID = request.Data.ID,
-                            LogType = LogTipo.Historico,
-                            UserID = request.UserID,
-                            Message = Text.PedidoCriado
-                        }
-                       .Parameters(usuario.Data.Nome)
-                       .Data(null, request.Data)
-                       .Save();
                     }
                 }
 
@@ -395,6 +371,58 @@ namespace EstiloMB.Core
             }
 
             return response;
+        }
+
+        public static bool IsValidCreditCardNumber(string cardNumber)
+        {
+            cardNumber = cardNumber.Replace(" ", "").Replace("-", ""); // Remove espaços e hífens
+            if (!cardNumber.All(char.IsDigit)) // Verifica se o número contém apenas dígitos
+            {
+                return false;
+            }
+
+            int sum = 0;
+            bool alternate = false;
+            for (int i = cardNumber.Length - 1; i >= 0; i--)
+            {
+                int digit = int.Parse(cardNumber[i].ToString());
+
+                if (alternate)
+                {
+                    digit *= 2;
+                    if (digit > 9)
+                    {
+                        digit -= 9;
+                    }
+                }
+
+                sum += digit;
+                alternate = !alternate;
+            }
+
+            return sum % 10 == 0; // Retorna verdadeiro se a soma for um múltiplo de 10
+        }
+
+        public static string GetCardBrand(string cardNumber)
+        {
+            cardNumber = cardNumber.Replace(" ", "").Replace("-", ""); // Remove espaços e hífens
+            string bin = cardNumber.Substring(0, 6); // Obtém os primeiros seis dígitos
+
+            using (HttpClient client = new HttpClient())
+            {
+                string url = "https://lookup.binlist.net/" + bin;
+                HttpResponseMessage response = client.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = response.Content.ReadAsStringAsync().Result;
+                    dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+                    return data.brand;
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         public static Pedido GetByID(int pedidoID)
@@ -426,6 +454,29 @@ namespace EstiloMB.Core
             {
                 throw ex;
             }
+        }
+
+        public static Pedido GetByStatus(int usuarioID)
+        {
+            Pedido pedido = new Pedido();
+            try
+            {
+                using Database<Pedido> db = new Database<Pedido>();
+                return db.Set<Pedido>()
+                    .Where(p => p.UsuarioID == usuarioID && p.StatusPedido == StatusPedido.EmAndamento)
+                    .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static bool UsuarioPossuiPedidosEmAndamento(int usuarioID)
+        {
+            using Database<Pedido> db = new Database<Pedido>();
+            return db.Set<Pedido>()
+                     .Any(p => p.UsuarioID == usuarioID && p.StatusPedido == StatusPedido.EmAndamento);
         }
 
         public static Pedido CreatePedido()

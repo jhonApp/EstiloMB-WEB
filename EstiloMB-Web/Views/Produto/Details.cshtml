@@ -4,7 +4,7 @@
     ViewData["Title"] = "Detalhes";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int produtoID = ViewBag.ProdutoID;
-    int userID = User.GetClaimInt32("ID");
+    int userID = User.GetClaimInt32("UsuarioID");
     
 }
 <content>

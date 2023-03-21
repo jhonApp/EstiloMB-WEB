@@ -219,6 +219,29 @@ a {
         color: black;
     }
 
+.cart-icon {
+    position: relative;
+    display: inline-block;
+}
+
+    .cart-icon .cart-count {
+        display: block;
+        z-index: 1;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        min-width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: red;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 16px;
+    }
+
+
     /* SEARCH PRINCIPAL
 -------------------------------------------------- */
     /*.cols:nth-child(1){
@@ -1409,8 +1432,7 @@ button {
 }
 
 .box {
-    background-color: #fff;
-    padding:10px;
+    padding-right: 15px;
 }
 
 .box p {
@@ -1983,8 +2005,13 @@ label.button.icon {
             width: 100%;
             padding: 10px;
             border-radius: 10px;
-            border: 1px solid rgba(0,0,0,.3);
         }
+
+    .pagamento-selecionado .inputBox :not(.error) input,
+    .pagamento-selecionado .inputBox :not(.error) select {
+        border: 1px solid rgba(0,0,0,.3);
+    }
+
 
         .pagamento-selecionado form .inputBox select {
             width: 150px;
@@ -2518,4 +2545,25 @@ textarea.error:not(:focus) ~ validation {
 
 .text-validation {
     color: rgb(191, 85, 70);
+}
+
+.card-number-input.error,
+.card-number-input.error:focus {
+    border: 2px solid red;
+    background: #f8bebe73;
+}
+
+.pagamento-selecionado form .inputBox .error-message {
+    color: red;
+    font-size: 12px;
+    right: 36%;
+    margin-top: -66px;
+    border-radius: 5px;
+    position: absolute;
+    padding: 5px;
+    display: none;
+}
+
+.pagamento-selecionado form .card-number-input.error ~ .error-message {
+    display: block; /* Exibe o elemento apenas quando a classe .error estiver presente em .inputBox */
 }

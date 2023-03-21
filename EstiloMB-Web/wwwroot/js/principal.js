@@ -196,7 +196,6 @@ function validateSameValue(select) {
 
     for (let i = 0; i < selects.length; i++) {
         if (selects[i].value === select.value && selects[i] !== select) {
-            console.log('entrei')
             return false;
         }
     }
@@ -214,6 +213,35 @@ function handleErrorResponse(error) {
     }
     $ui.message(error.message, "error");
 }
+
+(function ($login) {
+
+    $login.open = function () {
+        const url = $min.root() + $ui.relativePath + 'Sistema/login';
+        const headers = {
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+        };
+
+        const onSuccess = function (response) {
+            console.log(response);
+            
+        };
+
+        const onFailure = function (httpCode, httpMessage) {
+            console.log("erro");
+        };
+
+        $min.ajax({
+            url,
+            headers,
+            onsuccess: onSuccess,
+            onfailure: onFailure
+        });
+    };
+
+})(window.$login = window.$login || {});
+
 
 
 
