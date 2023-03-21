@@ -12,6 +12,7 @@
     <script type="text/javascript" src="~/js/fa/all.js"></script>
     <script type="text/javascript" src="~/js/ChartJS/Chart.js"></script>
     <script type="text/javascript" src="~/js/site.js"></script>
+    <script type="text/javascript" src="~/js/principal.js"></script>
     <script type="text/javascript" src="~/js/Minimum-1.8.js"></script>
     <script src="~/js/swipe.js"></script>
 </head>
@@ -141,7 +142,7 @@
                                 <span name="ValorTotalPedido" data-bind="ValorTotalPedido"></span>
                             </div>
                         </div>
-                        <button class="button-pay"><a href="~/Produto/Sacola">IR PARA PAGAMENTO</a></button>
+                        <button class="button-pay" onclick="$pedido.userValidation()">IR PARA PAGAMENTO</button>
                     </div>
                 </div>
             </div>
@@ -279,6 +280,35 @@
 
         function substituirVirgulaPorPonto(string) {
           return string.replace(/,/g, ".");
+        }
+
+        $pedido.userValidation = function(){
+            const url = $min.root() + $ui.relativePath + 'Pagamento/UserValidation';
+            const headers = {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+            };
+
+            const onSuccess = function(id) {
+
+              if(id != 0){
+                  window.location = 'FormaPagamento';
+              }else{
+                  // Caso contrário, redireciona para a página de login
+                  window.location = 'Login';
+              }
+            };
+
+            const onFailure = function(httpCode, httpMessage) {
+                console.log("erro");
+            };
+
+            $min.ajax({
+                url,
+                headers,
+                onsuccess: onSuccess,
+                onfailure: onFailure
+            });
         }
 
         $pedido.delete = function(button, itemSeletor){
@@ -514,8 +544,6 @@
                     item.classList.remove('hidden');
                  });       
               }
-              
-
             };
 
             const onFailure = function(httpCode, httpMessage) {
@@ -535,7 +563,5 @@
     $pedido.carregar(document.getElementById("sacola"));
 
     // seleciona o campo de entrada de CEP
-
     $pedido.maskCEP(document.getElementById('consulta'));
-
 </script>

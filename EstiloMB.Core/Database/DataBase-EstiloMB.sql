@@ -106,9 +106,9 @@ CREATE TABLE Pedido (
 	DataPagamento DATE NULL,
 	DataEntrega DATE NULL,
 	QuantidadeTotal INT NULL,
-	ValorTotalPedido DECIMAL(10,2) NULL,
-	ValorTotalProdutos DECIMAL(10,2) NULL,
-	Frete DECIMAL(10,2) NULL,
+	ValorTotalPedido DECIMAL(38,2) NULL,
+	ValorTotalProdutos DECIMAL(38,2) NULL,
+	Frete DECIMAL(38,2) NULL,
 	StatusPedido INT NOT NULL,
 )
 
@@ -121,11 +121,11 @@ CREATE TABLE [Pedido.Item] (
 	ProdutoID INT NOT NULL,
 	CONSTRAINT FK_Produto_Item FOREIGN KEY(ProdutoID) REFERENCES Produto(ID),
 
-	Cor NVARCHAR(50) NULL,
+	NomeCor NVARCHAR(50) NULL,
 	ImageURL NVARCHAR(255) NULL,
 	Tamanho NVARCHAR(50) NOT NULL,
 	Quantidade INT NOT NULL,
-	ValorTotal DECIMAL(10,2) NOT NULL,
+	ValorTotal DECIMAL(38,2) NOT NULL,
 );
 
 CREATE TABLE [Pedido.Endereco] (

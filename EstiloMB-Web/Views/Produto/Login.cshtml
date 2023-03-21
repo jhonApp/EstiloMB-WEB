@@ -1,0 +1,116 @@
+﻿@using EstiloMB.Core
+@{
+    ViewData["Title"] = "Login";
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <script type="text/javascript" src="~/js/fa/all.js"></script>
+    <script type="text/javascript" src="~/js/ChartJS/Chart.js"></script>
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <script type="text/javascript" src="~/Minimum/Minimum-1.7.js"></script>
+    <script type="text/javascript" src="~/Minimum/Minimum-1.7.css"></script>
+    <script src="~/js/swipe.js"></script>
+</head>
+<div class="nav-main-sacola">
+    <img class="logo" src="~/image/logo-oficial.png" alt=""/>
+    <nav>
+        <div class="wrapper">
+            
+            <ul class="nav-links">
+                <li class="active">
+                    <a>Sacola</a>
+                </li>
+                <li>
+                    <a>Identificação</a>
+                </li>
+                <li>
+                    <a>Pagamento</a>
+                </li>
+                <li>
+                    <a>Sucesso</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<content>
+    <div class="center">
+        <h2>Acesse com seu login ou cadastre-se!</h2>
+        <form class="page" action="~/Api/Login" method="post" onsubmit="return $user.login(this)">
+            <div class="txt_field">
+                <input type="text"
+                       name="Email"
+                       required="required"
+                       required-error="Por favor preencha este campo"
+                       onblur="$min.validate(this)" />
+                <label>E-mail</label>
+                <validation data-bind="Email" data-group="error" onbind="$ui.bindError(this)"></validation>
+            </div>
+            <div class="txt_field">
+                <input type="password"
+                       name="Senha"
+                       required="required"
+                       required-error="Por favor preencha este campo"
+                       onblur="$min.validate(this)" />
+                <label>Senha</label>
+                <validation data-bind="Senha" data-group="error" onbind="$ui.bindError(this)"></validation>
+            </div>
+            <div class="pass">Esqueceu a senha?</div>
+            <input type="submit" value="Login"/>
+            <div class="signup_link">
+                É novo por aqui? <a  href="~/Sistema/CriarConta">Cadastre-se</a>
+            </div>
+        </form>
+    </div>
+</content>
+<div id="ui-messages">
+    <template>
+        <div class="ui-message" onclick="this.className += ' closing'">
+
+        </div>
+    </template>
+</div>
+<script>
+    $user.onLoginCode(@((int)ResponseCode.Invalid), function (form, response) {
+        $min.bind(form, response.Data, "error");
+        return false;
+    });
+
+    $user.onLoginCode(@((int)ResponseCode.Sucess), function (form, response) {
+        console.log(response);
+        const url = $min.root() + $ui.relativePath + 'Pedido/Save?userID=' + response.Data.UsuarioID;
+        const headers = {
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+        };
+
+        const onSuccess = function(response) {
+            console.log(response);
+            if(response){
+                window.location = 'FormaPagamento';
+            }
+        };
+
+        const onFailure = function(httpCode, httpMessage) {
+            console.log("erro");
+        };
+
+        $min.ajax({
+            url,
+            headers,
+            onsuccess: onSuccess,
+            onfailure: onFailure
+        });
+
+        //if(response.Data.IsAdmin != 0) {
+        //    location.href = $min.root() + $ui.relativePath + "CRM/Index";
+        //} else {
+        //    location.href = $min.root() + $ui.relativePath + "Home/Index";
+        //}
+        
+    });
+</script>

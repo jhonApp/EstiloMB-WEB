@@ -1,4 +1,6 @@
-﻿using EstiloMB_Web.Models;
+﻿using EstiloMB.Core;
+using EstiloMB.MVC;
+using EstiloMB_Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,7 +22,10 @@ namespace EstiloMB.Site.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            int userID = User.GetClaimInt32("UsuarioID");
+            IndexViewModel model = new();
+            model.CartItemCount = ItemPedido.GetItemCount(userID);
+            return View(model);
         }
 
         public IActionResult Privacy()

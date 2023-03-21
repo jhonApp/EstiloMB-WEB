@@ -10,6 +10,8 @@ using System.Text.Json.Serialization;
 using System.Linq;
 using StackExchange.Redis;
 using System;
+using EstiloMB_Web.Models;
+using System.Security.Claims;
 
 namespace EstiloMB.Site.Controllers
 {
@@ -24,6 +26,38 @@ namespace EstiloMB.Site.Controllers
         public IActionResult Sacola()
         {
             return View();
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult FormaPagamento()
+        {
+            int userID = User.GetClaimInt32("UsuarioID");
+            PagamentoViewModel model = new();
+            model.Pedido = Pedido.GetByStatus(userID);
+            return View(model);
+        }
+
+        public IActionResult GetPagamento()
+        {
+            int userID = User.GetClaimInt32("UsuarioID");
+
+            Pedido pedido = Pedido.GetByStatus(userID);
+
+            if (pedido == null)
+            {
+                return NoContent(); // retorna 204 No Content se o carrinho estiver vazio
+            }
+
+            Response<Pedido> response = new Response<Pedido>
+            {
+                Data = pedido
+            };
+
+            return Json(response.Data); // retorna 200 OK com o objeto JSON contendo o carrinho de compras
         }
 
         public IActionResult RemoveItem(int ID)
@@ -62,7 +96,8 @@ namespace EstiloMB.Site.Controllers
 
             if (carrinho == null)
             {
-                return NoContent(); // retorna 204 No Content se o carrinho estiver vazio
+                int userID = User.GetClaimInt32("UsuarioID");
+                carrinho = Pedido.GetByStatus(userID);
             }
 
             Response<Pedido> response = new Response<Pedido>
