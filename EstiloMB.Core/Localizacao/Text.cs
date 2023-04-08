@@ -90,5 +90,11 @@ namespace EstiloMB.Core
         internal const string ItemCriado = "Item Criado!";
         #endregion
 
+        #region [Estoque]
+        internal const string Estoque = "Estoque";
+        internal const string EstoqueNomeJaRegistrado = "Este Estoque Ja foi Registrado.";
+        internal const string EstoqueCriado = "Estoque Criado!";
+        #endregion
+
     }
 }

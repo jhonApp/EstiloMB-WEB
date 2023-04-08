@@ -20,6 +20,11 @@ namespace EstiloMB.Site.Controllers
             return View();
         }
 
+        public IActionResult Estoque()
+        {
+            return View();
+        }
+
         public IActionResult Cor()
         {
             return View();

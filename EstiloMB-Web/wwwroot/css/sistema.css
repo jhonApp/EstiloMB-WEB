@@ -667,6 +667,28 @@ form .user-details .label {
     /*width: calc(100% / 2 - 15px);*/
 }
 
+.label[label]:after, .label input ~ placeholder, .label select ~ placeholder, .label textarea ~ placeholder, .label span ~ placeholder {
+    position: absolute;
+    padding: 0 0.25em;
+    left: 5px;
+    font-family: inherit;
+    font-size: 0.65em;
+    top: -15px;
+    font-weight: normal;
+    white-space: nowrap;
+    height: 23px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: text;
+    background-color: white;
+    border-radius: 4px;
+    user-select: none;
+    transition: color 0.2s ease, top 0.2s ease, left 0.2s ease, font-size 0.2s ease, background-color 0.1s ease, padding 0.2s ease;
+}
+
+.margin-top-estoque {
+    margin-top: 10px;
+}
 
 .multiselect-container,
 .user-details .label textarea,
@@ -680,6 +702,7 @@ form .user-details .label {
     font-size: 13px;
     box-sizing: border-box;
     /* padding-left: 13px; */
+    margin-bottom: 15px;
     padding: 0 0.5em;
     padding-top: 0.2em;
     /* border-bottom-width: 2px; */
