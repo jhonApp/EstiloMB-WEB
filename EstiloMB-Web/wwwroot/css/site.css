@@ -1923,7 +1923,7 @@ label.button.icon {
 
 .menu-pagamento {
     border-top: 1px dotted #BBB;
-    width: 260px;
+    width: 390px;
 }
 
     .menu-pagamento ul {
@@ -2051,7 +2051,7 @@ label.button.icon {
     }
 
         .pagamento-selecionado .card-container .front {
-            height: 33%;
+            max-height: 33%;
             width: 100%;
             margin-top: 30px;
             top: 0;

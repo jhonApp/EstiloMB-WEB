@@ -1,0 +1,888 @@
+﻿@using EstiloMB.Core;
+@using EstiloMB.MVC;
+@inject Localization loc
+@{
+    ViewData["Title"] = "Cadastro";
+    Layout = "~/Views/CRM/Shared/_Layout.cshtml";
+    IList<Cor> cores = Cor.Listar(new Request<Cor>() { UserID = Usuario.EstiloMbID })?.Data;
+    IList<Categoria> categoria = Categoria.Listar(new Request<Categoria>() { UserID = Usuario.EstiloMbID })?.Data;
+    IList<Tamanho> tamanhos = Tamanho.Listar(new Request<Tamanho>() { UserID = Usuario.EstiloMbID })?.Data;
+}
+<content>
+    <section class="page content-sis" ui="container" id="estoque">
+        <div class="item">
+            @*<div class="table-header">
+                <div>
+                <button class="button-new" name="active" onclick="popup(this, this.closest('section').querySelector('#produto'))">
+                Novo Produto
+                </button>
+                </div>
+                </div>*@
+            <div class="table-content">
+                <table class="table left-edit">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Grade De Tamanhos</th>
+                            <th>Quantidade Total</th>
+                            <th>Valor</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody ui-content="data" ui-load="auto" data-url="Api/Estoque/Listar">
+                        <template>
+                            <tr class="opacity-animation" onbind="this.data = data" name="active">
+                                <td>
+                                    <span class="text-line-2" data-bind="Produto.Nome"></span>
+                                    <input type="hidden" name="Produto.Nome" data-bind="Produto.Nome" />
+                                </td>
+                                <td>
+                                    <div class="col-12">
+                                        <div class="label top-multiselect">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-0">
+                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
+                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
+                                                                <i class="far fa-plus"></i>
+                                                            </button>
+                                                        </th>
+                                                        <th>@loc["Tamanho | Cor "]</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-array="ProdutoCategorias" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
+                                                    <template>
+                                                        <tr>
+                                                            <td class="col-0 text-center">
+                                                                <button class="button-icon red"
+                                                                        onclick="$ui.remove(this.closest('tr'))">
+                                                                    <span class="tooltip-top">@loc["Remover"]</span>
+                                                                    <i class="far fa-times"></i>
+                                                                </button>
+
+                                                                <!--IDs-->
+                                                                <input type="hidden" name="ID" data-bind="ID" />
+                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
+                                                            </td>
+                                                            <td>
+                                                                <label class="label margin-top-estoque">
+                                                                    <select name="Produto.Imagem.CorID" data-bind="Produto.Imagem.CorID"
+                                                                            required="required"
+                                                                            class="multiselect-container"
+                                                                            required-error="@loc["Este campo é obrigatório."]"
+                                                                            onblur="$min.validate(this)"
+                                                                            onvalidation="validateSameValue(this)"
+                                                                            onvalidation-error="@loc["Esta categoria já foi selecionada."]">
+                                                                        @for (int i = 0; i < cores.Count; i++)
+                                                                        {
+                                                                            <option value="@cores[i].ID">@cores[i].Nome</option>
+                                                                        }
+                                                                    </select>
+                                                                    <placeholder>Cor</placeholder>
+                                                                    <validation data-bind="Produto.Imagem.CorID" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                                                </label>
+                                                                <label class="label">
+                                                                    <select name="Produto.TamanhoID" data-bind="Produto.TamanhoID"
+                                                                            required="required"
+                                                                            class="multiselect-container"
+                                                                            required-error="@loc["Este campo é obrigatório."]"
+                                                                            onblur="$min.validate(this)"
+                                                                            onvalidation="validateSameValue(this)"
+                                                                            onvalidation-error="@loc["Esta categoria já foi selecionada."]">
+                                                                        @for (int i = 0; i < tamanhos.Count; i++)
+                                                                        {
+                                                                            <option value="@tamanhos[i].ID">@tamanhos[i].Nome</option>
+                                                                        }
+                                                                    </select>
+                                                                    <placeholder>Tamanho</placeholder>
+                                                                    <validation data-bind="Produto.TamanhoID" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                                                </label>
+                                                                <label class="label">
+                                                                    <input class="multiselect-container" type="number" min="0" name="QuantidadeCorTamanho" data-bind="QuantidadeCorTamanho" />
+                                                                    <placeholder>Quantidade</placeholder>
+                                                                </label>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                                <tfoot>
+                                                    <!-- Empty -->
+                                                    <tr ui-content="empty">
+                                                        <td class="text-center" colspan="10">
+                                                            @loc["Nenhum registro selecionado."]
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Loading -->
+                                                    <tr ui-content="loading">
+                                                        <td colspan="10">
+                                                            <div class="loading-bars">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div data-array="ProdutoCategorias">
+                                        <template>
+                                            <span data-bind="Categoria.Nome"></span>
+                                        </template>
+                                    </div>
+                                </td>
+                                <td><span data-bind="Valor" onbind="formatPrice(this)"></span></td>
+                                <td>
+                                    <button class="icon tooltip salvar"
+                                            onclick="popup(this, this.closest('section').querySelector('#produto'), (e) => { $produto.bindProduto(e); })">
+                                        <span class="tooltip-top">Salvar</span>
+                                        <i class="fas fa-pencil"></i>
+                                    </button>
+                                    <button class="icon tooltip remover"
+                                            onclick="$ui.delete(this, this.closest('tr'))"
+                                            data-url="Api/Produto/Remover"
+                                            ui-confirm-message="Tem certeza que deseja remover o Produto?"
+                                            ui-deleted-message="Produto removido.">
+                                        <span class="tooltip-top">Remover</span>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                    <tfoot>
+                        <!-- Empty -->
+                        <tr ui-content="empty">
+                            <td class="text-center" colspan="10">
+                                @loc["Nenhum registro encontrado."]
+                            </td>
+                        </tr>
+
+                        <!-- Loading -->
+                        <tr ui-content="loading">
+                            <td colspan="10">
+                                <div class="loading-bars">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            @*--PopUp Produtos--*@
+            <div class="popup-overlay" id="produto" onbind="this.data = data">
+                <div class="popup-box-container">
+                    <a onclick="popup(this, this.closest('#produto'))" class="close"><i class="far fa-times icon"></i></a>
+                    <div class="title">Produto</div>
+                    <aside>
+                        <div class="overflow">
+                            <div class="user-details">
+                                @*--Imagem--*@
+                                <div class="cols">
+                                    <div class="col-12">
+                                        <div class="label top-multiselect product-img">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-0">
+                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
+                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
+                                                                <i class="far fa-plus"></i>
+                                                            </button>
+                                                        </th>
+                                                        <th>@loc[""]</th>
+                                                        <th>@loc["Imagem"]</th>
+                                                        <th>@loc["Cor"]</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-array="ProdutoImagens" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
+                                                    <template>
+                                                        <tr>
+                                                            <td class="col-0 text-center">
+                                                                <button class="button-icon red"
+                                                                        onclick="$ui.remove(this.closest('tr'))">
+                                                                    <span class="tooltip-top">@loc["Remover"]</span>
+                                                                    <i class="far fa-times"></i>
+                                                                </button>
+
+                                                                <!--IDs-->
+                                                                @*<input type="hidden" name="ID" data-bind="ID"/>
+                                                                    <input type="hidden" name="ProdutoID" data-bind="ProdutoID"/>*@
+                                                            </td>
+                                                            <td class="col-0 text-center">
+                                                                <div>
+                                                                    <div class="">
+                                                                        <div class="top">
+                                                                            <button type="button" onclick="$produto.inputClick(this)">Selecionar</button>
+                                                                            <input name="file" type="file" class="file" onchange="$produto.addImages(this)" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="card-prod-image">
+                                                                    <div class="img-container">
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <label>
+                                                                    <select data-bind="CorID"
+                                                                            required="required"
+                                                                            class="cor multiselect-container"
+                                                                            required-error="@loc["Este campo é obrigatório."]"
+                                                                            onblur="$min.validate(this)"
+                                                                            onchange="$produto.getCorID(this)" corID>
+                                                                        <option value="">@loc["- Selecione -"]</option>
+                                                                        @for (int i = 0; i < cores.Count; i++)
+                                                                        {
+                                                                            <option value="@cores[i].ID">@cores[i].Nome</option>
+                                                                        }
+                                                                    </select>
+                                                                    <validation data-bind="CorID" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                                                </label>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                                <tfoot>
+                                                    <!-- Empty -->
+                                                    <tr ui-content="empty">
+                                                        <td class="text-center" colspan="10">
+                                                            @loc["Nenhuma categoria selecionada."]
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Loading -->
+                                                    <tr ui-content="loading">
+                                                        <td colspan="10">
+                                                            <div class="loading-bars">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*--Nome e Valor--*@
+                                <div class="cols">
+                                    @*--Nome--*@
+                                    <div class="col-6">
+                                        <div class="label">
+                                            <span class="details"> Nome</span>
+                                            <input type="text"
+                                                   required="required"
+                                                   name="Nome" data-bind="Nome"
+                                                   required-error="@loc["Este campo é obrigatório."]"
+                                                   maxlength="50"
+                                                   maxlength-error="@loc["Este campo não pode ter mais do que 50 caracteres."]"
+                                                   onblur="$min.validate(this)" />
+                                            <validation data-bind="Nome" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="ID" data-bind="ID" />
+                                    @*--Valor--*@
+                                    <div class="col-6">
+                                        <div class="label">
+                                            <span class="details">Valor</span>
+                                            <input type="hidden" name="Valor" data-bind="Valor" onbind="$mask.valor(this)" valorDecimal />
+                                            <input type="text" value="R$ 0,00"
+                                                   onkeyup="$mask.valor(this)"
+                                                   onbind="formatPrice(this)"
+                                                   data-bind="Valor"
+                                                   name="ValorText"
+                                                   valorTexto
+                                                   required="required"
+                                                   required-error="@loc["Este campo é obrigatório."]"
+                                                   onblur="$min.validate(this)" />
+                                            <validation data-bind="Valor" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*--Descrição--*@
+                                <div class="cols">
+                                    @*--Descrição--*@
+                                    <div class="col-12">
+                                        <div class="label">
+                                            <span class="details">Descrição</span>
+                                            <textarea type="text"
+                                                      rows="4" cols="50"
+                                                      name="Descricao" data-bind="Descricao"
+                                                      required="required"
+                                                      onblur="$min.validate(this)"
+                                                      required-error="@loc["Este campo é obrigatório."]"
+                                                      maxlength="255"
+                                                      maxlength-error="@loc["Este campo não pode ter mais do que 255 caracteres."]"></textarea>
+                                            <validation data-bind="Descricao" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*--Categoria e Tamanho--*@
+                                <div class="cols">
+                                    @*--Categoria--*@
+                                    <div class="col-6">
+                                        <div class="label top-multiselect">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-0">
+                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
+                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
+                                                                <i class="far fa-plus"></i>
+                                                            </button>
+                                                        </th>
+                                                        <th>@loc["Categoria"]</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-array="ProdutoCategorias" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
+                                                    <template>
+                                                        <tr>
+                                                            <td class="col-0 text-center">
+                                                                <button class="button-icon red"
+                                                                        onclick="$ui.remove(this.closest('tr'))">
+                                                                    <span class="tooltip-top">@loc["Remover"]</span>
+                                                                    <i class="far fa-times"></i>
+                                                                </button>
+
+                                                                <!--IDs-->
+                                                                <input type="hidden" name="ID" data-bind="ID" />
+                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
+                                                            </td>
+                                                            <td>
+                                                                <label>
+                                                                    <select name="CategoriaID" data-bind="CategoriaID"
+                                                                            required="required"
+                                                                            class="multiselect-container"
+                                                                            required-error="@loc["Este campo é obrigatório."]"
+                                                                            onblur="$min.validate(this)"
+                                                                            onvalidation="validateSameValue(this)"
+                                                                            onvalidation-error="@loc["Esta categoria já foi selecionada."]">
+                                                                        @for (int i = 0; i < categoria.Count; i++)
+                                                                        {
+                                                                            <option value="@categoria[i].ID">@categoria[i].Nome</option>
+                                                                        }
+                                                                    </select>
+                                                                    <validation data-bind="CategoriaID" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                                                    @* <span class="label">@loc["Cor"]</span>*@
+                                                                </label>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                                <tfoot>
+                                                    <!-- Empty -->
+                                                    <tr ui-content="empty">
+                                                        <td class="text-center" colspan="10">
+                                                            @loc["Nenhuma categoria selecionada."]
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Loading -->
+                                                    <tr ui-content="loading">
+                                                        <td colspan="10">
+                                                            <div class="loading-bars">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    @*--Tamanho--*@
+                                    <div class="col-6">
+                                        <div class="label top-multiselect">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="col-0">
+                                                            <button class="button-icon gold" onclick="$ui.add(this.closest('table'))">
+                                                                <span class="tooltip-top">@loc["Adicionar"]</span>
+                                                                <i class="far fa-plus"></i>
+                                                            </button>
+                                                        </th>
+                                                        <th>@loc["Tamanhos"]</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-array="ProdutoTamanhos" onbind="$ui.checkEmpty(this)" ui-content="data" state="empty">
+                                                    <template>
+                                                        <tr>
+                                                            <td class="col-0 text-center">
+                                                                <button class="button-icon red"
+                                                                        onclick="$ui.remove(this.closest('tr'))">
+                                                                    <span class="tooltip-top">@loc["Remover"]</span>
+                                                                    <i class="far fa-times"></i>
+                                                                </button>
+
+                                                                <!--IDs-->
+                                                                <input type="hidden" name="ID" data-bind="ID" />
+                                                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" />
+                                                            </td>
+                                                            <td>
+                                                                <label>
+                                                                    <select name="TamanhoID" data-bind="TamanhoID"
+                                                                            required="required"
+                                                                            class="multiselect-container"
+                                                                            required-error="@loc["Este campo é obrigatório."]"
+                                                                            onblur="$min.validate(this)"
+                                                                            onvalidation="validateSameValue(this)"
+                                                                            onvalidation-error="@loc["Este tamanho já foi selecionado."]"
+                                                                            data-url="Produto/RemoveTamanhosByID">
+                                                                        @for (int i = 0; i < tamanhos.Count; i++)
+                                                                        {
+                                                                            <option value="@tamanhos[i].ID">@tamanhos[i].Nome</option>
+                                                                        }
+                                                                    </select>
+                                                                    <validation data-bind="TamanhoID" data-group="error" onbind="$ui.bindError(this)"></validation>
+                                                                    @*<span class="validation" data-property="TamanhoID" data-group="error" onbind="$ui.error(this)"></span>*@
+                                                                    @*<span class="label">@loc["Tamanho"]</span>*@
+                                                                </label>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                                <tfoot>
+                                                    <!-- Empty -->
+                                                    <tr ui-content="empty">
+                                                        <td class="text-center" colspan="10">
+                                                            @loc["Nenhum registro encontrado."]
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Loading -->
+                                                    <tr ui-content="loading">
+                                                        <td colspan="10">
+                                                            <div class="loading-bars">
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*--Buttons--*@
+                            <div class="cols">
+                                <div class="col-6">
+                                    <div class="button-cadastro">
+                                        <input type="submit"
+                                               value="Cancelar"
+                                               onclick="popup(this, this.closest('#produto'))" />
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="button-cadastro">
+                                        <input type="submit"
+                                               value="Salvar"
+                                               onclick="$ui.save(this,'aside', (e, t) => { popup(e, this.closest('#produto')); })"
+                                               data-url="Api/Produto/Parametro"
+                                               ui-saved-message="@loc["Registro atualizado."]" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            @*--PopUp Galeria--*@
+            <div class="popup-overlay" id="galeria">
+                <div class="popup-box-container">
+                    <a onclick="popup(this, this.closest('#galeria'))" class="close"><i class="far fa-times icon"></i></a>
+                    <div class="title">Imagens</div>
+                    <aside>
+                        <div class="overflow">
+                            <div class="galery" data-array="ProdutoImagens">
+                                <template>
+                                    <div class="g-item">
+                                        <img src="~/images/EmptyPhoto.png"
+                                             preview="image"
+                                             onbind="if (data) { this.src = '@Url.Content("~/")' + 'Produtos/' + data.ImageURL; } " />
+
+                                        <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" />
+                                        <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" />
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+</content>
+
+<script type="text/javascript">
+
+    $ui.update(document.getElementById("estoque"));
+
+    function bindar(data){
+        console.log('teste')
+        console.log(data);
+    }
+
+    function imageEmpty(data){
+
+        let images;
+        let caminho;
+
+        let convertObj = function(images) {
+
+            var htmlObject = '';
+            let container = document.querySelector('.img-container');
+            var temp = document.createElement('div');
+
+            temp.innerHTML = images;
+            htmlObject = temp.childNodes[1];
+            return htmlObject;
+        }
+
+        let corAnterior;
+
+        for(let i = 0; i < data.ProdutoImagens.length; i++){
+
+            ID = data.ProdutoImagens[i].ID;
+            CorID = data.ProdutoImagens[i].CorID;
+            ProdutoID = data.ProdutoImagens[i].ProdutoID;
+            ImageURL = data.ProdutoImagens[i].ImageURL;
+
+            if(corAnterior == undefined){
+                corAnterior = CorID;
+            }
+
+            images += `<div class="image">
+                            <img preview="image" src="${caminho}" alt="image" />
+                            <span onclick="$produto.removeImage(${i}, this)">&times;</span>
+
+                            <input type="hidden" name="ID" data-bind="ID" value="${ID}" />
+                            <input type="hidden" name="CorID" data-bind="CorID" value="${CorID}" />
+                            <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="${ProdutoID}" />
+                            <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${ImageURL}"/>
+                        </div>`
+
+            images = convertObj(images);
+            caminho = images.querySelector('img').src = '@Url.Content("~/")' + 'Produtos/' + ImageURL;
+
+            let selects = document.querySelectorAll('select.cor');
+
+            selects.forEach(function(select){
+                if(select.value == CorID){
+                    select.closest('tr').querySelector('.img-container').appendChild(images);
+                }
+            });
+
+            corAnterior = CorID;
+        }
+
+        let vazios = document.querySelectorAll('.img-container');
+
+        vazios.forEach(function(vazio){
+
+            if(vazio.firstElementChild == null){
+                vazio.closest('tr').remove();
+            }
+        });
+    }
+
+    function validateSameValue(select) {
+        let tbody = select.closest("tbody");
+        let selects = tbody.querySelectorAll("[name=" + select.name + "]");
+
+        for (let i = 0; i < selects.length; i++) {
+            console.log(selects[i].value)
+            if (selects[i].value === select.value && selects[i] !== select) {
+
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    (function($rols) {
+
+        $rols.updateList = function(select){
+            console.log(select)
+            if (select.value == '') {
+                while (select.firstElementChild) {
+                    select.firstElementChild.remove();
+                }
+
+                let option = document.createElement('option');
+                option.value = '';
+                option.innerHTML = '- Selecione -';
+                select.appendChild(option);
+
+                return;
+            }
+
+            //let url = $min.root() + $ui.relativePath + 'Cliente/GetDS2ByDS1?DSSolucao1=' + select.value;
+            let url = $min.root() + $ui.relativePath + select.getAttribute("data-url") + '?ID=' + select.value;
+            console.log(url)
+            $min.ajax({
+                url: url,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                },
+                onsuccess: function(response) {
+                    console.log(response);
+                    while (select.firstElementChild) {
+                        select.firstElementChild.remove();
+                    }
+
+                    let option = document.createElement('option');
+                    option.value = '';
+                    option.innerHTML = '- Selecione -';
+                    select.appendChild(option);
+
+                    for (let i = 0; i < response.length; i++) {
+                        option = document.createElement('option');
+                        option.value = response[i].ID;
+                        option.innerHTML = response[i].DescricaoSolucaoProcesso;
+                        select.appendChild(option);
+                    }
+                },
+                onfailure: function(httpCode, httpMessage) {
+                    if (httpCode === 401) {
+                        let currentURL = window.location.href.replace($min.root() + $ui.relativePath, "");
+                        window.location.href = $min.root() + $ui.relativePath + $ui.redirectLoginURL + currentURL;
+                    }
+                    $ui.message(httpMessage, "error");
+                }
+            });
+        }
+    })(window.$rols = window.$rols || {});
+
+    (function($produto) {
+
+        let files = [];
+        //let container = document.querySelector('.img-container');
+
+        let ImgRender = (file, htmlObject, container) => {
+
+            let input = htmlObject.querySelector('[preview = data]');
+            let reader = new FileReader();
+            var image;
+
+            function loaded() {
+                dataURL = reader.result;
+                input.value = dataURL.substring(dataURL.indexOf(',') + 1);
+                container.appendChild(htmlObject);
+            }
+
+            //console.log(file)
+            reader.readAsDataURL(file);
+            reader.onload = loaded;
+            files = [];
+        }
+
+        let convertObj = function(files, images, element) {
+            var temp = document.createElement('div');
+
+            temp.innerHTML = images;
+            var htmlObject = '';
+            let container = element.closest('tbody').querySelector('.img-container');
+            htmlObject = temp.childNodes[0];
+
+            ImgRender(files, htmlObject, container);
+        }
+
+        const showImages = (dados, element, corID) => {
+
+            let images = '';
+            let dataURL;
+            let charge;
+            let produtoID = dados;
+
+            if(produtoID == undefined){
+                produtoID = 0;
+            }else{
+                produtoID = dados.ID
+            }
+
+            //montando o container
+            files.forEach((e, i) => {
+                i++;
+
+                images += `<div class="image">
+                                <img preview="image" src="${URL.createObjectURL(e)}" alt="image" />
+                                <span onclick="$produto.removeImage(${i}, this)">&times;</span>
+
+                                <input type="hidden" name="ID" data-bind="ID" value="0" />
+                                <input type="hidden" name="CorID" data-bind="CorID" value="${corID}" />
+                                <input type="hidden" name="ProdutoID" data-bind="ProdutoID" value="${produtoID}" />
+                                <input type="hidden" preview="name" name="ImageURL" data-bind="ImageURL" value="${e.name}"/>
+                                <input type="hidden" preview="data" name="ImageData" data-bind="ImageData" value="${dataURL}"/>
+                            </div>`
+
+                //Fazendo a conversão do container para objeto
+                convertObj(e, images, element);
+            });
+        }
+
+        $produto.inputClick = function(button) {
+            button.parentElement.querySelector('input').click();
+        }
+
+        $produto.addImages = function(element) {
+            let text = document.querySelector('.inner');
+            let input = document.querySelector('.top input');
+            let dados = element.closest('#produto').data;
+            let corID = document.querySelector('select[CorID]').value;
+            let file = input.files;
+
+            //Fazendo subistuição da imagem
+            for (let i = 0; i < file.length; i++) {
+                if(files.every(e => e.name != file[i].name)){
+                    files.push(file[i]);
+                }
+            }
+
+            showImages(dados, element, corID);
+        };
+
+        $produto.removeImage = function(index, span) {
+
+            if(span.parentElement.parentElement.querySelectorAll('.image').length >= 2){
+               span.parentElement.remove();
+
+            }else{
+                span.closest('tr').remove();
+            }
+        };
+
+        $produto.changeOpen = function(element) {
+
+            if(element.className != "open"){
+
+                element.classList.toggle("open");
+                $produto.selectItem(element);
+                return;
+            }
+
+            element.classList.remove("open");
+        };
+
+        $produto.selectItem = function(element) {
+
+            let items = element.closest(".label").querySelectorAll(".item");
+
+
+            items.forEach(item => {
+                item.addEventListener("click", () => {
+                    let result = "";
+                    item.classList.toggle("checked");
+
+                    let checked = element.closest(".label").querySelectorAll(".checked"),
+                        btnText = element.closest(".label").querySelector(".btn-text"),
+                        colorID = 0;
+
+                        for(let i = 0; i < checked.length; i++){
+
+                            if(checked[i].className == "item checked"){
+                                result += checked[i].innerText + ", ";
+
+                                let color = result.slice(0, -2) + '';
+                                btnText.innerText = color;
+                            }else{
+
+                                btnText.innerText = "Selecione apenas 4 cores";
+                            }
+                        }
+
+                        if(result == ""){ btnText.innerText = "- Selecione -"; } else { $produto.fillArray(element, colorID) }
+                });
+            });
+        };
+
+        $produto.fillArray = function(element, id) {
+
+            if(element.closest(".label").hasAttribute("data-array")){
+                let parametro = {
+                            ID: 0,
+                            ProdutoID: 0,
+                            CorID: parseInt(id)
+                        };
+
+                let obj = {
+                            ProdutoCores: parametro
+                        };
+
+                let array = element.closest('[data-array="ProdutoCores"]');
+                $min.bind(array, obj);
+
+                console.log(obj)
+                console.log(array)
+            }
+        };
+
+        $produto.bindImages = function(element) {
+            let template = element.closest('tr');
+            let dados = template.data;
+
+            let obj = {
+                ProdutoImagens: dados.ProdutoImagens
+            };
+
+            let popup = template.closest('section').querySelector('#galeria');
+            let array = popup.querySelector('[data-array="ProdutoImagens"]');
+            $min.bind(array, obj);
+        };
+
+        $produto.bindProduto = function(element) {
+            let template = element.closest('tr');
+            let dados = template.data;
+            let images = dados.ProdutoImagens;
+            let templateImg = '';
+
+            let obj = {
+                ID: dados.ID,
+                Nome: dados.Nome,
+                Descricao: dados.Descricao,
+                Valor: dados.Valor,
+                ProdutoImagens: dados.ProdutoImagens,
+                ProdutoTamanhos: dados.ProdutoTamanhos,
+                ProdutoCategorias: dados.ProdutoCategorias,
+            };
+            console.log(obj)
+            let popup = template.closest('section').querySelector('#produto');
+            $min.bind(popup, obj);
+            imageEmpty(obj)
+        };
+
+        $produto.getCorID = function(element) {
+            let inputs = element.closest('tr').querySelectorAll('.img-container > .image > input[name = CorID]');
+            inputs.forEach(function(input){
+                input.value = element.value;
+            });
+        };
+
+    })(window.$produto = window.$produto || {});
+</script>

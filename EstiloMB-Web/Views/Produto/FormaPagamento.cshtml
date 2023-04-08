@@ -15,14 +15,49 @@
     <script type="text/javascript" src="~/js/Minimum-1.8.js"></script>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script src="~/js/swipe.js"></script>
-
-    const mp = new MercadoPago("TEST-a90cd080-ef38-4c31-b250-32c50e7b2777");
 </head>
+<style>
+    #form-checkout {
+        display: flex;
+        flex-direction: column;
+        max-width: 600px;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid rgb(118, 118, 118);
+        margin-top: 10px;
+        padding: 0 10px;
+    }
+
+        .container > label {
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 120px;
+        }
+
+        .container > input,
+        .container > select {
+            flex: 1;
+            height: 100%;
+            border: none;
+            font-size: 16px;
+            outline: none;
+        }
+
+    #form-checkout__issuer, #form-checkout__identificationType, #form-checkout__cardholderEmail {
+        display: none;
+    }
+</style>
 <div class="nav-main-sacola">
-    <img class="logo" src="~/image/logo-oficial.png" alt=""/>
+    <img class="logo" src="~/image/logo-oficial.png" alt="" />
     <nav>
         <div class="wrapper">
-            
+
             <ul class="nav-links">
                 <li class="active">
                     <a>Sacola</a>
@@ -49,7 +84,7 @@
                     <div class="content-menu-pagamento">
                         <div class="menu-pagamento">
                             <ul>
-                                <li class="card" onclick="changeMenu(this)" style="background-color: rgba(242, 242, 242, 0.686);" >
+                                <li class="card" onclick="changeMenu(this)" style="background-color: rgba(242, 242, 242, 0.686);">
                                     <span>
                                         <i class="fas fa-credit-card icon"></i>
                                         Cartão de Crédito
@@ -68,7 +103,7 @@
                                 <div class="front">
                                     <div class="image">
                                         <img src="~/image/chip.png" />
-                                        <img src="~/image/visa.png" name="brand" class="hidden"/>
+                                        <img src="~/image/visa.png" name="brand" class="hidden" />
                                     </div>
                                     <div class="card-number-box">**** **** **** ****</div>
                                     <div class="flexbox">
@@ -91,77 +126,23 @@
                                     <div class="box">
                                         <span>CVV</span>
                                         <div class="cvv-box"></div>
-                                        <img src=~/image/visa.png/>
+                                        <img src=~/image/visa.png />
                                     </div>
                                 </div>
                             </div>
-                            <form action="" id="form-checkout">
-                                <input class="hidden" id="form-checkout__issuer"/>
-                                <div class="inputBox">
-                                    <span>Número do Cartão</span>
-                                    <input type="text" class="card-number-input"
-                                            id="form-checkout__cardNumber"
-                                            maxlength="19"
-                                            onkeyup="$pagamento.actionCard(this)" />
-                                    <span class="error-message">* Número do cartão inválido.</span>
-                                </div>
-                                <div class="inputBox">
-                                    <span>Nome Impresso no cartão</span>
-                                    <input type="text" id="form-checkout__cardholderName" maxlength="25" class="card-holder-input"/>
-                                </div>
-                                <div class="flexbox">
-                                    <div class="inputBox">
-                                        <span>Mês</span>
-                                        <select name="" id="" class="month-input">
-                                            <option value="month" selected disabled>mês</option>
-                                            <option value="01">01</option>
-                                            <option value="02">02</option>
-                                            <option value="03">03</option>
-                                            <option value="04">04</option>
-                                            <option value="05">05</option>
-                                            <option value="06">06</option>
-                                            <option value="07">07</option>
-                                            <option value="08">08</option>
-                                            <option value="09">09</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                        </select>
-                                    </div>
-                                    <div class="inputBox">
-                                        <span>Ano</span>
-                                        <select name="" class="year-input" id="form-checkout__expirationDate">
-                                            <option value="year" selected disabled>ano</option>
-                                            @for (int i = 0; i < 10; i++)
-                                            {
-                                                int year = DateTime.Now.Year + i;
-                                                <option value="@year">@year</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="inputBox">
-                                        <span>CVV</span>
-                                        <input type="text" maxlength="4" id="form-checkout__securityCode" class="cvv-input"/>
-                                    </div>
-                                </div>
-                                <div class="inputBox">
-                                    <span>N° Parcelas</span>
-                                    <select name="" id="" class="year-input" id="form-checkout__installments">
-                                        <option value="parcelas" selected disabled>parcelas</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="9">9</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                    </select>
-                                </div>
+                            <form id="form-checkout">
+                                <div id="form-checkout__cardNumber" class="container inputBox"></div>
+                                <div id="form-checkout__expirationDate" class="container"></div>
+                                <div id="form-checkout__securityCode" class="container"></div>
+                                <input type="text" id="form-checkout__cardholderName" class="container" />
+                                <select id="form-checkout__issuer" class="container hidden"></select>
+                                <select id="form-checkout__installments" class="container"></select>
+                                <select id="form-checkout__identificationType" class="container"></select>
+                                <input type="text" id="form-checkout__identificationNumber" class="container" />
+                                <input type="email" id="form-checkout__cardholderEmail" class="container" />
+
+                                @*<button type="submit" id="form-checkout__submit">Pagar</button>*@
+                                <progress value="0" class="progress-bar">Carregando...</progress>
                             </form>
                         </div>
                         <div class="pagamento-selecionado pix hidden">
@@ -192,8 +173,11 @@
                                 <span data-bind="PedidoValorTotal"></span>
                             </div>
                         </div>
-                        <button class="button-pay pay green" id="form-checkout__submit">
-                            <span><a href="~/Produto/Pagamento">FINALIZAR PEDIDO</a></span>
+                        <button class="button-pay pay green"
+                                type="submit" id="form-checkout__submit"
+                                onclick="$pagamento.enviar(this)"
+                                form="form-checkout">
+                            <span><a>FINALIZAR PEDIDO</a></span>
                         </button>
                     </div>
                 </div>
@@ -202,178 +186,279 @@
     </div>
 </content>
 <script>
-    (function($pagamento){
-        var init = function (container) {
-            let contents = container.querySelector("[ui-content='data']");
-            if (!contents) { return false; }
+        (function($pagamento){
+            var init = function (container) {
+                let contents = container.querySelector("[ui-content='data']");
+                if (!contents) { return false; }
 
-            contents.isAutoLoad = (contents.getAttribute("ui-load") || "").toLowerCase() === "auto";
+                contents.isAutoLoad = (contents.getAttribute("ui-load") || "").toLowerCase() === "auto";
 
-            if (!contents.initialized) {
-                contents.container = container;
-                contents.pixelAutoLoadThreshold = 25;
-                contents.maxPageCount = parseInt(contents.getAttribute("maxPageCount"), 10) || 10;
+                if (!contents.initialized) {
+                    contents.container = container;
+                    contents.pixelAutoLoadThreshold = 25;
+                    contents.maxPageCount = parseInt(contents.getAttribute("maxPageCount"), 10) || 10;
 
-                contents.url = contents.getAttribute("data-url");
-                contents.template = contents.template || contents.querySelector(":scope > template") || false;
+                    contents.url = contents.getAttribute("data-url");
+                    contents.template = contents.template || contents.querySelector(":scope > template") || false;
 
-                let elements = null;
+                    let elements = null;
 
-                elements = container.querySelectorAll("[ui-content='filter']") || false;
-                for (let i = 0; i < elements.length; i++) {
-                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
-                    if (target) { target.filter = elements[i]; continue; }
+                    elements = container.querySelectorAll("[ui-content='filter']") || false;
+                    for (let i = 0; i < elements.length; i++) {
+                        let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                        if (target) { target.filter = elements[i]; continue; }
 
-                    contents.filter = elements[i];
-                }
-
-                //elements = container.querySelectorAll("[ui-content='empty']") || false;
-                //for (let i = 0; i < elements.length; i++) {
-                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
-                //    if (target) { target.empty = elements[i]; continue; }
-
-                //    contents.empty = elements[i];
-                //}
-
-                //elements = container.querySelectorAll("[ui-content='loading']") || false;
-                //for (let i = 0; i < elements.length; i++) {
-                //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
-                //    if (target) { target.loading = elements[i]; continue; }
-
-                //    contents.loading = elements[i];
-                //}
-
-                elements = container.querySelectorAll("[ui-content='paging']") || false;
-                for (let i = 0; i < elements.length; i++) {
-                    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
-                    if (target) {
-                        target.paging = elements[i];
-                    }
-                    else {
-                        target = contents;
-                        target.paging = elements[i];
+                        contents.filter = elements[i];
                     }
 
-                    target.paging.pages = target.paging.querySelector("[ui-content='pages']") || false;
-                    target.paging.prevPage = target.paging.querySelector("[ui-content='prev-page']") || false;
-                    target.paging.nextPage = target.paging.querySelector("[ui-content='next-page']") || false;
+                    //elements = container.querySelectorAll("[ui-content='empty']") || false;
+                    //for (let i = 0; i < elements.length; i++) {
+                    //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    //    if (target) { target.empty = elements[i]; continue; }
+
+                    //    contents.empty = elements[i];
+                    //}
+
+                    //elements = container.querySelectorAll("[ui-content='loading']") || false;
+                    //for (let i = 0; i < elements.length; i++) {
+                    //    let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                    //    if (target) { target.loading = elements[i]; continue; }
+
+                    //    contents.loading = elements[i];
+                    //}
+
+                    elements = container.querySelectorAll("[ui-content='paging']") || false;
+                    for (let i = 0; i < elements.length; i++) {
+                        let target = elements[i].hasAttribute("for") ? eval(elements[i].getAttribute("for").replace("this", "elements[i]")) : false;
+                        if (target) {
+                            target.paging = elements[i];
+                        }
+                        else {
+                            target = contents;
+                            target.paging = elements[i];
+                        }
+
+                        target.paging.pages = target.paging.querySelector("[ui-content='pages']") || false;
+                        target.paging.prevPage = target.paging.querySelector("[ui-content='prev-page']") || false;
+                        target.paging.nextPage = target.paging.querySelector("[ui-content='next-page']") || false;
+                    }
+
+                    contents.initialized = true;
                 }
 
-                contents.initialized = true;
-            }
+                return contents;
+            };
 
-            return contents;
-        };
+            function formatarValorMonetario(valorString) {
+              // Substitui o separador decimal por ponto (se necessário)
+              valorString = valorString.replace(',', '.');
 
-        function formatarValorMonetario(valorString) {
-            const valorFloat = parseFloat(valorString);
-            if (isNaN(valorString)) {
+              const valorFloat = parseFloat(valorString);
+              if (isNaN(valorFloat)) {
                 return "Valor inválido";
-            }
-            const valorFormatado = valorFloat.toLocaleString("pt-BR", {
+              }
+
+              const valorFormatado = valorFloat.toLocaleString("pt-BR", {
                 style: "currency",
                 currency: "BRL",
-            });
-            return valorFormatado;
-        }
+              });
 
-        $pagamento.carregar = function(container) {
-            
-            const valoresFormatados = {
-                ProdutoValor: formatarValorMonetario(`${@Model.Pedido.ValorTotalProdutos}`),
-                PedidoValorTotal: formatarValorMonetario(`${@Model.Pedido.ValorTotalPedido}`),
-                Frete: formatarValorMonetario(`${@Model.Pedido.Frete}`)
+              return valorFormatado;
             };
-            $min.bind(container, valoresFormatados);
-        };
 
-        $pagamento.actionCard = function(input){
-            let number = input.value;
-            console.log(number.length)
-            if(number.length >= 6){
-                $pagamento.getCreditCardBrand(number, input);
-            }
-            
-            if(number.length >= 9){
-                $pagamento.validateCreditCard(number, input);
-            }
+            $pagamento.carregar = function(container) {
+                const valoresFormatados = {
+                    ProdutoValor: formatarValorMonetario('@Model.Pedido.ValorTotalProdutos'),
+                    PedidoValorTotal: formatarValorMonetario('@Model.Pedido.ValorTotalPedido'),
+                    Frete: formatarValorMonetario('@Model.Pedido.Frete')
+                };
+                $min.bind(container, valoresFormatados);
+            };
 
-            let cardNumber = input.value.replace(/\s/g, "");
-            cardNumber = cardNumber.replace(/(\d{4})/g, "$1 ");
-            input.value = cardNumber.trim();
-        }
-
-        $pagamento.getCreditCardBrand = function(number, input){
-            let img = input.closest('.card').querySelector('[name = brand]');
-    
-            function toggleImageHiddenClass(isHidden) {
-                if(isHidden) {
-                    img.classList.add('hidden');
-                } else {
-                    img.classList.remove('hidden');
+            $pagamento.actionCard = function(input){
+                let number = input.value;
+                console.log(number.length)
+                if(number.length >= 6){
+                    $pagamento.getCreditCardBrand(number, input);
                 }
+
+                if(number.length >= 9){
+                    $pagamento.validateCreditCard(number, input);
+                }
+
+                let cardNumber = input.value.replace(/\s/g, "");
+                cardNumber = cardNumber.replace(/(\d{4})/g, "$1 ");
+                input.value = cardNumber.trim();
             }
 
-            $min.ajax({
-                url: $min.root() + $ui.relativePath + 'Pagamento/GetCreditCardBrand?number=' + number,
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
-                },
-                onsuccess: function (bandeira) {
-                    toggleImageHiddenClass(bandeira == "Padrão");
-                    
-                    switch(bandeira.toUpperCase()) {
-                        case "VISA":
-                            img.src = "/image/visa.png";
-                            break;
-                        case "ELO":
-                            img.src = "/image/elo.png";
-                            break;
-                        case "AMERICAN EXPRESS":
-                            img.src = "/image/american_express.png";
-                            break;
-                        case "HIPERCARD":
-                            img.src = "/image/hipercard.png";
-                            break;
-                        case "MASTERCARD":
-                        case "GOLD":
-                            img.src = "/image/mastercard.png";
-                            break;
-                        default:
-                            // leave img.src as it is
-                            break;
+            $pagamento.getCreditCardBrand = function(number, input){
+                let img = input.closest('.card').querySelector('[name = brand]');
+
+                function toggleImageHiddenClass(isHidden) {
+                    if(isHidden) {
+                        img.classList.add('hidden');
+                    } else {
+                        img.classList.remove('hidden');
                     }
-                },
-                onfailure: function (httpCode, httpMessage) {
                 }
-            });
-        }
 
-        $pagamento.validateCreditCard = function(number, input){
-            console.log(number)
-            $min.ajax({
-                url: $min.root() + $ui.relativePath + 'Pagamento/ValidaCreditCard?number=' + number,
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
-                },
-                onsuccess: function (isValid) {
-                    if(!isValid){
-                        console.log('entrei')
-                        input.classList.add('error');
-                    }else{
-                        input.classList.remove('error');
+                $min.ajax({
+                    url: $min.root() + $ui.relativePath + 'Pagamento/GetCreditCardBrand?number=' + number,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                    },
+                    onsuccess: function (bandeira) {
+                        toggleImageHiddenClass(bandeira == "Padrão");
+
+                        switch(bandeira.toUpperCase()) {
+                            case "VISA":
+                                img.src = "/image/visa.png";
+                                break;
+                            case "ELO":
+                                img.src = "/image/elo.png";
+                                break;
+                            case "AMERICAN EXPRESS":
+                                img.src = "/image/american_express.png";
+                                break;
+                            case "HIPERCARD":
+                                img.src = "/image/hipercard.png";
+                                break;
+                            case "MASTERCARD":
+                            case "GOLD":
+                                img.src = "/image/mastercard.png";
+                                break;
+                            default:
+                                // leave img.src as it is
+                                break;
+                        }
+                    },
+                    onfailure: function (httpCode, httpMessage) {
                     }
+                });
+            }
+
+            $pagamento.validateCreditCard = function(number, input){
+                console.log(number)
+                $min.ajax({
+                    url: $min.root() + $ui.relativePath + 'Pagamento/ValidaCreditCard?number=' + number,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-XSRF-TOKEN": $min.getCookie("XSRF-TOKEN")
+                    },
+                    onsuccess: function (isValid) {
+                        if(!isValid){
+                            console.log('entrei')
+                            input.classList.add('error');
+                        }else{
+                            input.classList.remove('error');
+                        }
+                    },
+                    onfailure: function (httpCode, httpMessage) {
+                    }
+                });
+            }
+
+            $pagamento.enviar = function(button){
+              const mp = new MercadoPago("TEST-a90cd080-ef38-4c31-b250-32c50e7b2777");
+
+              const cardForm = mp.cardForm({
+                //debuuger;
+                amount: "150.5",
+                iframe: true,
+                form: {
+                    id: "form-checkout",
+                    cardNumber: {
+                        id: "form-checkout__cardNumber",
+                        placeholder: "Número do cartão"
+                    },
+                    expirationDate: {
+                        id: "form-checkout__expirationDate",
+                        placeholder: "MM/AA",
+                    },
+                    securityCode: {
+                        id: "form-checkout__securityCode",
+                        placeholder: "CVV"
+                    },
+                    cardholderName: {
+                        id: "form-checkout__cardholderName",
+                        placeholder: "Titular do cartão"
+                    },
+                    issuer: {
+                        id: "form-checkout__issuer",
+                        placeholder: "Banco emissor",
+                    },
+                    installments: {
+                        id: "form-checkout__installments",
+                        placeholder: "Parcelas",
+                    },
+                    identificationType: {
+                        id: "form-checkout__identificationType",
+                        placeholder: "Tipo de documento",
+                    },
+                    identificationNumber: {
+                        id: "form-checkout__identificationNumber",
+                        placeholder: "CPF",
+                    },
+                    cardholderEmail: {
+                        id: "form-checkout__cardholderEmail",
+                        placeholder: "E-mail",
+                    },
                 },
-                onfailure: function (httpCode, httpMessage) {
+                callbacks: {
+                    onFormMounted: error => {
+
+                        if (error) return console.warn("Form Mounted handling error: ", error);
+                        console.log("Form mounted");
+                    },
+                onSubmit: event => {
+                    console.log('entrei');
+                    event.preventDefault();
+
+                    const cardData = cardForm.getCardFormData();
+                    console.log(cardData)
+                    const obj = {
+                        PaymentMethodId: cardData.paymentMethodId,
+                        IssuerId: cardData.issuerId,
+                        Email: cardData.email,
+                        TransactionAmount: Number(cardData.amount),
+                        Description: "teste",
+                        Amount: cardData.amount,
+                        Token: cardData.token,
+                        Installments: Number(cardData.installments),
+                        IdentificationNumber: cardData.identificationNumber,
+                        IdentificationType: cardData.identificationType
+                    };
+
+                    console.log(obj);
+                    //está tudo certo, verificar os parametros
+                    fetch('../MercadoPagoProcess/ProcessPayment', {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(obj)
+                    });
+                },
+                onFetching: (resource) => {
+                    console.log("Fetching resource: ", resource);
+
+                    // Animate progress bar
+                    const progressBar = document.querySelector(".progress-bar");
+                    progressBar.removeAttribute("value");
+
+                    return () => {
+                    progressBar.setAttribute("value", "0");
+                    };
                 }
-            });
-        }
+                },
+              });
+            }
 
-    })(window.$pagamento = window.$pagamento || {});
+        })(window.$pagamento = window.$pagamento || {});
 
-    $pagamento.carregar(document.getElementById("pagamento"));
+
+        $pagamento.carregar(document.getElementById("pagamento"));
 </script>
 <script>
 
@@ -400,35 +485,144 @@
         }
     }
 
-    
+    const mp = new MercadoPago("TEST-a90cd080-ef38-4c31-b250-32c50e7b2777");
 
-    document.querySelector('.card-number-input').oninput = () =>{
-        document.querySelector('.card-number-box').innerText = document.querySelector('.card-number-input').value;
-    }
+    const cardForm = mp.cardForm({
+        //debuuger;
+        //amount: "@Model.Pedido.ValorTotalPedido".replace(',', '.'),
+        amount: "5.0",
+        iframe: true,
+        form: {
+            id: "form-checkout",
+            cardNumber: {
+                id: "form-checkout__cardNumber",
+                placeholder: "Número do cartão"
+            },
+            expirationDate: {
+                id: "form-checkout__expirationDate",
+                placeholder: "MM/AA",
+            },
+            securityCode: {
+                id: "form-checkout__securityCode",
+                placeholder: "CVV"
+            },
+            cardholderName: {
+                id: "form-checkout__cardholderName",
+                placeholder: "Titular do cartão"
+            },
+            issuer: {
+                id: "form-checkout__issuer",
+                placeholder: "Banco emissor",
+            },
+            installments: {
+                id: "form-checkout__installments",
+                placeholder: "Parcelas",
+            },
+            identificationType: {
+                id: "form-checkout__identificationType",
+                placeholder: "Tipo de documento",
+            },
+            identificationNumber: {
+                id: "form-checkout__identificationNumber",
+                placeholder: "CPF",
+            },
+            cardholderEmail: {
+                id: "form-checkout__cardholderEmail",
+                placeholder: "E-mail",
+            },
+        },
+        callbacks: {
+            onFormMounted: error => {
 
-    document.querySelector('.card-holder-input').oninput = () =>{
-        document.querySelector('.card-holder-name').innerText = document.querySelector('.card-holder-input').value;
-    }
+                if (error) return console.warn("Form Mounted handling error: ", error);
+                console.log("Form mounted");
+            },
+        onSubmit: event => {
+            event.preventDefault();
 
-    document.querySelector('.month-input').oninput = () =>{
-        document.querySelector('.exp-month').innerText = document.querySelector('.month-input').value;
-    }
+            const cardData = cardForm.getCardFormData();
+            const obj = {
+                PaymentMethodId: cardData.paymentMethodId,
+                IssuerId: cardData.issuerId,
+                Email: "@Model.Pedido.Usuario.Email",
+                TransactionAmount: Number(cardData.amount),
+                Description: "Descrição 1",
+                Amount: cardData.amount,
+                Token: cardData.token,
+                Installments: Number(cardData.installments),
+                IdentificationNumber: cardData.identificationNumber,
+                IdentificationType: cardData.identificationType
+            };
 
-    document.querySelector('.year-input').oninput = () =>{
-        document.querySelector('.exp-year').innerText = document.querySelector('.year-input').value;
-    }
+            console.log(obj);
+            //está tudo certo, verificar os parametros
+            fetch('../MercadoPagoProcess/ProcessPayment', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(obj)
+            })
+            .then(response => {
+                console.log(response)
 
-    document.querySelector('.cvv-input').onclick = () =>{
-        document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(-180deg)';
-        document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(0deg)';
-    }
+                if(response.status != 200){
+                    window.location.href = "../Pagamento/Recusado";
+                }else{
+                    window.location.href = "../Pagamento/Aprovado";
+                }
+            })
+        },
+        onFetching: (resource) => {
+            console.log("Fetching resource: ", resource);
 
-    document.querySelector('.cvv-input').onmouseleave = () =>{
-        document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(0deg)';
-        document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(180deg)';
-    }
+            // Animate progress bar
+            const progressBar = document.querySelector(".progress-bar");
+            progressBar.removeAttribute("value");
 
-    document.querySelector('.cvv-input').oninput = () =>{
-        document.querySelector('.cvv-box').innerText = document.querySelector('.cvv-input').value;
-    }
+            return () => {
+            progressBar.setAttribute("value", "0");
+            };
+        }
+       },
+    });
+
+    //const cardNumberInput = document.querySelector('#cardNumber');
+    //const cardNumberBox = document.querySelector('.card-number-box');
+    //console.log(cardNumberInput);
+    //cardNumberInput.addEventListener('input', () => {
+    //  const { value } = cardNumberInput;
+    //  cardNumberBox.innerText = value;
+    //});
+
+
+    //document.querySelector('#cardNumber').oninput = () =>{
+    //    document.querySelector('.card-number-box').innerText = document.querySelector('#cardNumber').value;
+    //}
+
+    //document.querySelector('.card-holder-input').oninput = () =>{
+    //    document.querySelector('.card-holder-name').innerText = document.querySelector('.card-holder-input').value;
+    //}
+
+    //document.querySelector('.month-input').oninput = () =>{
+    //    document.querySelector('.exp-month').innerText = document.querySelector('.month-input').value;
+    //}
+
+    //document.querySelector('.year-input').oninput = () =>{
+    //    document.querySelector('.exp-year').innerText = document.querySelector('.year-input').value;
+    //}
+
+    //document.querySelector('.cvv-input').onclick = () =>{
+    //    document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(-180deg)';
+    //    document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(0deg)';
+    //}
+
+    //document.querySelector('.cvv-input').onmouseleave = () =>{
+    //    document.querySelector('.front').style.transform = 'perspective(1000px) rotateY(0deg)';
+    //    document.querySelector('.back').style.transform = 'perspective(1000px) rotateY(180deg)';
+    //}
+
+    //document.querySelector('.cvv-input').oninput = () =>{
+    //    document.querySelector('.cvv-box').innerText = document.querySelector('.cvv-input').value;
+    //}
 </script>

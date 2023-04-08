@@ -1,15 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using EstiloMB.Core;
-using System.Collections.Generic;
 using EstiloMB.MVC;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Linq;
-using StackExchange.Redis;
-using System;
 
 namespace EstiloMB.Site.Controllers
 {
@@ -52,5 +43,16 @@ namespace EstiloMB.Site.Controllers
 
             return isValid;
         }
+
+        public IActionResult Recusado()
+        {
+            return View();
+        }
+
+        public IActionResult Aprovado()
+        {
+            return View();
+        }
+
     }
 }

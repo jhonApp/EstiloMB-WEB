@@ -463,6 +463,7 @@ namespace EstiloMB.Core
             {
                 using Database<Pedido> db = new Database<Pedido>();
                 return db.Set<Pedido>()
+                    .Include(p => p.Usuario)
                     .Where(p => p.UsuarioID == usuarioID && p.StatusPedido == StatusPedido.EmAndamento)
                     .FirstOrDefault();
             }
